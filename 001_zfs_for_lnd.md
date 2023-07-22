@@ -148,7 +148,7 @@ Syncing disks.
 
 $
 ~~~
- - ทำเช่นเดียวกันกับ sdb
+ - ทำเช่นเดียวกันกับ /dev/sdb
 ~~~
 $ sudo fdisk /dev/sdb
 
