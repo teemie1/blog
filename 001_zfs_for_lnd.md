@@ -235,18 +235,18 @@ lrwxrwxrwx 1 root root  15 Jul 22 01:57 eeea96f7-fd6c-4bcf-8484-1d2cabd3392e -> 
 ~~~
 จากด้านบน sda1=/dev/disk/by-partuuid/0282a869-01 และ sdb1=/dev/disk/by-partuuid/c6ba2aa9-b24e-6943-8e7b-0994780cd8ef นำชื่ออุปกรณ์ไปกำหนดค่าตัวแปรดังนี้
 ~~~
-DISK1="/dev/disk/by-partuuid/0282a869-01"
-DISK2="/dev/disk/by-partuuid/c6ba2aa9-b24e-6943-8e7b-0994780cd8ef"
+$ DISK1="/dev/disk/by-partuuid/0282a869-01"
+$ DISK2="/dev/disk/by-partuuid/c6ba2aa9-b24e-6943-8e7b-0994780cd8ef"
 ~~~
 สาเหตุที่ต้องใช้ชื่ออุปกรณ์เป็น ID แทนที่จะเป็น sda1 หรือ sdb1 เพราะชื่อ sda1 สามารถเปลี่ยนแปลงได้เมื่อมีออุปกรณ์ใหม่เพิ่มในระบบ หรือมีการ reboot เครื่อง ทำให้มีปัญหาในการใช้งานได้ แต่ ID จะคงเดิมเสมอ แม้จะเปลี่ยน USB Port ก็ตาม จึงเหมาะสมใช้งานเป็น ID มากกว่า
 
 สำหนดค่าตัวแปร POOL_NAME เป็นชื่อ zpool ที่ต้องการ
 ~~~
-POOL_NAME="lndpool"
+$ POOL_NAME="lndpool"
 ~~~
 คำสั่งสร้าง zpool
 ~~~
-zpool create \
+$ zpool create \
 -o cachefile=/etc/zfs/zpool.cache \
 -o ashift=12 -d \
 -o feature@async_destroy=enabled \
@@ -274,29 +274,29 @@ mirror $DISK1 $DISK2
 
 คำสั่งสำหรับ check zpool
 ~~~
-zpool status
-zpool list
+$ zpool status
+$ zpool list
 ~~~
 
  - Mount to /data/lnd
 ~~~
 # create a dataset named hdd (so it can be mounted as /mnt/hdd)
-POOL_NAME="lndpool"
-zfs create $POOL_NAME/lnd
+$ POOL_NAME="lndpool"
+$ zfs create $POOL_NAME/lnd
 
-# mount a ZFS dataset to /data/lightning
-zfs set mountpoint=/data/lnd $POOL_NAME
-zfs load-key -a
-zfs mount -la
+# mount a ZFS dataset to /data/lnd
+$ zfs set mountpoint=/data/lnd $POOL_NAME
+$ zfs load-key -a
+$ zfs mount -la
 
 
 # check
-zfs list
-df -h
+$ zfs list
+$ df -h
 
 
 # automount with cron
-cronjob="@reboot  /sbin/zfs load-key -a; /sbin/zfs mount -la"
+$ cronjob="@reboot  /sbin/zfs load-key -a; /sbin/zfs mount -la"
 (
 crontab -u root -l
 echo "$cronjob"
@@ -304,26 +304,26 @@ echo "$cronjob"
 
 
 # list the active crontab for root
-crontab -u root -l
+$ crontab -u root -l
 ~~~
  
  -
  - Backup Encryption Key
 ~~~
 # backup the key
-xxd /root/.zpoolraw.key
+$ xxd /root/.zpoolraw.key
 00000000: ad7d f5dc 7c6e 6a29 58ec 1107 919a a5d6 .}..|nj)X.......
 00000010: 9e19 1d26 89f0 e433 ae6b 1101 9259 9d61 ...&...3.k...Y.a
 
 
 # recover the key from text
 # https://lightning.readthedocs.io/BACKUP.html#hsm-secret
-cat >.zpoolraw_hex.txt <<HEX
+$ cat >.zpoolraw_hex.txt <<HEX
 00: 30cc f221 94e1 7f01 cd54 d68c a1ba f124
 10: e1f3 1d45 d904 823c 77b7 1e18 fd93 1676
 HEX
-xxd -r .zpoolraw_hex.txt >/root/.zpoolraw.key
-chmod 0400 .zpoolraw.key
-srm .zpoolraw_hex.txt
+$ xxd -r .zpoolraw_hex.txt >/root/.zpoolraw.key
+$ chmod 0400 .zpoolraw.key
+$ srm .zpoolraw_hex.txt
 ~~~
  - 
