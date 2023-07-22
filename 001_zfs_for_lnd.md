@@ -229,9 +229,9 @@ loop2                       7:2    0  49.8M  1 loop /snap/snapd/18357
 loop3                       7:3    0  53.3M  1 loop /snap/snapd/19457
 loop4                       7:4    0  63.4M  1 loop /snap/core20/1974
 sda                         8:0    1  57.3G  0 disk
-└─**sda1**                      8:1    1    14G  0 part
+└─sda1                      8:1    1    14G  0 part
 sdb                         8:16   1  14.4G  0 disk
-└─**sdb1**                      8:17   1    14G  0 part
+└─sdb1                      8:17   1    14G  0 part
 nvme0n1                   259:0    0   1.8T  0 disk
 ├─nvme0n1p1               259:1    0     1G  0 part /boot/efi
 ├─nvme0n1p2               259:2    0     2G  0 part /boot
@@ -243,10 +243,10 @@ $ ls -la /dev/disk/by-partuuid/
 total 0
 drwxr-xr-x 2 root root 140 Jul 22 05:49 .
 drwxr-xr-x 7 root root 140 Jul 22 05:46 ..
-lrwxrwxrwx 1 root root  10 Jul 22 05:46 0282a869-01 -> ../../**sda1**
+lrwxrwxrwx 1 root root  10 Jul 22 05:46 0282a869-01 -> ../../sda1
 lrwxrwxrwx 1 root root  15 Jul 22 01:57 7797a70d-9ee2-4b02-94ac-c3eff79c3919 -> ../../nvme0n1p2
 lrwxrwxrwx 1 root root  15 Jul 22 01:57 9e101d8c-135d-44ce-a42c-bae7f5ac7dd3 -> ../../nvme0n1p1
-lrwxrwxrwx 1 root root  10 Jul 22 05:49 c6ba2aa9-b24e-6943-8e7b-0994780cd8ef -> ../../**sdb1**
+lrwxrwxrwx 1 root root  10 Jul 22 05:49 c6ba2aa9-b24e-6943-8e7b-0994780cd8ef -> ../../sdb1
 lrwxrwxrwx 1 root root  15 Jul 22 01:57 eeea96f7-fd6c-4bcf-8484-1d2cabd3392e -> ../../nvme0n1p3
 ~~~
 จากด้านบน sda1=/dev/disk/by-partuuid/0282a869-01 และ sdb1=/dev/disk/by-partuuid/c6ba2aa9-b24e-6943-8e7b-0994780cd8ef นำชื่ออุปกรณ์ไปกำหนดค่าตัวแปรดังนี้
