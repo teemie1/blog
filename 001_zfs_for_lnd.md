@@ -93,7 +93,13 @@ Partition 1 has been deleted.
 Command (m for help):
 ~~~
  - คำสั่ง w เพื่อยืนยันการลบ partition และออกจาก fdisk
+~~~
+Command (m for help): w
+The partition table has been altered.
+Calling ioctl() to re-read partition table.
+Syncing disks.
 
+~~~
 หลังจากลบ partition เสร็จแล้วให้เช็คอีกครั้ง
 ~~~
 $ sudo fdisk -l
