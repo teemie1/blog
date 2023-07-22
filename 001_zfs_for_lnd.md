@@ -385,8 +385,8 @@ tmpfs                              769M  4.0K  769M   1% /run/user/1000
 # backup the key
 $ sudo -i
 $ xxd /root/.zpoolraw.key
-00000000: ad7d f5dc 7c6e 6a09 58ec 1107 919a a5d6 .}..|nj)X.......
-00000010: 9e19 1d26 89f0 e433 ae6b 1101 9259 9d61 ...&...3.k...Y.a
+00000000: 30cc f221 94e1 7f01 cd54 d68c a1ba f124 0..!.....T.....$
+00000010: e1f3 1d45 d904 823c 77b7 1e18 fd93 1676 ...E... <w......v
 
 
 # recover the key from text
