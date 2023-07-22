@@ -60,6 +60,7 @@ Device       Start      End  Sectors  Size Type
 เมื่อเช็คจนแน่ใจแล้ว เราจะเริ่มลบข้อมูลใน sdb เสียก่อนดังนี้
  - เลือก disk ที่ต้องการ
 ~~~
+$ sudo fdisk /dev/sdb
 Welcome to fdisk (util-linux 2.37.2).
 Changes will remain in memory only, until you decide to write them.
 Be careful before using the write command.
