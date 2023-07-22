@@ -291,24 +291,55 @@ mirror $DISK1 $DISK2
 คำสั่งสำหรับ check zpool
 ~~~
 $ zpool status
+  pool: lndpool
+ state: ONLINE
+status: Some supported and requested features are not enabled on the pool.
+        The pool can still be used, but some features are unavailable.
+action: Enable all features using 'zpool upgrade'. Once this is done,
+        the pool may no longer be accessible by software that does not support
+        the features. See zpool-features(7) for details.
+config:
+
+        NAME                                      STATE     READ WRITE CKSUM
+        lndpool                                   ONLINE       0     0     0
+          mirror-0                                ONLINE       0     0     0
+            0282a869-01                           ONLINE       0     0     0
+            c6ba2aa9-b24e-6943-8e7b-0994780cd8ef  ONLINE       0     0     0
+
+errors: No known data errors
 $ zpool list
+NAME      SIZE  ALLOC   FREE  CKPOINT  EXPANDSZ   FRAG    CAP  DEDUP    HEALTH  ALTROOT
+lndpool  13.5G   724K  13.5G        -         -     0%     0%  1.00x    ONLINE  -
 ~~~
 
  - Mount to /data/lnd
 ~~~
-# create a dataset named hdd (so it can be mounted as /mnt/hdd)
+$ sudo -i
+# create a dataset named data_lnd (so it can be mounted as /data/lnd)
 $ POOL_NAME="lndpool"
-$ zfs create $POOL_NAME/lnd
+$ zfs create $POOL_NAME/data_lnd
 
 # mount a ZFS dataset to /data/lnd
-$ zfs set mountpoint=/data/lnd $POOL_NAME
+$ zfs set mountpoint=/data/lnd $POOL_NAME/data_lnd
 $ zfs load-key -a
 $ zfs mount -la
 
 
 # check
 $ zfs list
+NAME               USED  AVAIL     REFER  MOUNTPOINT
+lndpool            788K  13.1G      184K  /lndpool
+lndpool/data_lnd   184K  13.1G      184K  /data/lnd
 $ df -h
+Filesystem                         Size  Used Avail Use% Mounted on
+tmpfs                              769M  1.7M  767M   1% /run
+/dev/mapper/ubuntu--vg-ubuntu--lv   98G  7.0G   86G   8% /
+tmpfs                              3.8G     0  3.8G   0% /dev/shm
+tmpfs                              5.0M     0  5.0M   0% /run/lock
+/dev/nvme0n1p2                     2.0G  131M  1.7G   8% /boot
+/dev/nvme0n1p1                     1.1G  6.1M  1.1G   1% /boot/efi
+tmpfs                              769M  4.0K  769M   1% /run/user/1000
+lndpool/data_lnd                    14G  256K   14G   1% /data/lnd
 
 
 # automount with cron
@@ -321,14 +352,33 @@ echo "$cronjob"
 
 # list the active crontab for root
 $ crontab -u root -l
+
 ~~~
- 
- -
+ทดสอบ automount ของ zfs ที่เพิ่งสร้างขึ้นด้วยการ reboot เครื่อง
+~~~
+$ reboot
+# หลังจากนั้น รอให้เครื่อง reboot จนเสร็จแล้วเช็ค filesystem
+$ df -h
+Filesystem                         Size  Used Avail Use% Mounted on
+tmpfs                              769M  1.6M  767M   1% /run
+/dev/mapper/ubuntu--vg-ubuntu--lv   98G  7.0G   86G   8% /
+tmpfs                              3.8G     0  3.8G   0% /dev/shm
+tmpfs                              5.0M     0  5.0M   0% /run/lock
+/dev/nvme0n1p2                     2.0G  131M  1.7G   8% /boot
+/dev/nvme0n1p1                     1.1G  6.1M  1.1G   1% /boot/efi
+lndpool/data_lnd                    14G  256K   14G   1% /data/lnd
+tmpfs                              769M  4.0K  769M   1% /run/user/1000
+~~~ 
+
  - Backup Encryption Key
+
+เนื่องจากการะบวนการสร้าง zpool มีการใช้การเข้ารหัสเพื่อป้องกันไม่ให้ผู้ไม่ประสงค์ดีถอด disk ไปใช้ได้ แต่ก็จำเป็นต้องสำรองรหัสดังกล่าวไว้ เพื่อใช้กู้ข้อมูลจาก disk บนเครื่องอื่นได้ จึงควรเก็บรหัสไว้อย่างดีนะครับ (รหัสที่แสดงด้านล่างไม่ได้ถูกใช้งานจริง เราไม่ควรแสดงรหัสที่ใช้งานจริงให้ผู้อื่นเห็นเด็ดขาด)
+   
 ~~~
 # backup the key
+$ sudo -i
 $ xxd /root/.zpoolraw.key
-00000000: ad7d f5dc 7c6e 6a29 58ec 1107 919a a5d6 .}..|nj)X.......
+00000000: ad7d f5dc 7c6e 6a09 58ec 1107 919a a5d6 .}..|nj)X.......
 00000010: 9e19 1d26 89f0 e433 ae6b 1101 9259 9d61 ...&...3.k...Y.a
 
 
@@ -342,4 +392,4 @@ $ xxd -r .zpoolraw_hex.txt >/root/.zpoolraw.key
 $ chmod 0400 .zpoolraw.key
 $ srm .zpoolraw_hex.txt
 ~~~
- - 
+
