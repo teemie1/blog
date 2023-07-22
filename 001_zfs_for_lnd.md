@@ -171,6 +171,159 @@ Syncing disks.
 
 $
 ~~~
- - 
- - 
+ - เช็ค partition ด้วยคำสัง fdisk
+~~~
+$ sudo fdisk -l
+...
+Disk /dev/sda: 57.3 GiB, 61530439680 bytes, 120176640 sectors
+Disk model: Ultra USB 3.0
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x0282a869
+
+Device     Boot Start      End  Sectors Size Id Type
+/dev/sda1        2048 29362176 29360129  14G 83 Linux
+
+
+Disk /dev/sdb: 14.44 GiB, 15502147584 bytes, 30277632 sectors
+Disk model: DataTraveler 2.0
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: gpt
+Disk identifier: C3B09D5C-3F01-457B-AC5E-206E8818BFA0
+
+Device     Start      End  Sectors Size Type
+/dev/sdb1   2048 29362176 29360129  14G Linux filesystem
+$
+~~~
+เราจะได้ partition /dev/sda1 และ /dev/sdb1 ขนาดเท่ากันที่ 14GB ซึ่งพร้อมที่จะสร้าง zfs mirror pool กันได้เลย
+
+## การติดตั้ง ZFS และสร้าง ZPOOL ลงบน Ubuntu
+  
+ - เริ่มแรกติดตั้ง zfs บน ubuntu เสียก่อน
+~~~
+$ sudo apt install zfsutils-linux
+
+# Check zpool by following command
+$ zpool status
+~~~
+
+ - สร้าง encryption key จากค่าสุ่มและบันทึกไว้ที่ /root/.zpoolraw.key ขนาด 32 bytes และแก้ไข permission
+~~~
+$ sudo su -
+$ dd if=/dev/urandom of=/root/.zpoolraw.key bs=32 count=1
+$ chmod 400 /root/.zpoolraw.key
+~~~
+
+ - สร้าง zpool
+~~~
+# list physical disks
+$ lsblk
+# get the IDs
+$ ls -la /dev/disk/by-partuuid/
+total 0
+drwxr-xr-x 2 root root 140 Jul 22 05:49 .
+drwxr-xr-x 7 root root 140 Jul 22 05:46 ..
+lrwxrwxrwx 1 root root  10 Jul 22 05:46 0282a869-01 -> ../../sda1
+lrwxrwxrwx 1 root root  15 Jul 22 01:57 7797a70d-9ee2-4b02-94ac-c3eff79c3919 -> ../../nvme0n1p2
+lrwxrwxrwx 1 root root  15 Jul 22 01:57 9e101d8c-135d-44ce-a42c-bae7f5ac7dd3 -> ../../nvme0n1p1
+lrwxrwxrwx 1 root root  10 Jul 22 05:49 c6ba2aa9-b24e-6943-8e7b-0994780cd8ef -> ../../sdb1
+lrwxrwxrwx 1 root root  15 Jul 22 01:57 eeea96f7-fd6c-4bcf-8484-1d2cabd3392e -> ../../nvme0n1p3
+~~~
+จากด้านบน sda1=/dev/disk/by-partuuid/0282a869-01 และ sdb1=/dev/disk/by-partuuid/c6ba2aa9-b24e-6943-8e7b-0994780cd8ef นำชื่ออุปกรณ์ไปกำหนดค่าตัวแปรดังนี้
+~~~
+DISK1="/dev/disk/by-partuuid/0282a869-01"
+DISK2="/dev/disk/by-partuuid/c6ba2aa9-b24e-6943-8e7b-0994780cd8ef"
+~~~
+สาเหตุที่ต้องใช้ชื่ออุปกรณ์เป็น ID แทนที่จะเป็น sda1 หรือ sdb1 เพราะชื่อ sda1 สามารถเปลี่ยนแปลงได้เมื่อมีออุปกรณ์ใหม่เพิ่มในระบบ หรือมีการ reboot เครื่อง ทำให้มีปัญหาในการใช้งานได้ แต่ ID จะคงเดิมเสมอ แม้จะเปลี่ยน USB Port ก็ตาม จึงเหมาะสมใช้งานเป็น ID มากกว่า
+
+สำหนดค่าตัวแปร POOL_NAME เป็นชื่อ zpool ที่ต้องการ
+~~~
+POOL_NAME="lndpool"
+~~~
+คำสั่งสร้าง zpool
+~~~
+zpool create \
+-o cachefile=/etc/zfs/zpool.cache \
+-o ashift=12 -d \
+-o feature@async_destroy=enabled \
+-o feature@bookmarks=enabled \
+-o feature@bookmark_v2=enabled \
+-o feature@embedded_data=enabled \
+-o feature@empty_bpobj=enabled \
+-o feature@enabled_txg=enabled \
+-o feature@encryption=enabled \
+-o feature@extensible_dataset=enabled \
+-o feature@filesystem_limits=enabled \
+-o feature@hole_birth=enabled \
+-o feature@large_blocks=enabled \
+-o feature@livelist=enabled \
+-o feature@lz4_compress=enabled \
+-o feature@spacemap_histogram=enabled \
+-o feature@zpool_checkpoint=enabled \
+-O acltype=posixacl -O canmount=off -O compression=lz4 \
+-O devices=off -O normalization=formD -O relatime=on -O xattr=sa \
+-O encryption=on \
+-O keyformat=raw -O keylocation=file:///root/.zpoolraw.key \
+$POOL_NAME \
+mirror $DISK1 $DISK2
+~~~
+
+คำสั่งสำหรับ check zpool
+~~~
+zpool status
+zpool list
+~~~
+
+ - Mount to /data/lnd
+~~~
+# create a dataset named hdd (so it can be mounted as /mnt/hdd)
+POOL_NAME="lndpool"
+zfs create $POOL_NAME/lnd
+
+# mount a ZFS dataset to /data/lightning
+zfs set mountpoint=/data/lnd $POOL_NAME
+zfs load-key -a
+zfs mount -la
+
+
+# check
+zfs list
+df -h
+
+
+# automount with cron
+cronjob="@reboot  /sbin/zfs load-key -a; /sbin/zfs mount -la"
+(
+crontab -u root -l
+echo "$cronjob"
+) | crontab -u root -
+
+
+# list the active crontab for root
+crontab -u root -l
+~~~
+ 
+ -
+ - Backup Encryption Key
+~~~
+# backup the key
+xxd /root/.zpoolraw.key
+00000000: ad7d f5dc 7c6e 6a29 58ec 1107 919a a5d6 .}..|nj)X.......
+00000010: 9e19 1d26 89f0 e433 ae6b 1101 9259 9d61 ...&...3.k...Y.a
+
+
+# recover the key from text
+# https://lightning.readthedocs.io/BACKUP.html#hsm-secret
+cat >.zpoolraw_hex.txt <<HEX
+00: 30cc f221 94e1 7f01 cd54 d68c a1ba f124
+10: e1f3 1d45 d904 823c 77b7 1e18 fd93 1676
+HEX
+xxd -r .zpoolraw_hex.txt >/root/.zpoolraw.key
+chmod 0400 .zpoolraw.key
+srm .zpoolraw_hex.txt
+~~~
  - 
