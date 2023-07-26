@@ -73,7 +73,7 @@ $ createdb -O lightningusr lightningdb # create database lightningdb
 $ exit
 ~~~
 
-## Install Core Lightning
+## Download Core Lightning Software
 ~~~
 # Check bitcoin.conf
 $ sudo nano /data/bitcoin/bitcoin.conf
@@ -100,10 +100,67 @@ $ gpg --import cdecker.txt
 $ gpg --import niftynei.txt
 $ gpg --verify SHA256SUMS.asc
 
-# Install Core Lightning Software
+# Install Core Lightning
 $ cd /
 $ sudo tar -xvf /tmp/clightning-v23.05.2-Ubuntu-22.04.tar.xz    # this will extract lightningd binary to the system
+~~~
+# Prepare environment for Core Lightning
+~~~
+$ sudo adduser --disabled-password --gecos "" lightningd
+$ sudo usermod -a -G bitcoin,debian-tor lightningd
+$ sudo adduser tee lightningd
+$ sudo mkdir /data/lightningd
+$ sudo mkdir /data/lightningd-plugins-available
+$ sudo chown -R lightningd:lightningd /data/lightningd
+$ sudo chown -R lightningd:lightningd /data/lightningd-plugins-available
+$ sudo su - lightningd
+$ ln -s /data/lightningd /home/lightningd/.lightning
+$ ln -s /data/bitcoin /home/lightningd/.bitcoin
+~~~
+## Configure CLN & PostgreSQL
+~~~
 $ sudo -i -u lightningd    # already created user for lightningd
+$ cd /home/lightningd/.lightning
+$ nano config
+~~~
+### Edit CLN Configuration File
+~~~
+# MiniBolt: cln configuration
+# /home/lightningd/.lightning/config
+
+alias=teemie⚡ #This accepts emojis i.e ⚡🧡​ https://emojikeyboard.top/
+rgb=<#FFA500> #You can choose whatever you want on https://www.color-hex.com/
+network=bitcoin
+log-file=/data/lightningd/cln.log
+log-level=info
+# for admin to interact with lightning-cli
+rpc-file-mode=0660
+
+# default fees and channel min size
+fee-base=<1000>
+fee-per-satoshi=<1>
+min-capacity-sat=1000000
+
+## optional
+# wumbo channels
+large-channels
+# channel confirmations needed
+funding-confirms=2
+# autoclean (86400=daily)
+autocleaninvoice-cycle=86400
+autocleaninvoice-expired-by=86400
+
+# wallet settings (PostgreSQL DB)
+wallet='postgres://lightningusr:ch!chaK0rn9103@localhost:5432/lightningdb'
+
+
+# network
+proxy=127.0.0.1:9050
+bind-addr=0.0.0.0:9735
+addr=statictor:127.0.0.1:9051/torport=9735
+always-use-proxy=true
+~~~
+~~~
 
 lightningd --network=bitcoin --log-level=debug
 
