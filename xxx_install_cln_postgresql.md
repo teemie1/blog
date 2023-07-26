@@ -64,8 +64,56 @@ $ sudo tail -f /var/log/postgresql/postgresql-14-main.log
 # Ctrl-C to exit
 ~~~
 
-## 
+## Create lightningd database and a user into PostgreSQL
 ~~~
+# Create db & user on only primary & standby server
+$ sudo -i -u postgres
+$ createuser --createdb --pwprompt --replication lightningusr # create user lightningusr (set a password)
+$ createdb -O lightningusr lightningdb # create database lightningdb
+$ exit
+~~~
+
+## Install Core Lightning
+~~~
+# Check bitcoin.conf
+$ sudo nano /data/bitcoin/bitcoin.conf
+blocksonly=0
+prune=n
+
+# Restart Bitcoin Core
+$ sudo systemctl restart bitcoind
+
+# Download Core Lightning Software and Checksum
+$ cd /tmp
+$ wget https://github.com/ElementsProject/lightning/releases/download/v23.05.2/clightning-v23.05.2-Ubuntu-22.04.tar.xz
+$ wget https://github.com/ElementsProject/lightning/releases/download/v23.05.2/SHA256SUMS
+$ wget https://github.com/ElementsProject/lightning/releases/download/v23.05.2/SHA256SUMS.asc
+$ sha256sum --ignore-missing --check SHA256SUMS
+clightning-v23.05.2-Ubuntu-22.04.tar.xz: OK
+
+# Browse to https://github.com/ElementsProject/lightning/tree/master/contrib/keys and download key from github
+# verify key with gpg
+$ gpg --import rustyrussell.txt
+$ gpg --import cdecker.txt
+$ gpg --import niftynei.txt
+$ gpg --verify SHA256SUMS.asc
+
+# Install Core Lightning Software
+$ cd /
+$ sudo tar -xvf /tmp/clightning-v23.05.2-Ubuntu-22.04.tar.xz    # this will extract lightningd binary to the system
+$ sudo -i -u lightningd    # already created user for lightningd
+
+lightningd --network=bitcoin --log-level=debug
+
+sudo -i -u postgres
+psql -U lightningusr --host=localhost --port=5432 "dbname=lightningdb" 
+
+\d     # Check no table from lightning
+
+lightningd --network=bitcoin --log-level=debug --wallet='postgres://lightningusr:[PASSWORD]@localhost:5432/lightningdb'
+
+\d  # Back to postgres prompt and Check table in postgresql
+psql -U lightningusr --host=localhost --port=5432 "dbname=lightningdb" -t -c "SELECT max(height) from blocks;"      # Check blocks
 
 ~~~
 
