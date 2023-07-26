@@ -178,6 +178,8 @@ $ sudo nano /etc/systemd/system/lightningd.service
 Description=Core Lightning daemon
 Requires=bitcoind.service
 After=bitcoind.service
+Requires=postgresql.service
+After=postgresql.service
 Wants=network-online.target
 After=network-online.target
 
