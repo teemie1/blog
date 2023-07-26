@@ -1,6 +1,7 @@
 # การติดตั้ง Core Lightning เพื่อใช้งานร่วมกับ PostgreSQL Database
 
 NODE1: 10.8.1.2
+
 NODE2: 10.8.1.4
 
 ## Install PostgresQL on both machine via Ubuntu Repository
@@ -156,9 +157,13 @@ wallet=postgres://lightningusr:[PASSWORD]@localhost:5432/lightningdb
 
 # network
 proxy=127.0.0.1:9050
-bind-addr=0.0.0.0:9735
-addr=statictor:127.0.0.1:9051/torport=9735
-always-use-proxy=true
+addr=statictor:127.0.0.1:9051/torport=9736
+always-use-proxy=false
+
+# CLEARNET
+bind-addr=0.0.0.0:9736
+announce-addr=[Public Ip]:9736
+
 ~~~
 ## Autostart on boot
 ~~~
@@ -253,4 +258,7 @@ $ psql -U lightningusr --host=localhost --port=5432 "dbname=lightningdb" -t -c "
 
 $ exit
 ~~~
-
+## Open port on firewall
+~~~
+$ sudo ufw allow 9736 comment 'allow CLN from outside'
+~~~
