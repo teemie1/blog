@@ -91,8 +91,10 @@ $ wget https://github.com/ElementsProject/lightning/releases/download/v23.05.2/S
 $ sha256sum --ignore-missing --check SHA256SUMS
 clightning-v23.05.2-Ubuntu-22.04.tar.xz: OK
 
-# Browse to https://github.com/ElementsProject/lightning/tree/master/contrib/keys and download key from github
-# verify key with gpg
+# Download and verify key with gpg
+$ wget https://raw.githubusercontent.com/ElementsProject/lightning/master/contrib/keys/rustyrussell.txt
+$ wget https://raw.githubusercontent.com/ElementsProject/lightning/master/contrib/keys/cdecker.txt
+$ wget https://raw.githubusercontent.com/ElementsProject/lightning/master/contrib/keys/niftynei.txt
 $ gpg --import rustyrussell.txt
 $ gpg --import cdecker.txt
 $ gpg --import niftynei.txt
