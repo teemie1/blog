@@ -128,8 +128,8 @@ $ nano config
 # MiniBolt: cln configuration
 # /home/lightningd/.lightning/config
 
-alias=teemie⚡ #This accepts emojis i.e ⚡🧡​ https://emojikeyboard.top/
-rgb=<#FFA500> #You can choose whatever you want on https://www.color-hex.com/
+alias=teemie⚡ 
+rgb=FFA500
 network=bitcoin
 log-file=/data/lightningd/cln.log
 log-level=info
@@ -137,8 +137,8 @@ log-level=info
 rpc-file-mode=0660
 
 # default fees and channel min size
-fee-base=<1000>
-fee-per-satoshi=<1>
+fee-base=1000
+fee-per-satoshi=1
 min-capacity-sat=1000000
 
 ## optional
@@ -151,7 +151,7 @@ autocleaninvoice-cycle=86400
 autocleaninvoice-expired-by=86400
 
 # wallet settings (PostgreSQL DB)
-wallet='postgres://lightningusr:[PASSWORD]@localhost:5432/lightningdb'
+wallet=postgres://lightningusr:[PASSWORD]@localhost:5432/lightningdb
 
 
 # network
@@ -160,19 +160,97 @@ bind-addr=0.0.0.0:9735
 addr=statictor:127.0.0.1:9051/torport=9735
 always-use-proxy=true
 ~~~
+## Autostart on boot
 ~~~
+$ exit
+$ sudo nano /etc/systemd/system/lightningd.service
+~~~
+~~~
+# MiniBolt: systemd unit for lightningd
+# /etc/systemd/system/lightningd.service
 
-lightningd --network=bitcoin --log-level=debug
+[Unit]
+Description=Core Lightning daemon
+Requires=bitcoind.service
+After=bitcoind.service
+Wants=network-online.target
+After=network-online.target
 
-sudo -i -u postgres
-psql -U lightningusr --host=localhost --port=5432 "dbname=lightningdb" 
+[Service]
+ExecStart=/bin/sh -c '/usr/bin/lightningd \
+                       --conf=/data/lightningd/config \
+                       --daemon \
+                       --pid-file=/run/lightningd/lightningd.pid'
 
-\d     # Check no table from lightning
+ExecStop=/bin/sh -c '/usr/bin/lightning-cli stop'
 
-lightningd --network=bitcoin --log-level=debug --wallet='postgres://lightningusr:[PASSWORD]@localhost:5432/lightningdb'
+RuntimeDirectory=lightningd
 
-\d  # Back to postgres prompt and Check table in postgresql
-psql -U lightningusr --host=localhost --port=5432 "dbname=lightningdb" -t -c "SELECT max(height) from blocks;"      # Check blocks
+User=lightningd
 
+# process management
+Type=simple
+PIDFile=/run/lightningd/lightningd.pid
+Restart=on-failure
+TimeoutSec=240
+RestartSec=30
+
+# hardening measures
+PrivateTmp=true
+ProtectSystem=full
+NoNewPrivileges=true
+PrivateDevices=true
+
+[Install]
+WantedBy=multi-user.target
+~~~
+~~~
+$ sudo systemctl enable lightningd.service
+$ sudo systemctl start lightningd.service
+$ sudo journalctl -f -u lightningd
+Jul 26 13:45:41 nuc11 sh[42629]: WARNING:  skipping "pg_authid" --- only superuser can vacuum it
+Jul 26 13:45:41 nuc11 sh[42629]: WARNING:  skipping "pg_subscription" --- only superuser can vacuum it
+Jul 26 13:45:41 nuc11 sh[42629]: WARNING:  skipping "pg_database" --- only superuser can vacuum it
+Jul 26 13:45:41 nuc11 sh[42629]: WARNING:  skipping "pg_db_role_setting" --- only superuser can vacuum it
+Jul 26 13:45:41 nuc11 sh[42629]: WARNING:  skipping "pg_tablespace" --- only superuser can vacuum it
+Jul 26 13:45:41 nuc11 sh[42629]: WARNING:  skipping "pg_auth_members" --- only superuser can vacuum it
+Jul 26 13:45:41 nuc11 sh[42629]: WARNING:  skipping "pg_shdepend" --- only superuser can vacuum it
+Jul 26 13:45:41 nuc11 sh[42629]: WARNING:  skipping "pg_shdescription" --- only superuser can vacuum it
+Jul 26 13:45:41 nuc11 sh[42629]: WARNING:  skipping "pg_replication_origin" --- only superuser can vacuum it
+Jul 26 13:45:41 nuc11 sh[42629]: WARNING:  skipping "pg_shseclabel" --- only superuser can vacuum it
+
+~~~
+## Allow user "tee" to work with CLN
+~~~
+$ ln -s /data/lightningd /home/tee/.lightning
+$ sudo chmod -R g+x /data/lightningd/bitcoin/
+$ logout
+~~~
+## Verify PostgreSQL DB
+~~~
+$ sudo -i -u postgres
+$ psql -U lightningusr --host=localhost --port=5432 "dbname=lightningdb" 
+lightningdb=> \d     # Check no table from lightning
+                              List of relations
+ Schema |                   Name                   |   Type   |    Owner
+--------+------------------------------------------+----------+--------------
+ public | blocks                                   | table    | lightningusr
+ public | channel_blockheights                     | table    | lightningusr
+ public | channel_configs                          | table    | lightningusr
+ public | channel_configs_id_seq                   | sequence | lightningusr
+ public | channel_feerates                         | table    | lightningusr
+ public | channel_funding_inflights                | table    | lightningusr
+...
+lightningdb=> SELECT max(height) from blocks;
+  max
+--------
+ 800312
+(1 row)
+
+lightningdb=> \q
+$ psql -U lightningusr --host=localhost --port=5432 "dbname=lightningdb" -t -c "SELECT max(height) from blocks;"      # Check blocks
+ 800312
+
+$ exit
 ~~~
 
