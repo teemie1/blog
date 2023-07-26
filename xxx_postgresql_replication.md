@@ -82,15 +82,19 @@ $ sudo systemctl start postgresql
 ~~~
 $ tail /var/log/postgresql/postgresql-14-main.log
 ~~~
-## Check replication
+## Check replication at primary server
 ~~~
 # Check Replication Status
 $ sudo su - postgres -c 'psql -x -c "SELECT * from pg_stat_replication;"' 
 $ sudo su - postgres -c 'psql -c "select usename, application_name, client_addr, state, sync_priority, sync_state from pg_stat_replication;"'
 
-# Check Block Height
+~~~
+## Check block height at standby server
+~~~
+$ sudo -i -u postgres
+$ psql -U lightningusr --host=localhost --port=5432 "dbname=lightningdb" -t -c "SELECT max(height) from blocks;"
+Password for user lightningusr:
+ 800337
 
 ~~~
-
-
 
