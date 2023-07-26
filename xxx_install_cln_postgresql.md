@@ -262,3 +262,17 @@ $ exit
 ~~~
 $ sudo ufw allow 9736 comment 'allow CLN from outside'
 ~~~
+## Encrypt hsm_secret
+~~~
+$ sudo -iu lightningd
+$ xxd .lightning/bitcoin/hsm_secret
+# Record hsm_secret in password manager or in a piece of paper
+$ lightning-hsmtool encrypt /data/lightningd/bitcoin/hsm_secret
+Enter hsm_secret password: [PASSWORD]
+Confirm hsm_secret password: [PASSWORD]
+Successfully encrypted hsm_secret. You'll now have to pass the --encrypted-hsm startup option.
+$ exit
+$ sudo nano /etc/systemd/system/lightningd.service
+# Add --encrypted-hsm in ExecStart
+
+~~~
