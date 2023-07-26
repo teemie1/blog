@@ -4,8 +4,8 @@ NODE1: 10.8.1.2
 
 NODE2: 10.8.1.4
 
-## Install PostgresQL on both machine via Ubuntu Repository
-ติดตั้ง PostgreSQL 14.0 ลงบน NODE ทั้งสอง
+## Install PostgreSQL on both machine via Ubuntu Repository
+ติดตั้ง PostgreSQL 14.8 ลงบน NODE ทั้งสอง
 ~~~
 # ติดตั้ง PostgreSQL
 $ sudo apt install postgresql
