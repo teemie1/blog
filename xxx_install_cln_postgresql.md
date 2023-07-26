@@ -104,7 +104,7 @@ $ gpg --verify SHA256SUMS.asc
 $ cd /
 $ sudo tar -xvf /tmp/clightning-v23.05.2-Ubuntu-22.04.tar.xz    # this will extract lightningd binary to the system
 ~~~
-# Prepare environment for Core Lightning
+## Prepare environment for Core Lightning
 ~~~
 $ sudo adduser --disabled-password --gecos "" lightningd
 $ sudo usermod -a -G bitcoin,debian-tor lightningd
@@ -151,7 +151,7 @@ autocleaninvoice-cycle=86400
 autocleaninvoice-expired-by=86400
 
 # wallet settings (PostgreSQL DB)
-wallet='postgres://lightningusr:ch!chaK0rn9103@localhost:5432/lightningdb'
+wallet='postgres://lightningusr:[PASSWORD]@localhost:5432/lightningdb'
 
 
 # network
