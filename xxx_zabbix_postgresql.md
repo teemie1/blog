@@ -65,8 +65,12 @@ server_name example.com;
 ~~~
 ### Start Zabbix server and agent processes
 ~~~
-$ systemctl restart zabbix-server zabbix-agent nginx php8.1-fpm
-$ systemctl enable zabbix-server zabbix-agent nginx php8.1-fpm
+$ sudo systemctl restart zabbix-server zabbix-agent nginx php8.1-fpm
+$ sudo systemctl enable zabbix-server zabbix-agent nginx php8.1-fpm
 ~~~
 ### Open Zabbix UI web page
-
+~~~
+# Open browser and go to URL: http://[IP Address]:8080
+# User: Admin
+# password: zabbix 
+~~~
