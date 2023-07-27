@@ -79,10 +79,18 @@ $ exit
 $ sudo systemctl start postgresql
 
 ~~~
+## Check replication status
+~~~
+# Login NODE2 (Now, it's primary node)
+# Check Replication Status
+$ sudo su - postgres -c 'psql -x -c "SELECT * from pg_stat_replication;"' 
+$ sudo su - postgres -c 'psql -c "select usename, application_name, client_addr, state, sync_priority, sync_state from pg_stat_replication;"'
+
+~~~
 
 ## Start Core Lighting on NODE2
 ~~~
-Login NODE2
+# Login NODE2
 $ sudo -i -u lightningd
 $ /usr/bin/lightningd  --alias=teemie⚡ \
                        --rgb=FFA500 \
@@ -101,7 +109,7 @@ $ /usr/bin/lightningd  --alias=teemie⚡ \
                        --funding-confirms=2 \
                        --autocleaninvoice-cycle=86400 \
                        --autocleaninvoice-expired-by=86400 \
-                       --wallet=sqlite3:///data/lightningd/bitcoin/lightningd.sqlite3:/data/lightningd/bitcoin/lightningd2.sqlite3 \
+                       --wallet=postgres://lightningusr:[PASSWORD]@localhost:5432/lightningdb \
                        --bind-addr=0.0.0.0:9736 \
                        --announce-addr=165.232.161.68:9736 \
                        --daemon 
@@ -109,10 +117,22 @@ $ /usr/bin/lightningd  --alias=teemie⚡ \
 
 ## Checking and verification
 ~~~
+# Login NODE2 (Can't use admin/tee user on NODE2)
+$ sudo -i -u lightningd
+$ lightning-cli getinfo
+~~~
 
+## Change forward port on VPS
 ~~~
+# Login to VPS Clearnet
+$ sudo iptables -t nat -D PREROUTING -i eth0 -p tcp --dport 9736 -j DNAT --to-destination 10.8.0.2
+$ sudo iptables -t nat -D POSTROUTING -o wg0 -p tcp --dport 9736 -d 10.8.0.2 -j SNAT --to-source 10.8.0.1
+$ sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 9736 -j DNAT --to-destination 10.8.0.4
+$ sudo iptables -t nat -A POSTROUTING -o wg0 -p tcp --dport 9736 -d 10.8.0.4 -j SNAT --to-source 10.8.0.1
+$ sudo apt install netfilter-persistent
+$ sudo apt install iptables-persistent
+$ sudo netfilter-persistent save
+$ sudo systemctl enable netfilter-persistent
 ~~~
 
-#             --wallet=postgres://lightningusr:ch!chaK0rn9103@localhost:5432/lightningdb \
-~~~
 Ref: https://github.com/gabridome/docs/blob/master/c-lightning_with_postgresql_reliability.md
