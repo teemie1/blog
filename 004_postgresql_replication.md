@@ -97,4 +97,4 @@ Password for user lightningusr:
  800337
 
 ~~~
-
+Ref: [https://github.com/gabridome/docs/blob/master/c-lightning_with_postgresql_reliability.md](https://github.com/gabridome/docs/blob/master/c-lightning_with_postgresql_reliability.md)
