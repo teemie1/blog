@@ -1,7 +1,8 @@
 # Scenario 1: Failover from NODE1 to NODE2
 
- - NODE1: 10.8.1.2
- - NODE2: 10.8.1.4
+ - NODE1: 10.8.1.2, 10.8.0.2
+ - NODE2: 10.8.1.4, 10.8.0.4
+ - VPS:  165.232.161.6, 10.8.0.1
 
 ## Stop Core Lightning on NODE1
 ~~~
