@@ -1,4 +1,4 @@
-# Scenario 1: Fail over from NODE1 to NODE2
+# Scenario 1: Failover from NODE1 to NODE2
 
 NODE1: 10.8.1.2
 NODE2: 10.8.1.4
