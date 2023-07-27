@@ -88,6 +88,18 @@ $ sudo su - postgres -c 'psql -x -c "SELECT * from pg_stat_replication;"'
 $ sudo su - postgres -c 'psql -c "select usename, application_name, client_addr, state, sync_priority, sync_state from pg_stat_replication;"'
 
 ~~~
+## Copy config file from NODE1 to NODE2
+~~~
+# Login NODE1
+$ sudo tar -cvf /tmp/cln_config.tar /data/lightningd*
+$ chown tee.tee /tmp/cln_config.tar
+$ scp /tmp/cln_config.tar 10.8.1.4:/tmp
+
+# Login NODE2
+$ cd /
+$ sudo rm -rf /data/lightningd*
+$ sudo tar -xvf /tmp/cln_config.tar
+~~~
 
 ## Start Core Lighting on NODE2
 ~~~
