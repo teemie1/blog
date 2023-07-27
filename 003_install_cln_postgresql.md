@@ -264,3 +264,4 @@ $ exit
 ~~~
 $ sudo ufw allow 9736 comment 'allow CLN from outside'
 ~~~
+Ref: [https://github.com/gabridome/docs/blob/master/c-lightning_with_postgresql_reliability.md](https://github.com/gabridome/docs/blob/master/c-lightning_with_postgresql_reliability.md)
