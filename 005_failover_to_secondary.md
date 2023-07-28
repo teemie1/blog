@@ -31,6 +31,10 @@ $ pg_ctlcluster 14 main promote
 $ rm /var/lib/postgresql/14/main/standby.signal
 # Change configuration file
 $ nano /etc/postgresql/14/main/postgresql.conf
+# Comment out
+#primary_conninfo = 'host=10.8.1.2 port=5432 user=lightningusr password=''ch!chaK0rn9103'' application_name=lightningd dbname=replication'
+#primary_slot_name = 'node_a_slot'
+# Add lines
 listen_addresses = 'localhost,10.8.1.4' # required for streaming replication
 wal_level = replica
 wal_log_hints = on
@@ -44,7 +48,7 @@ full_page_writes = on
 # Start PostgreSQL on NODE2 as primary
 $ exit
 
-$ sudo systemctl start postgresql
+$ sudo systemctl restart postgresql
 ~~~
 
 ## Configure PostgreSQL on NODE1 as secondary and start replication
@@ -92,13 +96,17 @@ $ sudo su - postgres -c 'psql -c "select usename, application_name, client_addr,
 ~~~
 # Login NODE1
 $ sudo tar -cvf /tmp/cln_config.tar /data/lightningd*
-$ chown tee.tee /tmp/cln_config.tar
+$ sudo chown tee.tee /tmp/cln_config.tar
 $ scp /tmp/cln_config.tar 10.8.1.4:/tmp
 
 # Login NODE2
 $ cd /
 $ sudo rm -rf /data/lightningd*
 $ sudo tar -xvf /tmp/cln_config.tar
+$ sudo -i -u lightningd
+$ ln -s /data/lightningd .lightning
+$ rm /data/lightningd/config
+$ rm /data/lightningd/cln.log
 ~~~
 
 ## Start Core Lighting on NODE2
@@ -113,7 +121,7 @@ $ /usr/bin/lightningd  --alias=teemie⚡ \
                        --bitcoin-rpcconnect=10.8.0.205 \
                        --network=bitcoin \
                        --log-file=/data/lightningd/cln.log \
-                       --log-level=info \
+                       --log-level=debug \
                        --rpc-file-mode=0660 \
                        --fee-base=1000 \
                        --fee-per-satoshi=1 \
@@ -122,10 +130,12 @@ $ /usr/bin/lightningd  --alias=teemie⚡ \
                        --funding-confirms=2 \
                        --autocleaninvoice-cycle=86400 \
                        --autocleaninvoice-expired-by=86400 \
-                       --wallet=postgres://lightningusr:[PASSWORD]@localhost:5432/lightningdb \
+                       --wallet='postgres://lightningusr:[PASSWORD]@localhost:5432/lightningdb' \
                        --bind-addr=0.0.0.0:9736 \
                        --announce-addr=165.232.161.68:9736 \
+                       --always-use-proxy=false \
                        --daemon 
+
 ~~~
 
 ## Checking and verification
