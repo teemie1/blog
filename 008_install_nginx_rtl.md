@@ -73,7 +73,7 @@ $ nano /data/lightningd/config
 plugin=/data/lightningd-plugins-available/c-lightning-REST-0.10.5/clrest.js
 rest-port=3092
 rest-docport=4091
-rest-protocol=http
+rest-protocol=https
 
 $ cd /data/lightningd-plugins-available/c-lightning-REST-0.10.5
 $ cp sample-cl-rest-config.json cl-rest-config.json
@@ -137,7 +137,7 @@ $ nano /home/rtl/RTL/RTL-Config.json
         "fiatConversion": true,
         "currencyUnit": "THB",
         "logLevel": "ERROR",
-        "lnServerUrl": "http://127.0.0.1:3092",
+        "lnServerUrl": "https://127.0.0.1:3092",
         "enableOffers": true
       }
     }
