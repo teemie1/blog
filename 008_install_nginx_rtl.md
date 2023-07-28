@@ -89,19 +89,89 @@ $ nano cl-rest-config.json
 
 $ node cl-rest.js
 $ exit
-~~~
-Copy magaroon
-~~~
-$ sudo adduser --disabled-password --gecos "" rtl
-$ sudo usermod -a -G lightningd rtl
-$ sudo adduser tee rtl
-$ sudo cp /data/lightningd-plugins-available/c-lightning-REST-0.10.5/certs/access.macaroon /home/rtl/
-$ sudo chown rtl:rtl /home/rtl/access.macaroon
+
 $ sudo systemctl restart lightningd
 ~~~
+
 ## Install & Configuring RTL
+
+Copy magaroon & Install RTL
 ~~~
-## Install RTL
+$ sudo adduser --disabled-password --gecos "" rtl
+$ sudo cp /data/lightningd-plugins-available/c-lightning-REST-0.10.5/certs/access.macaroon /home/rtl/
+$ sudo chown rtl:rtl /home/rtl/access.macaroon
+$ sudo su - rtl
+$ curl https://keybase.io/suheb/pgp_keys.asc | gpg --import
+$ git clone https://github.com/Ride-The-Lightning/RTL.git
+$ cd RTL
+$ git tag | grep -E "v[0-9]+.[0-9]+.[0-9]+$" | sort --version-sort | tail -n 1
+$ git checkout v0.14.0
+$ git verify-tag v0.14.0
+$ npm install --omit=dev --legacy-peer-deps
+~~~
+Configure RTL
+~~~
+$ sudo su - rtl
+$ nano /home/rtl/RTL/RTL-Config.json
+{
+  "multiPass": "<yourfancypassword>",
+  "port": "3000",
+  "SSO": {
+    "rtlSSO": 0,
+    "rtlCookiePath": "",
+    "logoutRedirectLink": ""
+  },
+  "nodes": [
+    {
+      "index": 1,
+      "lnNode": "teemie⚡",
+      "lnImplementation": "CLN",
+      "Authentication": {
+        "macaroonPath": "/home/rtl",
+        "configPath": "/data/lightningd/config"
+      },
+      "Settings": {
+        "userPersona": "OPERATOR",
+        "themeMode": "DAY",
+        "themeColor": "INDIGO",
+        "fiatConversion": true,
+        "currencyUnit": "THB",
+        "logLevel": "ERROR",
+        "lnServerUrl": "http://127.0.0.1:3092",
+        "enableOffers": true
+      }
+    }
+  ],
+  "defaultNodeIndex": 1
+}
+
+$ exit
+
+$ sudo nano /etc/systemd/system/rtl.service
+# MiniBolt: systemd unit for Ride the Lightning
+# /etc/systemd/system/rtl.service
+
+[Unit]
+Description=Ride the Lightning
+After=lightningd.service
+PartOf=lightningd.service
+
+[Service]
+WorkingDirectory=/home/rtl/RTL
+ExecStart=/usr/bin/node rtl
+User=rtl
+
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
+
+$ sudo systemctl start rtl
+~~~
+
+Configure nginx
+~~~
 $ sudo nano /etc/nginx/sites-enabled/rtl-reverse-proxy.conf
 server {
   listen 4001 ssl;
@@ -115,49 +185,9 @@ server {
 $ sudo nginx -t
 $ sudo systemctl reload nginx
 $ sudo ufw allow 4001/tcp comment 'allow Ride The Lightning SSL from anywhere'
-$ sudo adduser --disabled-password --gecos "" rtl
-
-$ sudo su - rtl
-$ nano /home/rtl/RTL/RTL-Config.json
-~~~
-~~~
-{
-  "multiPass": "<yourfancypassword>",
-  "port": "3000",
-  "SSO": {
-    "rtlSSO": 0,
-    "rtlCookiePath": "",
-    "logoutRedirectLink": ""
-  },
-  "nodes": [
-    {
-      "index": 1,
-      "lnNode": "CLN Node",
-      "lnImplementation": "CLN",
-      "Authentication": {
-        "macaroonPath": "/home/rtl",
-        "configPath": "/data/lightningd/config"
-      },
-      "Settings": {
-        "userPersona": "OPERATOR",
-        "themeMode": "DAY",
-        "themeColor": "INDIGO",
-        "fiatConversion": true,
-        "currencyUnit": "EUR",
-        "logLevel": "ERROR",
-        "lnServerUrl": "http://127.0.0.1:3092",
-        "enableOffers": true
-      }
-    }
-  ],
-  "defaultNodeIndex": 1
-}
-~~~
 
 ~~~
-$ exit
-$ sudo systemctl start rtl
-~~~
+
 Access RTL via your local IP: https:10.8.0.2:4001
 
 Ref: [https://v2.minibolt.info/bonus-guides/lightning/cln](https://v2.minibolt.info/bonus-guides/lightning/cln)
