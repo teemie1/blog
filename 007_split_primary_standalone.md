@@ -29,6 +29,7 @@ listen_addresses = 'localhost,10.8.1.4'
 $ exit
 $ sudo systemctl start postgresql
 ~~~
+If secondary node (NODE2) is still be running, the replication will be changed to async. Should not let it run like this for lightning.
 
 ## Start & Check Core Lightning
 ~~~
