@@ -37,15 +37,15 @@ $ sudo systemctl daemon-reload
 $ sudo systemctl enable node_exporter
 $ sudo systemctl start node_exporter
 $ sudo systemctl status node_exporter
+$ sudo ufw allow 9100/tcp comment 'allow for prometheus monitoring'
+# Go to http://10.8.0.2:9100/targets
 ~~~
 ## Configure the Node Exporter as a Prometheus target
 ~~~
 # Login Prometheus Server
 $ cd /etc/prometheus
-$ sudo nano prometheus.yml
+$ sudo nano prometheus.yml            # Add more target for new node
 - targets: [‘localhost:9090’, ‘localhost:9100’]
 $ sudo systemctl restart prometheus
-$ sudo ufw allow 9100/tcp
-
-# Go to https://localhost:9100/targets
+# Browse to Grafana (Prometheus)
 ~~~
