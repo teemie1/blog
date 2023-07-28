@@ -3,9 +3,10 @@
  - NODE1: 10.8.1.2, 10.8.0.2
  - NODE2: 10.8.1.4, 10.8.0.4
 
-## Stop PostgreSQL on NODE1
+## Stop Core Lightning & PostgreSQL on NODE1
 ~~~
 # Login NODE1
+$ sudo systemctl stop lightningd
 $ sudo systemctl stop postgresql
 ~~~
 
@@ -29,8 +30,9 @@ $ exit
 $ sudo systemctl start postgresql
 ~~~
 
-## Check Core Lightning
+## Start & Check Core Lightning
 ~~~
+$ sudo systemctl start lightningd
 $ lightning-cli getinfo
 ~~~
 
