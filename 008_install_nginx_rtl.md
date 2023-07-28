@@ -191,3 +191,4 @@ $ sudo ufw allow 4001/tcp comment 'allow Ride The Lightning SSL from anywhere'
 Access RTL via your local IP: https:10.8.0.2:4001
 
 Ref: [https://v2.minibolt.info/bonus-guides/lightning/cln](https://v2.minibolt.info/bonus-guides/lightning/cln)
+Ref RTL: [https://github.com/Ride-The-Lightning/RTL/blob/master/.github/docs/Core_lightning_setup.md](https://github.com/Ride-The-Lightning/RTL/blob/master/.github/docs/Core_lightning_setup.md)
