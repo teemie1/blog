@@ -64,7 +64,7 @@ $ rm /var/lib/postgresql/14/main/postgresql.auto.conf
 $ nano /etc/postgresql/14/main/postgresql.conf
 
 # Comment out the following lines
-#listen_addresses = 'localhost,10.8.0.4' # required for streaming replication
+#listen_addresses = 'localhost,10.8.1.2' # required for streaming replication
 #wal_level = replica
 #wal_log_hints = on
 #max_wal_senders = 3
@@ -79,7 +79,7 @@ primary_conninfo = 'host=10.8.1.4 port=5432 user=lightningusr password=''[PASSWO
 primary_slot_name = 'node_a_slot'
 
 
-# Start PostgreSQL on NODE2 as primary
+# Start PostgreSQL on NODE1 as secondary
 $ exit
 $ sudo systemctl enable postgresql
 $ sudo systemctl start postgresql
