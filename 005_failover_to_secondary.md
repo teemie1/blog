@@ -32,7 +32,7 @@ $ rm /var/lib/postgresql/14/main/standby.signal
 # Change configuration file
 $ nano /etc/postgresql/14/main/postgresql.conf
 # Comment out
-#primary_conninfo = 'host=10.8.1.2 port=5432 user=lightningusr password=''ch!chaK0rn9103'' application_name=lightningd dbname=replication'
+#primary_conninfo = 'host=10.8.1.2 port=5432 user=lightningusr password=''[PASSWORD]'' application_name=lightningd dbname=replication'
 #primary_slot_name = 'node_a_slot'
 # Add lines
 listen_addresses = 'localhost,10.8.1.4' # required for streaming replication
