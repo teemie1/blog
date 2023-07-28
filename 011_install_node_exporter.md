@@ -32,10 +32,11 @@ Restart=always
 RestartSec=10s
 [Install]
 WantedBy=multi-user.target
-sudo systemctl daemon-reload
-sudo systemctl enable node_exporter
-sudo systemctl start node_exporter
-sudo systemctl status node_exporter
+
+$ sudo systemctl daemon-reload
+$ sudo systemctl enable node_exporter
+$ sudo systemctl start node_exporter
+$ sudo systemctl status node_exporter
 ~~~
 ## Configure the Node Exporter as a Prometheus target
 ~~~
