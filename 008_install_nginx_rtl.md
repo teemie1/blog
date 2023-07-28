@@ -46,29 +46,36 @@ $ sudo rm /etc/nginx/sites-enabled/default
 $ sudo nginx -t
 $ sudo systemctl reload nginx
 ~~~
+## Install NodeJS 18 LTS
+~~~
+$ cd ~
+$ curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+$ sudo apt install nodejs
+~~~
+
+
 ## c-lightning-Rest plugin
 ~~~
 $ sudo su - lightningd
-$ wget https://github.com/Ride-The-Lightning/c-lightning-REST/archive/refs/tags/v0.9.0.tar.gz
-$ wget https://github.com/Ride-The-Lightning/c-lightning-REST/releases/download/v0.9.0/v0.9.0.tar.gz.asc
+$ wget https://github.com/Ride-The-Lightning/c-lightning-REST/archive/refs/tags/v0.10.5.tar.gz
+$ wget https://github.com/Ride-The-Lightning/c-lightning-REST/releases/download/v0.10.5/v0.10.5.tar.gz.asc
 
 $ curl https://keybase.io/suheb/pgp_keys.asc | gpg --import
-$ gpg --verify v0.9.0.tar.gz.asc v0.9.0.tar.gz
-
-$ tar xvf v0.9.0.tar.gz
-$ cd c-lightning-REST-0.9.0
+$ gpg --verify v0.10.5.tar.gz.asc v0.10.5.tar.gz
+$ tar xvf v0.10.5.tar.gz
+$ cd c-lightning-REST-0.10.5
 $ npm install
 
-$ cp -r ~/c-lightning-REST-0.9.0/ /data/lightningd-plugins-available/
+$ cp -r ~/c-lightning-REST-0.10.5/ /data/lightningd-plugins-available/
 
 $ nano /data/lightningd/config
 # cln-rest-plugin
-plugin=/data/lightningd-plugins-available/c-lightning-REST-0.9.0/plugin.js
+plugin=/data/lightningd-plugins-available/c-lightning-REST-0.10.5/clrest.js
 rest-port=3092
 rest-docport=4091
 rest-protocol=http
 
-$ cd /data/lightningd-plugins-available/c-lightning-REST-0.9.0
+$ cd /data/lightningd-plugins-available/c-lightning-REST-0.10.5
 $ cp sample-cl-rest-config.json cl-rest-config.json
 $ nano cl-rest-config.json
 {
@@ -85,8 +92,72 @@ $ exit
 ~~~
 Copy magaroon
 ~~~
-$ sudo cp /data/lightningd-plugins-available/c-lightning-REST-0.9.0/certs/access.macaroon /home/rtl/
+$ sudo adduser --disabled-password --gecos "" rtl
+$ sudo usermod -a -G lightningd rtl
+$ sudo adduser tee rtl
+$ sudo cp /data/lightningd-plugins-available/c-lightning-REST-0.10.5/certs/access.macaroon /home/rtl/
 $ sudo chown rtl:rtl /home/rtl/access.macaroon
+$ sudo systemctl restart lightningd
+~~~
+## Install & Configuring RTL
+~~~
+## Install RTL
+$ sudo nano /etc/nginx/sites-enabled/rtl-reverse-proxy.conf
+server {
+  listen 4001 ssl;
+  error_page 497 =301 https://$host:$server_port$request_uri;
+
+  location / {
+    proxy_pass http://127.0.0.1:3000;
+  }
+}
+
+$ sudo nginx -t
+$ sudo systemctl reload nginx
+$ sudo ufw allow 4001/tcp comment 'allow Ride The Lightning SSL from anywhere'
+$ sudo adduser --disabled-password --gecos "" rtl
+
+$ sudo su - rtl
+$ nano /home/rtl/RTL/RTL-Config.json
+~~~
+~~~
+{
+  "multiPass": "<yourfancypassword>",
+  "port": "3000",
+  "SSO": {
+    "rtlSSO": 0,
+    "rtlCookiePath": "",
+    "logoutRedirectLink": ""
+  },
+  "nodes": [
+    {
+      "index": 1,
+      "lnNode": "CLN Node",
+      "lnImplementation": "CLN",
+      "Authentication": {
+        "macaroonPath": "/home/rtl",
+        "configPath": "/data/lightningd/config"
+      },
+      "Settings": {
+        "userPersona": "OPERATOR",
+        "themeMode": "DAY",
+        "themeColor": "INDIGO",
+        "fiatConversion": true,
+        "currencyUnit": "EUR",
+        "logLevel": "ERROR",
+        "lnServerUrl": "http://127.0.0.1:3092",
+        "enableOffers": true
+      }
+    }
+  ],
+  "defaultNodeIndex": 1
+}
 ~~~
 
-Ref: [https://v2.minibolt.info/bonus-guides/lightning/cln](https://v2.minibolt.info/bonus-guides/lightning/cln)https://v2.minibolt.info/bonus-guides/lightning/cln
+~~~
+$ exit
+$ sudo systemctl start rtl
+~~~
+Access RTL via your local IP: https:10.8.0.2:4001
+
+Ref: [https://v2.minibolt.info/bonus-guides/lightning/cln](https://v2.minibolt.info/bonus-guides/lightning/cln)
