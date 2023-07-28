@@ -84,7 +84,7 @@ $ exit
 $ sudo systemctl start postgresql
 
 ~~~
-## Check replication status
+## Check replication status on NODE2
 ~~~
 # Login NODE2 (Now, it's primary node)
 # Check Replication Status
@@ -107,6 +107,16 @@ $ sudo -i -u lightningd
 $ ln -s /data/lightningd .lightning
 $ rm /data/lightningd/config
 $ rm /data/lightningd/cln.log
+$ /usr/bin/lightning-hsmtool encrypt /data/lightningd/bitcoin/hsm_secret
+# Enter the password
+Successfully encrypted hsm_secret. You'll now have to pass the --encrypted-hsm startup option.
+
+# Delete tar file
+$ exit
+$ sudo rm /tmp/cln_config.tar
+
+# Open port at fw
+$ sudo ufw allow 9737/tcp comment 'allow cln(secondary) from anywhere'
 ~~~
 
 ## Start Core Lighting on NODE2
@@ -131,9 +141,10 @@ $ /usr/bin/lightningd  --alias=teemie⚡ \
                        --autocleaninvoice-cycle=86400 \
                        --autocleaninvoice-expired-by=86400 \
                        --wallet='postgres://lightningusr:[PASSWORD]@localhost:5432/lightningdb' \
-                       --bind-addr=0.0.0.0:9736 \
-                       --announce-addr=165.232.161.68:9736 \
+                       --bind-addr=0.0.0.0:9737 \
+                       --announce-addr=165.232.161.68:9737 \
                        --always-use-proxy=false \
+                       --encrypted-hsm \
                        --daemon 
 
 ~~~
@@ -148,12 +159,9 @@ $ lightning-cli getinfo
 ## Change forward port on VPS
 ~~~
 # Login to VPS Clearnet
-$ sudo iptables -t nat -D PREROUTING -i eth0 -p tcp --dport 9736 -j DNAT --to-destination 10.8.0.2
-$ sudo iptables -t nat -D POSTROUTING -o wg0 -p tcp --dport 9736 -d 10.8.0.2 -j SNAT --to-source 10.8.0.1
-$ sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 9736 -j DNAT --to-destination 10.8.0.4
-$ sudo iptables -t nat -A POSTROUTING -o wg0 -p tcp --dport 9736 -d 10.8.0.4 -j SNAT --to-source 10.8.0.1
-$ sudo apt install netfilter-persistent
-$ sudo apt install iptables-persistent
+$ sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 9737 -j DNAT --to-destination 10.8.0.4
+$ sudo iptables -t nat -A POSTROUTING -o wg0 -p tcp --dport 9737 -d 10.8.0.4 -j SNAT --to-source 10.8.0.1
+
 $ sudo netfilter-persistent save
 $ sudo systemctl enable netfilter-persistent
 ~~~
