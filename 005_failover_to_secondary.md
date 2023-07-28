@@ -81,6 +81,7 @@ primary_slot_name = 'node_a_slot'
 
 # Start PostgreSQL on NODE2 as primary
 $ exit
+$ sudo systemctl enable postgresql
 $ sudo systemctl start postgresql
 
 ~~~
