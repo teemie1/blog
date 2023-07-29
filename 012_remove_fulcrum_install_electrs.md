@@ -4,7 +4,7 @@ After synchronize Fulcrum for 14 hours until it's full sync. I can connect Blue 
 
 ## Remove fulcrum database and disable Fulcrum
 ~~~
-$ sudo rm /data/fulcrum/fulcrum_db
+$ sudo rm -rf /data/fulcrum/fulcrum_db
 $ sudo systemctl stop fulcrum
 $ sudo systemctl disable fulcrum
 ~~~
@@ -31,7 +31,7 @@ $ sudo systemctl reload nginx
 ## Build from source
 ~~~
 $ cd /tmp
-$ VERSION=0.10.0
+$ VERSION=0.9.14
 $ git clone --branch v$VERSION https://github.com/romanz/electrs.git
 $ cd electrs
 $ curl https://romanzey.de/pgp.txt | gpg --import
