@@ -127,7 +127,7 @@ $ sudo -i -u lightningd
 $ /usr/bin/lightningd  --alias=teemie⚡ \
                        --rgb=FFA500 \
                        --bitcoin-rpcuser=umbrel \
-                       --bitcoin-rpcpassword='H0lASO-8vR9Q9ZGZ4VNQiwFWYPJVpp8a1UBRh3Z-2eA=' \
+                       --bitcoin-rpcpassword='[PASSWORD of Bitcoind on Umbrel]' \
                        --bitcoin-rpcport=8332 \
                        --bitcoin-rpcconnect=10.8.0.205 \
                        --network=bitcoin \
