@@ -56,11 +56,11 @@ $ sudo systemctl status wg-quick@wg0
 ~~~
 $ wg
 interface: wg0
-  public key: /gxiXxR5rB9Uxul28b+qnHEfa7FF2d2sHkVCYteiuCe=
+  public key: [public key]
   private key: (hidden)
   listening port: 51820
 
-peer: bqCbtP5dBMNl1aLIs16o9kzGQE1u0yNgftIv0bUhn1Q=
+peer: [public key of peer]
   endpoint: 114.10.9.198:32114
   allowed ips: 10.8.1.0/24
   latest handshake: 1 minute, 7 seconds ago
