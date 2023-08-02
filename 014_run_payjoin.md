@@ -13,7 +13,7 @@ BITCOIN:TB1QJCR6W4J9ENS5G8RJWJ6HRK93A8D3SJJ4ZQGUPK?amount=0.0001&pj=https://loca
 
 ~~~
 
-## For sender, run joinmarket payment
+## For sender, check balance in joinmarket
 ~~~
 tee@mutiny:/tmp/joinmarket-clientserver-0.9.9$ source jmvenv/bin/activate
 (jmvenv) tee@mutiny:/tmp/joinmarket-clientserver-0.9.9$ cd scripts/
@@ -84,6 +84,115 @@ internal addresses      m/84'/1'/4'/1
 Balance:        0.00000000
 Balance for mixdepth 4: 0.00000000
 Total balance:  0.01270986
+~~~
+## For sender, try to pay via joinmarket with payjoin
+~~~
+(jmvenv) tee@mutiny:/tmp/joinmarket-clientserver-0.9.9/scripts$ python sendpayment.py -m 0 wallet.jmdat  "BITCOIN:TB1QJCR6W4J9ENS5G8RJWJ6HRK93A8D3SJJ4ZQGUPK?amount=0.0001&pj=https://mutiny.payjoin.org:4433"
+User data location: /home/tee/.joinmarket/
+Attempting to pay via payjoin.
+2023-08-02 02:46:20,744 [INFO]  starting sendpayment
+Enter passphrase to decrypt wallet:
+2023-08-02 02:46:29,490 [INFO]  BIP78 daemon listening on port 25183
+2023-08-02 02:46:29,493 [WARNING]  Could not source a fee estimate from Core, falling back to default: 10000 sat/vkB (10.0 sat/vB).
+2023-08-02 02:46:29,493 [INFO]  Using bitcoin network feerate for 3 block confirmation target (randomized for privacy): 9459 sat/vkB (9.4 sat/vB)
+2023-08-02 02:46:29,501 [WARNING]  Could not source a fee estimate from Core, falling back to default: 10000 sat/vkB (10.0 sat/vB).
+2023-08-02 02:46:29,501 [INFO]  Using bitcoin network feerate for 3 block confirmation target (randomized for privacy): 9336 sat/vkB (9.3 sat/vB)
+2023-08-02 02:46:29,556 [INFO]  Using a fee of: 0.00001316 BTC (1316 sat).
+2023-08-02 02:46:29,556 [INFO]  Using a change value of: 0.00259670 BTC (259670 sat).
+Completed PSBT created:
+{
+    "psbt-version": 0,
+    "unsigned-tx": {
+        "hex": "020000000171c6d089a1904e7a12c81cdd7506db9f17c109e41fdc4449fe7d14fe27de80410100000000fdffffff0210270000000000001600149607a75645cce1441c7274b571d8b1e9db184a5556f6030000000000160014e170436a7f24ae458ed161c678b94aa1d4596892106c0400",
+        "inputs": [
+            {
+                "outpoint": "4180de27fe147dfe4944dc1fe409c1179fdb0675dd1cc8127a4e90a189d0c671:1",
+                "scriptSig": "",
+                "nSequence": 4294967293
+            }
+        ],
+        "outputs": [
+            {
+                "value_sats": 10000,
+                "scriptPubKey": "00149607a75645cce1441c7274b571d8b1e9db184a55",
+                "address": "tb1qjcr6w4j9ens5g8rjwj6hrk93a8d3sjj4zqgupk"
+            },
+            {
+                "value_sats": 259670,
+                "scriptPubKey": "0014e170436a7f24ae458ed161c678b94aa1d4596892",
+                "address": "tb1qu9cyx6nlyjhytrk3v8r83w225829j6yj0uujq2"
+            }
+        ],
+        "txid": "440b289e3a16acbc5570534e67438fa82971e4282b843a00f7be09c2c7437e8b",
+        "nLockTime": 289808,
+        "nVersion": 2
+    },
+    "psbt-inputs": [
+        {
+            "input-index": 0,
+            "utxo": {
+                "value_sats": 270986,
+                "scriptPubKey": "0014aa3365c581264dab9f0759ffeb4baafc64ca01b5",
+                "address": "tb1q4gekt3vpyex6h8c8t8l7kja2l3jv5qd4ps249c"
+            },
+            "final-scriptSig": "",
+            "final-scriptWitness": "0248304502210088585d727cfe6da7105cb3b01e608318d523172dbd12fba7c62b197c286b3c020220174c516f5be54175d837f56ebdea10ae6528f0e00470bf10f43306138871597f012102d13e7245638b0db174e402386bea882a85c506985e3d7e772177137a8e9d9c3a"
+        }
+    ],
+    "psbt-outputs": [
+        {
+            "output-index": 0
+        },
+        {
+            "output-index": 1
+        }
+    ]
+}
+2023-08-02 02:46:29,583 [INFO]  Starting transaction monitor in walletservice
+2023-08-02 02:46:29,809 [WARNING]  Receiver returned error code: 400, message: <html>
+<head><title>400 Bad Request</title></head>
+<body>
+<center><h1>400 Bad Request</h1></center>
+<hr><center>nginx/1.18.0 (Ubuntu)</center>
+</body>
+</html>
 
+2023-08-02 02:46:29,809 [WARNING]  Payjoin did not succeed, falling back to non-payjoin payment.
+2023-08-02 02:46:29,809 [WARNING]  Error message was: <html>
+<head><title>400 Bad Request</title></head>
+<body>
+<center><h1>400 Bad Request</h1></center>
+<hr><center>nginx/1.18.0 (Ubuntu)</center>
+</body>
+</html>
+
+2023-08-02 02:46:30,018 [INFO]  Payment made without coinjoin. Transaction:
+2023-08-02 02:46:30,020 [INFO]  {
+    "hex": "0200000000010171c6d089a1904e7a12c81cdd7506db9f17c109e41fdc4449fe7d14fe27de80410100000000fdffffff0210270000000000001600149607a75645cce1441c7274b571d8b1e9db184a5556f6030000000000160014e170436a7f24ae458ed161c678b94aa1d45968920248304502210088585d727cfe6da7105cb3b01e608318d523172dbd12fba7c62b197c286b3c020220174c516f5be54175d837f56ebdea10ae6528f0e00470bf10f43306138871597f012102d13e7245638b0db174e402386bea882a85c506985e3d7e772177137a8e9d9c3a106c0400",
+    "inputs": [
+        {
+            "outpoint": "4180de27fe147dfe4944dc1fe409c1179fdb0675dd1cc8127a4e90a189d0c671:1",
+            "scriptSig": "",
+            "nSequence": 4294967293,
+            "witness": "0248304502210088585d727cfe6da7105cb3b01e608318d523172dbd12fba7c62b197c286b3c020220174c516f5be54175d837f56ebdea10ae6528f0e00470bf10f43306138871597f012102d13e7245638b0db174e402386bea882a85c506985e3d7e772177137a8e9d9c3a"
+        }
+    ],
+    "outputs": [
+        {
+            "value_sats": 10000,
+            "scriptPubKey": "00149607a75645cce1441c7274b571d8b1e9db184a55",
+            "address": "tb1qjcr6w4j9ens5g8rjwj6hrk93a8d3sjj4zqgupk"
+        },
+        {
+            "value_sats": 259670,
+            "scriptPubKey": "0014e170436a7f24ae458ed161c678b94aa1d4596892",
+            "address": "tb1qu9cyx6nlyjhytrk3v8r83w225829j6yj0uujq2"
+        }
+    ],
+    "txid": "440b289e3a16acbc5570534e67438fa82971e4282b843a00f7be09c2c7437e8b",
+    "nLockTime": 289808,
+    "nVersion": 2
+}
+done
 ~~~
 
