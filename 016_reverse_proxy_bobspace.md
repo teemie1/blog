@@ -248,4 +248,4 @@ $ sudo systemctl restart tor
 $ sudo ss -tulpn | grep LISTEN | grep tor
 ~~~
 
-Now, visiting bobspace-lnbits.duckdns.org should show your LNbits Server instance.
+Now, visiting [https://bobspace-lnbits.duckdns.org](https://bobspace-lnbits.duckdns.org) should show your LNbits Server instance.
