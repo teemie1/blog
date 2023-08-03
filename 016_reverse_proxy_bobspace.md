@@ -216,4 +216,36 @@ Restart Apache2
 ~~~
 sudo systemctl restart apache2
 ~~~
+## Install tor
+~~~
+$ sudo apt install apt-transport-https
+$ sudo nano /etc/apt/sources.list.d/tor.list
+# Add the following line list
+deb     [arch=amd64 signed-by=/usr/share/keyrings/tor-archive-keyring.gpg] https://deb.torproject.org/torproject.org jammy main
+deb-src [arch=amd64 signed-by=/usr/share/keyrings/tor-archive-keyring.gpg] https://deb.torproject.org/torproject.org jammy main
+
+$ sudo su -
+$ wget -qO- https://deb.torproject.org/torproject.org/A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc | gpg --dearmor | tee /usr/share/keyrings/tor-archive-keyring.gpg >/dev/null
+$ exit
+$ sudo apt update
+$ sudo apt install tor deb.torproject.org-keyring
+$ tor --version
+
+~~~
+## Tor configuration
+~~~
+$ sudo nano /etc/tor/torrc --linenumbers
+# uncomment line 56:
+ControlPort 9051
+
+# uncomment line 60
+CookieAuthentication 1
+
+# add under line 60:
+CookieAuthFileGroupReadable 1
+
+$ sudo systemctl restart tor
+$ sudo ss -tulpn | grep LISTEN | grep tor
+~~~
+
 Now, visiting bobspace-lnbits.duckdns.org should show your LNbits Server instance.
