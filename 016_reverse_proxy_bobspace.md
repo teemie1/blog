@@ -17,9 +17,7 @@ sudo ufw allow 9735 comment 'LND Main Node 1'
 sudo ufw enable
 sudo apt install fail2ban
 sudo timedatectl set-timezone Asia/Bangkok
-~~~
-## Install Necessary Program
-~~~
+
 # install dependencies (assumes you don't have apache2 installed)
 sudo apt install -y certbot apache2 socat tor
 
@@ -29,7 +27,7 @@ sudo a2enmod proxy_http
 ~~~
 ## SOCAT Setup
 ~~~
-nano /etc/systemd/system/http-to-socks-proxy@.service
+sudo nano /etc/systemd/system/http-to-socks-proxy@.service
 
 #add the following to the file
 
@@ -43,60 +41,57 @@ ExecStart=/usr/bin/socat tcp4-LISTEN:${LOCAL_PORT},reuseaddr,fork,keepalive,bind
 
 [Install]
 WantedBy=multi-user.target
-
-#exit and save
-ctrl-x, y
 ~~~
-Create the configuration for the service in /etc/http-to-socks-proxy/btcpayserver.conf:
+Create the configuration for the service in /etc/http-to-socks-proxy/lnbits.conf:
 ~~~
 # create the directory
-mkdir -p /etc/http-to-socks-proxy/
+sudo mkdir -p /etc/http-to-socks-proxy/
 
 # create the file with the content below
-nano /etc/http-to-socks-proxy/btcpayserver.conf
+sudo nano /etc/http-to-socks-proxy/lnbits.conf
 
 # replace the REMOTE_HOST and adapt the ports as needed
 PROXY_HOST=127.0.0.1
 PROXY_PORT=9050
 LOCAL_PORT=9081
-REMOTE_HOST=heregoesthebtcpayserverhiddenserviceaddress.onion
+REMOTE_HOST=ksgckoebikx53v4iarh5aops3i7arjwznmlin2j2pc7rpdgbfyeo2kyd.onion
 REMOTE_PORT=80
 ~~~
 Create a symlink in /etc/systemd/system/multi-user.target.wants to enable the service and start it:
 ~~~
 # build the symbolic link
-ln -s /etc/systemd/system/http-to-socks-proxy\@.service /etc/systemd/system/multi-user.target.wants/http-to-socks-proxy\@btcpayserver.service
+sudo ln -s /etc/systemd/system/http-to-socks-proxy\@.service /etc/systemd/system/multi-user.target.wants/http-to-socks-proxy\@lnbits.service
 
 # start
-systemctl start http-to-socks-proxy@btcpayserver
+sudo systemctl start http-to-socks-proxy@lnbits
 
 # check service status
-systemctl status http-to-socks-proxy@btcpayserver
+sudo systemctl status http-to-socks-proxy@lnbits
 
 # check if tunnel is active
-netstat -tulpn | grep socat
+sudo netstat -tulpn | grep socat
 # should give something like this:
 # tcp 0 0 127.0.0.1:9081 0.0.0.0:* LISTEN 951/socat
 ~~~
 ## Webserver setup
 ### Prepare Apache, SSL and Let’s Encrypt
-Create a config file for the domain, e.g. /etc/apache2/sites-available/btcpayserver.conf
+Create a config file for the domain, e.g. /etc/apache2/sites-available/lnbits.conf
 
 NOTE: don’t forget to update your actual domain name in 3 locations marked below.
 ~~~
 #build the file
-nano /etc/apache2/sites-available/btcpayserver.conf
+sudo nano /etc/apache2/sites-available/lnbits.conf
 
 #insert the following for http:80
 <VirtualHost *:80>
-ServerName <yourdomain>.com
-ServerAdmin admin@<yourdomain>.com
+ServerName bobspace-lnbits.duckdns.org
+ServerAdmin admin@bobspace-lnbits.duckdns.org
 
 ErrorLog ${APACHE_LOG_DIR}/error.log
 CustomLog ${APACHE_LOG_DIR}/access.log combined
 
 RewriteEngine on
-RewriteCond %{SERVER_NAME} =<yourdomain>.com
+RewriteCond %{SERVER_NAME} =bobspace-lnbits.duckdns.org
 RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
 </VirtualHost>
 
@@ -108,34 +103,34 @@ We will let Apache create/configure the https file once we obtain the SSL certif
 Enable the web server config by creating a symlink and restarting apache2:
 ~~~
 #build the symbolic link
-ln -s /etc/apache2/sites-available/btcpayserver.conf /etc/apache2/sites-enabled/btcpayserver.conf
+sudo ln -s /etc/apache2/sites-available/lnbits.conf /etc/apache2/sites-enabled/lnbits.conf
 
 #confirm the link is built
 cd /etc/apache2/sites-enabled
 ls -l
-#you should see a listing of btcpayserver.conf in blue
-#pointing to the sites-available btcpayserver reference
+#you should see a listing of lnbits.conf in blue
+#pointing to the sites-available lnbits reference
 
 #restart apache
-systemctl restart apache2
+sudo systemctl restart apache2
 ~~~
 
 ## Obtain SSL certificate via Let’s Encrypt
 Run the following command and verifications:
 ~~~
 cd /etc/apache2/sites-available
-certbot --apache -d <yourdomain>.com
+sudo certbot --apache -d bobspace-lnbits.duckdns.org
 #Follow the prompts to accept Terms of Service and add your admin email
 
 #Once completed, check the directory for the SSL/https version of your config file
 ls -l
 #you should see two files now
--rw-r--r-- 1 root root 1090 Dec 14 21:53 btcpayserver-le-ssl.conf
--rw-r--r-- 1 root root 412 Nov 29 21:47 btcpayserver.conf
+-rw-r--r-- 1 root root 1090 Dec 14 21:53 lnbits-le-ssl.conf
+-rw-r--r-- 1 root root 412 Nov 29 21:47 lnbits.conf
 ~~~
-Edit the btcpayserver-le-ssl.conf file
+Edit the lnbits-le-ssl.conf file
 ~~~
-nano /etc/apache2/sites-available/btcpayserver-le-ssl.conf
+sudo nano /etc/apache2/sites-available/lnbits-le-ssl.conf
 
 # note that <yourdomain> should be pre-filled here by the Certbot process
 # when creating the SSL certificate
@@ -145,8 +140,8 @@ nano /etc/apache2/sites-available/btcpayserver-le-ssl.conf
 <IfModule mod_ssl.c>
 <VirtualHost *:443>
 
-ServerName <yourdomain-alreadyfilled>.com
-ServerAdmin admin@<yourdomain-alreadyfilled>.com
+ServerName bobspace-lnbits.duckdns.org
+ServerAdmin admin@bobspace-lnbits.duckdns.org
 
 ErrorLog ${APACHE_LOG_DIR}/error.log
 CustomLog ${APACHE_LOG_DIR}/access.log combined
@@ -158,8 +153,8 @@ RewriteEngine on
 # RewriteCond %{SERVER_NAME} =<yourdomain-alreadyfilled>.com
 # RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
 
-SSLCertificateFile /etc/letsencrypt/live/<yourdomain-alreadyfilled>.com/fullchain.pem
-SSLCertificateKeyFile /etc/letsencrypt/live/<yourdomain-alreadyfilled>.com/privkey.pem
+SSLCertificateFile /etc/letsencrypt/live/bobspace-lnbits.duckdns.org/fullchain.pem
+SSLCertificateKeyFile /etc/letsencrypt/live/bobspace-lnbits.duckdns.org/privkey.pem
 Include /etc/letsencrypt/options-ssl-apache.conf
 
 </VirtualHost>
@@ -184,8 +179,8 @@ Your file should look like this now:
 <IfModule mod_ssl.c>
 <VirtualHost *:443>
 
-ServerName <yourdomain-alreadyfilled>.com
-ServerAdmin admin@<yourdomain-alreadyfilled>.com
+ServerName bobspace-lnbits.duckdns.org
+ServerAdmin admin@bobspace-lnbits.duckdns.org
 
 ErrorLog ${APACHE_LOG_DIR}/error.log
 CustomLog ${APACHE_LOG_DIR}/access.log combined
@@ -194,11 +189,11 @@ RewriteEngine on
 # Some rewrite rules in this file were disabled on your HTTPS site,
 # because they have the potential to create redirection loops.
 
-# RewriteCond %{SERVER_NAME} =<yourdomain-alreadyfilled>.com
+# RewriteCond %{SERVER_NAME} =bobspace-lnbits.duckdns.org
 # RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
 
-SSLCertificateFile /etc/letsencrypt/live/<yourdomain-alreadyfilled>.com/fullchain.pem
-SSLCertificateKeyFile /etc/letsencrypt/live/<yourdomain-alreadyfilled>.com/privkey.pem
+SSLCertificateFile /etc/letsencrypt/live/bobspace-lnbits.duckdns.org/fullchain.pem
+SSLCertificateKeyFile /etc/letsencrypt/live/bobspace-lnbits.duckdns.org/privkey.pem
 Include /etc/letsencrypt/options-ssl-apache.conf
 
 ProxyRequests Off
@@ -220,4 +215,4 @@ Restart Apache2
 ~~~
 systemctl restart apache2
 ~~~
-Now, visiting <yourdomain>.com should show your BTCPay Server instance.
+Now, visiting bobspace-lnbits.duckdns.org should show your LNbits Server instance.
