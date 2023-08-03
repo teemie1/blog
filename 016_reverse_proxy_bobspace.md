@@ -20,10 +20,13 @@ sudo timedatectl set-timezone Asia/Bangkok
 
 # install dependencies (assumes you don't have apache2 installed)
 sudo apt install -y certbot apache2 socat tor
+sudo apt-get install python3-certbot-apache
 
 #add apache proxy modules
 sudo a2enmod proxy
 sudo a2enmod proxy_http
+sudo a2enmod rewrite
+sudo a2enmod headers
 ~~~
 ## SOCAT Setup
 ~~~
@@ -69,9 +72,9 @@ sudo systemctl start http-to-socks-proxy@lnbits
 sudo systemctl status http-to-socks-proxy@lnbits
 
 # check if tunnel is active
-sudo netstat -tulpn | grep socat
+sudo ss -tulpn | grep socat
 # should give something like this:
-# tcp 0 0 127.0.0.1:9081 0.0.0.0:* LISTEN 951/socat
+# tcp 0 0 127.0.0.1:9081 0.0.0.0:* 
 ~~~
 ## Webserver setup
 ### Prepare Apache, SSL and Let’s Encrypt
@@ -95,8 +98,6 @@ RewriteCond %{SERVER_NAME} =bobspace-lnbits.duckdns.org
 RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
 </VirtualHost>
 
-#exit and save
-ctrl-X, y
 ~~~
 We will let Apache create/configure the https file once we obtain the SSL certificate.
 
@@ -213,6 +214,6 @@ RequestHeader set X-Forwarded-Port "443"
 ~~~
 Restart Apache2
 ~~~
-systemctl restart apache2
+sudo systemctl restart apache2
 ~~~
 Now, visiting bobspace-lnbits.duckdns.org should show your LNbits Server instance.
