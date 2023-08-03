@@ -5,32 +5,32 @@
 
 ## Prepare Ubuntu OS
 ~~~
-sudo apt-get update
-sudo apt-get upgrade
-sudo apt install ufw
-sudo ufw default deny incoming
-sudo ufw default allow outgoing
-sudo ufw allow OpenSSH
-sudo ufw allow 80 comment 'Standard Webserver'
-sudo ufw allow 443 comment 'SSL Webserver'
-sudo ufw allow 9735 comment 'LND Main Node 1'
-sudo ufw enable
-sudo apt install fail2ban
-sudo timedatectl set-timezone Asia/Bangkok
+$ sudo apt-get update
+$ sudo apt-get upgrade
+$ sudo apt install ufw
+$ sudo ufw default deny incoming
+$ sudo ufw default allow outgoing
+$ sudo ufw allow OpenSSH
+$ sudo ufw allow 80 comment 'Standard Webserver'
+$ sudo ufw allow 443 comment 'SSL Webserver'
+$ sudo ufw allow 9735 comment 'LND Main Node 1'
+$ sudo ufw enable
+$ sudo apt install fail2ban
+$ sudo timedatectl set-timezone Asia/Bangkok
 
 # install dependencies (assumes you don't have apache2 installed)
-sudo apt install -y certbot apache2 socat tor
-sudo apt-get install python3-certbot-apache
+$ sudo apt install -y certbot apache2 socat tor
+$ sudo apt-get install python3-certbot-apache
 
 #add apache proxy modules
-sudo a2enmod proxy
-sudo a2enmod proxy_http
-sudo a2enmod rewrite
-sudo a2enmod headers
+$ sudo a2enmod proxy
+$ sudo a2enmod proxy_http
+$ sudo a2enmod rewrite
+$ sudo a2enmod headers
 ~~~
 ## SOCAT Setup
 ~~~
-sudo nano /etc/systemd/system/http-to-socks-proxy@.service
+$ sudo nano /etc/systemd/system/http-to-socks-proxy@.service
 
 #add the following to the file
 
@@ -48,10 +48,10 @@ WantedBy=multi-user.target
 Create the configuration for the service in /etc/http-to-socks-proxy/lnbits.conf:
 ~~~
 # create the directory
-sudo mkdir -p /etc/http-to-socks-proxy/
+$ sudo mkdir -p /etc/http-to-socks-proxy/
 
 # create the file with the content below
-sudo nano /etc/http-to-socks-proxy/lnbits.conf
+$ sudo nano /etc/http-to-socks-proxy/lnbits.conf
 
 # replace the REMOTE_HOST and adapt the ports as needed
 PROXY_HOST=127.0.0.1
@@ -63,16 +63,16 @@ REMOTE_PORT=80
 Create a symlink in /etc/systemd/system/multi-user.target.wants to enable the service and start it:
 ~~~
 # build the symbolic link
-sudo ln -s /etc/systemd/system/http-to-socks-proxy\@.service /etc/systemd/system/multi-user.target.wants/http-to-socks-proxy\@lnbits.service
+$ sudo ln -s /etc/systemd/system/http-to-socks-proxy\@.service /etc/systemd/system/multi-user.target.wants/http-to-socks-proxy\@lnbits.service
 
 # start
-sudo systemctl start http-to-socks-proxy@lnbits
+$ sudo systemctl start http-to-socks-proxy@lnbits
 
 # check service status
-sudo systemctl status http-to-socks-proxy@lnbits
+$ sudo systemctl status http-to-socks-proxy@lnbits
 
 # check if tunnel is active
-sudo ss -tulpn | grep socat
+$ sudo ss -tulpn | grep socat
 # should give something like this:
 # tcp 0 0 127.0.0.1:9081 0.0.0.0:* 
 ~~~
@@ -83,7 +83,7 @@ Create a config file for the domain, e.g. /etc/apache2/sites-available/lnbits.co
 NOTE: don’t forget to update your actual domain name in 3 locations marked below.
 ~~~
 #build the file
-sudo nano /etc/apache2/sites-available/lnbits.conf
+$ sudo nano /etc/apache2/sites-available/lnbits.conf
 
 #insert the following for http:80
 <VirtualHost *:80>
@@ -104,34 +104,34 @@ We will let Apache create/configure the https file once we obtain the SSL certif
 Enable the web server config by creating a symlink and restarting apache2:
 ~~~
 #build the symbolic link
-sudo ln -s /etc/apache2/sites-available/lnbits.conf /etc/apache2/sites-enabled/lnbits.conf
+$ sudo ln -s /etc/apache2/sites-available/lnbits.conf /etc/apache2/sites-enabled/lnbits.conf
 
 #confirm the link is built
-cd /etc/apache2/sites-enabled
-ls -l
+$ cd /etc/apache2/sites-enabled
+$ ls -l
 #you should see a listing of lnbits.conf in blue
 #pointing to the sites-available lnbits reference
 
 #restart apache
-sudo systemctl restart apache2
+$ sudo systemctl restart apache2
 ~~~
 
 ## Obtain SSL certificate via Let’s Encrypt
 Run the following command and verifications:
 ~~~
-cd /etc/apache2/sites-available
-sudo certbot --apache -d bobspace-lnbits.duckdns.org
+$ cd /etc/apache2/sites-available
+$ sudo certbot --apache -d bobspace-lnbits.duckdns.org
 #Follow the prompts to accept Terms of Service and add your admin email
 
 #Once completed, check the directory for the SSL/https version of your config file
-ls -l
+$ ls -l
 #you should see two files now
 -rw-r--r-- 1 root root 1090 Dec 14 21:53 lnbits-le-ssl.conf
 -rw-r--r-- 1 root root 412 Nov 29 21:47 lnbits.conf
 ~~~
 Edit the lnbits-le-ssl.conf file
 ~~~
-sudo nano /etc/apache2/sites-available/lnbits-le-ssl.conf
+$ sudo nano /etc/apache2/sites-available/lnbits-le-ssl.conf
 
 # note that <yourdomain> should be pre-filled here by the Certbot process
 # when creating the SSL certificate
@@ -214,7 +214,7 @@ RequestHeader set X-Forwarded-Port "443"
 ~~~
 Restart Apache2
 ~~~
-sudo systemctl restart apache2
+$ sudo systemctl restart apache2
 ~~~
 ## Install tor
 ~~~
