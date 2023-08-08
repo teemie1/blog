@@ -9,7 +9,8 @@
 ## Prepare Ubuntu OS
 ~~~
 # install dependencies (assumes you don't have apache2 installed)
-$ sudo apt install -y certbot apache2 tor
+$ sudo apt install -y apache2
+$ sudo apt install python3-certbot-apache
 
 #add apache proxy modules
 $ sudo a2enmod proxy
@@ -36,7 +37,7 @@ ErrorLog ${APACHE_LOG_DIR}/error.log
 CustomLog ${APACHE_LOG_DIR}/access.log combined
 
 RewriteEngine on
-RewriteCond %{SERVER_NAME} =mutiny.payjoin.org
+RewriteCond %{SERVER_NAME} =mutiny.payjoin.org:4433
 RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
 </VirtualHost>
 
@@ -97,6 +98,7 @@ RequestHeader set X-Forwarded-Port "4433"
 ~~~
 Restart Apache2
 ~~~
+$ sudo ln -s /etc/apache2/sites-available/payjoin-le-ssl.conf /etc/apache2/sites-enabled/payjoin-le-ssl.conf
 $ sudo systemctl restart apache2
 ~~~
 
