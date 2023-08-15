@@ -3,7 +3,7 @@
 
 ## Bitcoind
 ~~~
-bitcoind -datadir=/data/bitcoin -server=1 -txindex=1 -coinstatsindex=1 -listen=1 -bind=0.0.0.0 -rpcallowip=0.0.0.0/0 -rpcbind=0.0.0.0 -rpcport=8332 -rpcuser=bitcoin -rpcpassword=password -daemon=1 
+bitcoind -datadir=/data/bitcoin -server=1 -txindex=1 -listen=1 -bind=0.0.0.0 -rpcallowip=0.0.0.0/0 -rpcbind=0.0.0.0 -rpcport=8332 -rpcuser=bitcoin -rpcpassword=password -daemon=1 
 ~~~
 
 
