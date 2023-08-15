@@ -1,4 +1,4 @@
-# Common Command for Bitcoind & Lightningd
+# Starting Command for Bitcoind & Lightningd
 
 
 ## Bitcoind
