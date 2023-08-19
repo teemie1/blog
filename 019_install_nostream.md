@@ -1,10 +1,8 @@
 # Install nostream for Paid Public Nostr Relay
 
 ## Prerequisite Docker setup
- - PostgreSQL 14.0
- - Redis
- - Node v18
- - Typescript
+ - Docker v20.10
+ - Docker Compose v2.10
 
 
 ## Install Prerequisite
