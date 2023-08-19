@@ -1,6 +1,6 @@
 # Install nostream for Paid Public Nostr Relay
 
-## Prerequisite Standalone setup
+## Prerequisite Docker setup
  - PostgreSQL 14.0
  - Redis
  - Node v18
@@ -11,60 +11,62 @@
 ~~~
 # Update deps & install nodejs, npm, nginx, certbot
 $ sudo apt update
+$ sudo apt upgrade
 $ sudo apt install nodejs npm nginx certbot python3-certbot-nginx
 
 # Setup new `nostream` user (don't run nostream on root)
-$ sudo adduser --gecos "" --disabled-password nostr
-$ sudo adduser tee nostr
+$ sudo useradd -m -G docker nostream
+# If the group `docker` doesn't exist run groupadd docker
+
+# Set new nostream user password
+$ sudo passwd nostream
+
+# Set bash shell for nostream user
+$ sudo chsh -s /bin/bash nostream
 
 ~~~
 
-## Install nostream
+## Setup Docker + Install
 ~~~
-# Change to nostream user
-$ sudo -i -u nostr
+# Create the keyring folder
+$ sudo mkdir -p /etc/apt/keyrings
 
-# Clone `nostream` repo
-$ git clone https://github.com/Cameri/nostream.git
+# Fetch and add it to folder
+$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 
-# Open a TMUX session
-# (to be able to detach and maintain process running)
-$ tmux
+# Setup proper folder permissions
+$ sudo chmod a+r /etc/apt/keyrings/docker.gpg
 
-# Start the relay
-$ ./scripts/start
+# Setup `apt` Docker repository (this is a one-liner)
+$ echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-# You want to start the relay once such that all Docker images are downloaded/built, and the default settings.yaml file is automatically copied over.
+# Install Docker
+$ sudo apt update && sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
-# Stop the relay (you will see the NOSTREAM logo once it's running)
-Ctrl + C (you can use ./scripts/stop as well)
-
-# Edit the settings file to your liking
-# (see Settings.yaml Configuration below)
-
-# Add local.env file to root
-touch local.env
-
-# Edit local.env file and add ZEBEDEE_API_KEY and SECRET
-# SECRET is a 128bit random hash
-nano local.env
-
-ZEBEDEE_API_KEY="your API key goes here"
-SECRET="your SECRET goes here"
-
-# You may need to add a `env_file` property to docker-compose.yml
-env_file
-  - local.env
-
-# Restart Nostream
-./scripts/start
-
-# To detach from the TMUX session
-Ctrl+B  +  D
-# To re-attach to the TMUX session
-tmux a
+# Check installation is successful by checking verions
+$ docker --version
 ~~~
+## Forward port in public VPS
+80 & 443
+## Setup Nginx
+~~~
+# Delete the default nginx settings file
+$ rm -rf /etc/nginx/sites-available/default
 
+# Paste in new settings file contents (see heading NGINX Settings below)
+$ sudo nano /etc/nginx/sites-available/default
+
+# Restart nginx
+$ sudo systemctl start nginx
+
+# Map DNS A record to IP of VM machine (see DNS Settings below)
+
+# Request SSL cert from letsencrypt/certbot
+$ sudo certbot --nginx -d teemie1-relay.duckdns.org
+
+~~~
 ## Running as a Service
 ~~~
 $ nano /etc/systemd/system/nostream.service
@@ -95,26 +97,4 @@ $ systemctl start nostream
 $ journalctl -fu nostream
 ~~~
 
-## Initializing the database
-~~~
-$ psql -h $DB_HOST -p $DB_PORT -U $DB_USER -W
-postgres=# create database nostr_ts_relay;
-postgres=# quit
-~~~
-~~~
-$ redis-cli
-127.0.0.1:6379> CONFIG SET requirepass "nostr_ts_relay"
-OK
-127.0.0.1:6379> AUTH nostr_ts_relay
-Ok
-~~~
-~~~
-$ git clone git@github.com:Cameri/nostream.git
-$ cd nostream
-$ npm install -g knex
-$ npm install
-$ NODE_OPTIONS="-r dotenv/config" npm run db:migrate
-$ mkdir .nostr
-$ cp resources/default-settings.yaml .nostr/settings.yaml
 
-~~~
