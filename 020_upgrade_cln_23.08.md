@@ -54,5 +54,5 @@ $ /usr/bin/lightningd  --alias=teemie⚡ \
 ~~~
 $ sudo -i -u lightningd
 $ lightning-cli getinfo
-$ lightningd -version
+$ lightningd --version
 ~~~
