@@ -247,6 +247,13 @@ $ sudo su - postgres -c 'psql -c "select usename, application_name, client_addr,
 
 ~~~
 
+## Copy CLN Config Folder
+~~~
+# Copy file lightningd_data.tar to /tmp
+$ cd /
+$ sudo tar -xvf /tmp/lightningd_data.tar
+~~~
+
 ## Start Core Lightning daemon
 ~~~
 $ sudo systemctl enable lightningd.service
