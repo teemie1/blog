@@ -117,9 +117,11 @@ Wants=network-online.target
 After=network-online.target
 
 [Service]
-ExecStart=/bin/sh -c '/usr/bin/lightningd \
+ExecStart=/bin/sh -c '(cat /home/lightningd/.lightningdpw;echo;cat /home/lightningd/.lightningdpw) | \
+                        /usr/bin/lightningd \
                        --conf=/data/lightningd/config \
                        --daemon \
+                       --encrypted-hsm \
                        --pid-file=/run/lightningd/lightningd.pid'
 
 ExecStop=/bin/sh -c '/usr/bin/lightning-cli stop'
@@ -259,6 +261,16 @@ $ sudo tar -xvf /tmp/lightningd_data.tar
 $ sudo systemctl enable lightningd.service
 $ sudo systemctl start lightningd.service
 $ sudo journalctl -f -u lightningd
+~~~
 
+## Forward port at VPS
+~~~
+# Login to VPS Clearnet
+$ sudo iptables -t nat -D PREROUTING -i eth0 -p tcp --dport 9736 -j DNAT --to-destination 10.8.0.4
+$ sudo iptables -t nat -D POSTROUTING -o wg0 -p tcp --dport 9736 -d 10.8.0.4 -j SNAT --to-source 10.8.0.1
+$ sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 9736 -j DNAT --to-destination 10.8.0.2
+$ sudo iptables -t nat -A POSTROUTING -o wg0 -p tcp --dport 9736 -d 10.8.0.2 -j SNAT --to-source 10.8.0.1
 
+$ sudo netfilter-persistent save
+$ sudo systemctl enable netfilter-persistent
 ~~~
