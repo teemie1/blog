@@ -161,3 +161,23 @@ sudo systemctl enable nostream
 sudo systemctl start nostream
 sudo journalctl -u nostream
 ~~~
+
+## Query PostgreSQL
+~~~
+$ sudo -i
+$ docker exec -it nostream-db bash
+$ (inside the docker) psql -U nostr_ts_relay -W
+enter the passward nostr_ts_relay
+\d
+Schema | Name | Type | Owner
+--------+--------------------------------+----------+----------------
+public | events | table | nostr_ts_relay
+public | invoices | table | nostr_ts_relay
+public | knex_migrations | table | nostr_ts_relay
+public | knex_migrations_id_seq | sequence | nostr_ts_relay
+public | knex_migrations_lock | table | nostr_ts_relay
+public | knex_migrations_lock_index_seq | sequence | nostr_ts_relay
+public | users | table | nostr_ts_relay
+(7 rows)
+select * from users;
+~~~
