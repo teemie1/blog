@@ -13,8 +13,8 @@ rtmp {
         server {
                 listen 1935;
                 chunk_size 4096;
-                allow publish 127.0.0.1;
-                deny publish all;
+#                allow publish 127.0.0.1;
+                allow publish all;
 
                 application live {
                         live on;
@@ -28,30 +28,18 @@ $ sudo ufw allow 1935/tcp
 $ sudo systemctl reload nginx.service
 ~~~
 
-## Sending Video to Your RTMP Server
+## Streaming Video to Your Server via OBS (Optional)
+Download (OBS)[https://cdn-fastly.obsproject.com/downloads/OBS-Studio-29.1.3-Full-Installer-x64.exe] and start stream from the following config.
 ~~~
-sudo apt install python3-pip
-sudo pip install youtube-dl
-youtube-dl https://www.youtube.com/watch?v=iom_nhYQIYk
-sudo apt install ffmpeg
-ffmpeg -re -i "Introducing App Platform by DigitalOcean-iom_nhYQIYk.mkv" -c:v copy -c:a aac -ar 44100 -ac 1 -f flv rtmp://localhost/live/stream
+Streaming Service: Custom
+Server: rtmp://your_domain/live
+Play Path/Stream Key: obs_stream
 ~~~
+To see the streaming use VLC and "Open Network Stream..." to "rtmp://teemie1-relay.duckdns.org/live/obs_stream
 
-## Sending Video to Your RTMP Server
+## Adding Monitoring to Your Configuration (Optional)
 ~~~
-sudo nano /etc/nginx/nginx.conf
-. . .
-                allow publish 127.0.0.1;
-                allow publish your_local_ip_address;
-                deny publish all;
-. . .
-
-sudo systemctl reload nginx.service
-~~~
-
-## Sending Video to Your RTMP Server
-~~~
-sudo nano /etc/nginx/sites-available/rtmp
+$ sudo nano /etc/nginx/sites-available/rtmp
 server {
     listen 8080;
     server_name  localhost;
@@ -71,17 +59,19 @@ server {
     }
 }
 
-sudo mkdir /var/www/html/rtmp
-sudo gunzip -c /usr/share/doc/libnginx-mod-rtmp/examples/stat.xsl.gz > /var/www/html/rtmp/stat.xsl
-sudo ufw allow from your_ip_address to any port http-alt
-sudo ln -s /etc/nginx/sites-available/rtmp /etc/nginx/sites-enabled/rtmp
-sudo systemctl reload nginx.service
+$ sudo mkdir /var/www/html/rtmp
+$ sudo cp /usr/share/doc/libnginx-mod-rtmp/examples/stat.xsl /var/www/html/rtmp/stat.xsl
+$ sudo ufw allow from 10.8.0.0/24 to any port http-alt comment 'Allow VPN Client to connect'
+$ sudo ufw allow from 192.168.1.0/24 to any port http-alt comment 'Allow Local Client to connect'
+$ sudo ln -s /etc/nginx/sites-available/rtmp /etc/nginx/sites-enabled/rtmp
+$ sudo systemctl reload nginx.service
 
 ~~~
+You should now be able to go to http://teemie1-relay.duckdns.org:8080/stat
 
 ## Creating Modern Streams for Browsers (Optional)
 ~~~
-sudo nano /etc/nginx/nginx.conf
+$ sudo nano /etc/nginx/nginx.conf
 . . .
 rtmp {
         server {
@@ -101,7 +91,7 @@ rtmp {
 }
 . . .
 
-sudo nano /etc/nginx/sites-available/rtmp
+$ sudo nano /etc/nginx/sites-available/rtmp
 . . .
 server {
     listen 8088;
@@ -116,12 +106,12 @@ types {
     application/dash+xml mpd;
 }
 
-sudo ufw allow 8088/tcp
-sudo mkdir /var/www/html/stream
-sudo systemctl reload nginx
+$ sudo ufw allow 8088/tcp
+$ sudo mkdir /var/www/html/stream
+$ sudo systemctl reload nginx
 
 ~~~
-You should now have an HLS stream available at http://your_domain:8088/hls/stream.m3u8 and a DASH stream available at http://your_domain:8088/dash/stream.mpd. These endpoints will generate any necessary metadata on top of your RTMP video feed in order to support modern APIs.
+You should now have an HLS stream available at http://teemie1-relay.duckdns.org:8088/hls/obs_stream.m3u8 and a DASH stream available at http://teemie1-relay.duckdns.org:8088/dash/stream.mpd. These endpoints will generate any necessary metadata on top of your RTMP video feed in order to support modern APIs.
 
 ## 
 ~~~
