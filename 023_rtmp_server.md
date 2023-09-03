@@ -1,5 +1,6 @@
 # Create RTMP Streaming Server on Ubuntu 22.04
 
+This streaming server already installed NGINX.
 ## Installing and Configuring Nginx-RTMP
 ~~~
 $ sudo apt update
