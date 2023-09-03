@@ -113,8 +113,43 @@ $ sudo systemctl reload nginx
 ~~~
 You should now have an HLS stream available at http://teemie1-relay.duckdns.org:8088/hls/obs_stream.m3u8 and a DASH stream available at http://teemie1-relay.duckdns.org:8088/dash/stream.mpd. These endpoints will generate any necessary metadata on top of your RTMP video feed in order to support modern APIs.
 
-## 
+## Add authentication
 ~~~
+$ sudo vi /etc/nginx/nginx.conf
+...
+rtmp {
+        server {
+...
+                application live {
+                        live on;
+                        on_publish http://localhost:8080/auth;
+   ...
+                }
+        }
+}
+...
+$ sudo nano /etc/nginx/sites-available/rtmp
+...
+    listen 8080;
+    server_name  localhost;
+
+    # rtmp authentication
+    location /auth {
+        if ($arg_pwd = 'rightshift') {
+            return 200;
+            }
+            return 401;
+    }
+
+
+$  systemctl restart nginx.service
+~~~
+## Streaming Video to Your Server via OBS with password
 
 ~~~
+Streaming Service: Custom
+Server: rtmp://teemie1-relay.duckdns.org/live
+Play Path/Stream Key: obs_stream?pwd=rightshift
+~~~
+To see the streaming use VLC and "Open Network Stream..." to "rtmp://teemie1-relay.duckdns.org/live/obs_stream
 
