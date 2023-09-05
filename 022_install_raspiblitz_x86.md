@@ -39,8 +39,8 @@ $ sudo shutdown -r now
  - Login with admin user
  - Select fresh install and delete all existing data
  - Fill Password A,B,C,D --> all the same
- - Wait until LND Setup
- - Ctrl+C to command line
+ - Wait until finish system Setup
+ - Open another terminal windows
 ~~~
 $ sudo systemctl stop bitcoind
 $ sudo rm -rf /mnt/hdd/bitcoin/blocks
@@ -50,7 +50,8 @@ $ sudo ln -s /data/bitcoin/chainstate /mnt/hdd/bitcoin/chainstate
 $ sudo ln -s /data/bitcoin/indexes /mnt/hdd/bitcoin/indexes
 $ sudo chown bitcoin:bitcoin /mnt/hdd/bitcoin
 $ sudo chown bitcoin:bitcoin /data/bitcoin
-$ sudo reboot
-#$ sudo systemctl start bitcoind
+$ sudo chmod 777 /mnt/hdd/bitcoin
+$ sudo chmod -R 777 /data/bitcoin
+$ sudo systemctl start bitcoind
 $ sudo tail -f /mnt/hdd/bitcoin/debug.log
 ~~~
