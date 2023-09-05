@@ -48,9 +48,9 @@ $ sudo rm -rf /mnt/hdd/bitcoin/chainstate
 $ sudo ln -s /data/bitcoin/blocks /mnt/hdd/bitcoin/blocks
 $ sudo ln -s /data/bitcoin/chainstate /mnt/hdd/bitcoin/chainstate
 $ sudo ln -s /data/bitcoin/indexes /mnt/hdd/bitcoin/indexes
-$ sudo chown bitcoin:bitcoin /mnt/hdd/bitcoin
-$ sudo chown bitcoin:bitcoin /data/bitcoin
-$ sudo chmod 777 /mnt/hdd/bitcoin
+$ sudo chown -R bitcoin:bitcoin /mnt/hdd/bitcoin
+$ sudo chown -R bitcoin:bitcoin /data/bitcoin
+$ sudo chmod -R 777 /mnt/hdd/bitcoin
 $ sudo chmod -R 777 /data/bitcoin
 $ sudo systemctl start bitcoind
 $ sudo tail -f /mnt/hdd/bitcoin/debug.log
