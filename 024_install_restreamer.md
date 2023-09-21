@@ -56,8 +56,8 @@ $ sudo vi /opt/restreamer/config/config.json
       "address": ":8181",
       "enable": true,
       "auto": false,
-      "cert_file": "/etc/letsencrypt/live/teemie1-relay.duckdns.org/fullchain.pem",
-      "key_file": "/etc/letsencrypt/live/teemie1-relay.duckdns.org/privkey.pem"
+      "cert_file": "/etc/letsencrypt/archive/teemie1-relay.duckdns.org/fullchain1.pem",
+      "key_file": "/etc/letsencrypt/archive/teemie1-relay.duckdns.org/privkey1.pem"
    },
 }
 
