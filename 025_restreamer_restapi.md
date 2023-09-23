@@ -11,6 +11,14 @@ $ curl -X 'POST' \
   "password": "*****"
 }'
 ~~~
+## Show process
+~~~
+$ curl -X 'GET' \
+  'https://teemie1-relay.duckdns.org:8181/api/v3/process' \
+  -H 'accept: application/json' \
+  -H 'Authorization: Bearer ACCESS_TOKEN'
+~~~
+
 ## List active session
 ~~~
 $ curl -X 'GET' \
