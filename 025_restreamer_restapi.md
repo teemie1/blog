@@ -18,6 +18,13 @@ $ curl -X 'GET' \
   -H 'accept: application/json' \
   -H 'Authorization: Bearer ACCESS_TOKEN'
 ~~~
+## Show probe process
+~~~
+$ curl -X 'GET' \
+  'https://teemie1-relay.duckdns.org:8181/api/v3/process/restreamer-ui:ingest:a1bf161c-c0af-4cd3-ae7b-c35f72d53e00/probe' \
+  -H 'accept: application/json' \
+  -H 'Authorization: Bearer ACCESS_TOKEN'
+~~~
 
 ## List active session
 ~~~
