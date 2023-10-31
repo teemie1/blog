@@ -56,7 +56,8 @@ $ sudo systemctl start payjoin-relay-ssh.service
 $ sudo systemctl start payjoin-relay-http.service
 $ sudo systemctl start payjoin-relay-https.service
 
-$ socat TCP-LISTEN:10022,fork TCP:10.8.0.205:22
-$ socat TCP-LISTEN:80,fork TCP:10.8.0.205:80
-$ socat TCP-LISTEN:443,fork TCP:10.8.0.205:443
+# These are for reference
+# socat TCP-LISTEN:10022,fork TCP:10.8.0.205:22
+# socat TCP-LISTEN:80,fork TCP:10.8.0.205:80
+# socat TCP-LISTEN:443,fork TCP:10.8.0.205:443
 ~~~
