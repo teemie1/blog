@@ -24,62 +24,81 @@ $ tapd --version
 
 ## User & Data Directory
 ~~~
-$ sudo adduser --disabled-password --gecos "" tapd
-$ sudo usermod -a -G tapd,debian-tor tapd
-$ sudo adduser admin tapd
 $ sudo mkdir /mnt/hdd/tapd
-$ sudo chown -R tapd:tapd /mnt/hdd/tapd
-$ sudo su - tapd
+$ sudo chown -R bitcoin:bitcoin /mnt/hdd/tapd
+$ sudo su - bitcoin
 $ ln -s /mnt/hdd/tapd /home/tapd/.tapd
-$ ln -s /mnt/hdd/lnd /home/tapd/.lnd
-$ ln -s /mnt/hdd/bitcoin /home/tapd/.bitcoin
 
 ~~~
 ## TAPD Configuration File
 ~~~
 $ nano /mnt/hdd/tapd/tapd.conf
-# RaspiBolt: lnd configuration
-# /data/lnd/lnd.conf
+# Teemie: tapd configuration
+# /mnt/hdd/tapd/tapd.conf
 
-[Application Options]
-alias=YOUR_FANCY_ALIAS
-debuglevel=info
-maxpendingchannels=5
-listen=localhost
+network=mainnet
+debuglevel=debug
+lnd.host=localhost:10009
+lnd.macaroonpath=/mnt/hdd/lnd/data/chain/bitcoin/mainnet/admin.macaroon
+lnd.tlspath=/mnt/hdd/lnd/tls.cert
 
-# Password: automatically unlock wallet with the password in this file
-# -- comment out to manually unlock wallet, and see RaspiBolt guide for more secure options
-wallet-unlock-password-file=/data/lnd/password.txt
-wallet-unlock-allow-create=true
+~~~
 
-# Automatically regenerate certificate when near expiration
-tlsautorefresh=true
-# Do not include the interface IPs or the system hostname in TLS certificate.
-tlsdisableautofill=true
-# Explicitly define any additional domain names for the certificate that will be created.
-# tlsextradomain=raspibolt.local
-# tlsextradomain=raspibolt.public.domainname.com
+## TAPD Autostart
+~~~
+$ exit
+$ sudo nano /etc/systemd/system/tapd.service
+# Teemie: systemd unit for tapd
+# /etc/systemd/system/tapd.service
 
-# Channel settings
-bitcoin.basefee=1000
-bitcoin.feerate=1
-minchansize=100000
-accept-keysend=true
-accept-amp=true
-protocol.wumbo-channels=true
-coop-close-target-confs=24
+[Unit]
+Description=Taproot Asset Protocol Daemon
+Wants=lnd.service
+After=lnd.service
 
-# Set to enable support for the experimental taproot channel type
-protocol.simple-taproot-chans=true
+[Service]
 
-# Watchtower
-wtclient.active=true
+# Service execution
+###################
+ExecStart=/usr/local/bin/tapd
+ExecStop=/usr/local/bin/tapcli --rpcserver=127.0.0.1:10029  --network=mainnet stop
 
-# Performance
-gc-canceled-invoices-on-startup=true
-gc-canceled-invoices-on-the-fly=true
-ignore-historical-gossip-filters=1
-stagger-initial-reconnect=true
+# Process management
+####################
+Type=simple
+Restart=always
+RestartSec=30
+TimeoutSec=240
+LimitNOFILE=128000
 
+# Directory creation and permissions
+####################################
+User=bitcoin
+
+# /run/tapd
+RuntimeDirectory=tapd
+RuntimeDirectoryMode=0710
+
+# Hardening measures
+####################
+# Provide a private /tmp and /var/tmp.
+PrivateTmp=true
+
+# Mount /usr, /boot/ and /etc read-only for the process.
+ProtectSystem=full
+
+# Disallow the process and all of its children to gain
+# new privileges through execve().
+NoNewPrivileges=true
+
+# Use a new /dev namespace only populated with API pseudo devices
+# such as /dev/null, /dev/zero and /dev/random.
+PrivateDevices=true
+
+# Deny the creation of writable and executable memory mappings.
+MemoryDenyWriteExecute=true
+
+[Install]
+WantedBy=multi-user.target
 
 ~~~
