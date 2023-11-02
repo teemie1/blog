@@ -102,3 +102,14 @@ MemoryDenyWriteExecute=true
 WantedBy=multi-user.target
 
 ~~~
+## Sync Universe
+~~~
+$ sudo adduser admin bitcoin
+$ ln -s /mnt/hdd/tapd /home/admin/.tapd
+$ sudo chmod -R g+X /mnt/hdd/tapd/data/
+
+# Logout and login again
+
+$ tapcli -n=mainnet getinfo
+$ tapcli -n=mainnet universe sync --universe_host universe.lightning.finance
+~~~
