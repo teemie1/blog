@@ -12,6 +12,7 @@ $ apt update
 $ apt install temurin-11-jdk
 $ mkdir /mnt/hdd/eclair
 $ chown bitcoin.bitcoin /mnt/hdd/eclair
+$ ln -s /mnt/hdd/eclair /home/bitcoin/.eclair
 
 ~~~
 
@@ -20,7 +21,6 @@ $ chown bitcoin.bitcoin /mnt/hdd/eclair
 $ su - bitcoin
 $ wget https://github.com/ACINQ/eclair/releases/download/v0.9.0/eclair-node-0.9.0-623f7e4-bin.zip
 $ unzip ./eclair-node-0.9.0-623f7e4-bin.zip
-$ ln -s /mnt/hdd/eclair /home/bitcoin/.eclair
 $ nano ~/.eclair/eclair.conf
 eclair.chain=mainnet
 eclair.node-alias=teemie⚡-ecl
@@ -42,10 +42,16 @@ eclair.bitcoind.wallet="teemie"
 
 # Create wallet on bitcoind
 $ bitcoin-cli -named createwallet wallet_name=teemie load_on_startup=true
+
+# install eclair-cli
+$ exit
+$ sudo cp /home/bitcoin/eclair-node-0.9.0-623f7e4/bin/eclair-cli /usr/local/bin
 ~~~
 
 ## Start Eclair for test
 ~~~
+$ sudo su - bitcoin
+
 # Start Eclair
 $ /home/bitcoin/eclair-node-0.9.0-623f7e4/bin/eclair-node.sh
 
