@@ -88,7 +88,7 @@ $ logout
 
 # Login again
 $ eclair-cli getinfo
-$ eclair-cli connect --uri=[NODE-ID]@[ADDRESS]:9737
+$ eclair-cli connect --uri=[NODE-ID]@[ADDRESS]:[PORT]
 $ eclair-cli peers
 
 
