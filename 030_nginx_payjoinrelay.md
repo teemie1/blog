@@ -50,3 +50,15 @@ server {
 
 $ sudo systemctl restart nginx
 ~~~
+
+## Forward port
+~~~
+$ sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j DNAT --to-destination 10.8.0.205
+$ sudo iptables -t nat -A POSTROUTING -o wg0 -p tcp --dport 80 -d 10.8.0.205 -j SNAT --to-source 10.8.0.1
+$ sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j DNAT --to-destination 10.8.0.205
+$ sudo iptables -t nat -A POSTROUTING -o wg0 -p tcp --dport 443 -d 10.8.0.205 -j SNAT --to-source 10.8.0.1
+
+$ sudo netfilter-persistent save
+$ sudo systemctl enable netfilter-persistent
+
+~~~
