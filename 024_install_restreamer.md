@@ -34,11 +34,11 @@ $ sudo docker run --detach --name restreamer --privileged \
 --volume /opt/restreamer/config:/core/config \
 --volume /opt/restreamer/data:/core/data \
 --volume /etc/letsencrypt:/etc/letsencrypt \
---publish 8080:8080 --publish 8181:8181 --publish 1935:1935 --publish 1936:1936 --publish 6000:6000/udp \
+--publish 8180:8080 --publish 8181:8181 --publish 1935:1935 --publish 1936:1936 --publish 6000:6000/udp \
 datarhei/restreamer:vaapi-latest
 
 # Open Firewall
-$ sudo ufw allow 8080/tcp comment 'Allow restreamer http'
+$ sudo ufw allow 8180/tcp comment 'Allow restreamer http'
 $ sudo ufw allow 8181/tcp comment 'Allow restreamer https'
 $ sudo ufw allow 1935/tcp comment 'Allow restreamer rtmp'
 $ sudo ufw allow 1936/tcp comment 'Allow restreamer rtmps'
