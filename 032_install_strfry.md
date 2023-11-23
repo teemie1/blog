@@ -9,6 +9,7 @@ $ sudo ufw default allow outgoing
 $ sudo ufw allow OpenSSH
 $ sudo ufw allow 80 comment 'Standard Webserver'
 $ sudo ufw allow 443 comment 'SSL Webserver'
+$ sudo ufw allow 7777 comment 'strfry'
 $ sudo ufw enable
 $ sudo apt install fail2ban
 $ sudo timedatectl set-timezone Asia/Bangkok
@@ -44,3 +45,33 @@ $ make -j4
 $ ./strfry relay
 ~~~
 
+## Configure Systemd
+~~~
+$ sudo nano /etc/systemd/system/strfry.service
+
+# Note: replace "User=..." with your username, and
+# "/home/strfry/strfry" with the directory where you cloned the repo.
+
+[Unit]
+Description=strfry
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+User=strfry
+Restart=on-failure
+RestartSec=5
+ProtectHome=yes
+NoNewPrivileges=yes
+ProtectSystem=full
+LimitCORE=1000000000
+WorkingDirectory=/home/strfry/strfry
+ExecStart=/home/strfry/strfry relay
+
+[Install]
+WantedBy=multi-user.target
+
+sudo systemctl enable strfry
+sudo systemctl start strfry
+sudo journalctl -u strfry
+~~~
