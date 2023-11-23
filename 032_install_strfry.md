@@ -22,13 +22,17 @@ $ sudo nano /etc/ssh/sshd_config
 # Remove sshd config file
 $ sudo mv /etc/ssh/sshd_config.d/50-cloud-init.conf /tmp
 $ sudo systemctl restart sshd
+
+$ sudo adduser --disabled-password --gecos "" strfry
+$ sudo usermod -a -G tee strfry
+$ sudo adduser tee strfry
 ~~~
 
 
 ## Install strfry by git clone and compile
 ~~~
-$ sudo -i
-$ apt install -y git build-essential libyaml-perl libtemplate-perl libregexp-grammars-perl libssl-dev zlib1g-dev liblmdb-dev libflatbuffers-dev libsecp256k1-dev libzstd-dev
+$ sudo apt install -y git build-essential libyaml-perl libtemplate-perl libregexp-grammars-perl libssl-dev zlib1g-dev liblmdb-dev libflatbuffers-dev libsecp256k1-dev libzstd-dev
+$ sudo -iu strfry
 $ git clone https://github.com/hoytech/strfry && cd strfry/
 $ git submodule update --init
 $ make setup-golpe
