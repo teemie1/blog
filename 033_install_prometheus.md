@@ -1,4 +1,4 @@
-# Configure prometheus agent
+# Configure prometheus
 
 ## Install Prometheus & Configuration
 ### Creating Prometheus System Users and Directory
