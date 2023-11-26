@@ -38,11 +38,28 @@ $ git clone https://github.com/hoytech/strfry && cd strfry/
 $ git submodule update --init
 $ make setup-golpe
 $ make -j4
+$ exit
+~~~
+## Edit strfry.conf and prepare environment
+~~~
+$ sudo mkdir /var/lib/strfry
+$ sudo chown strfry:strfry /var/lib/strfry
+$ sudo chmod 755 /var/lib/strfry 
+$ sudo cp /home/strfry/strfry/strfry.conf /etc/strfry.conf
+$ sudo cp /home/strfry/strfry/strfry /usr/local/bin/strfry
+$ sudo chown strfry:strfry /etc/strfry.conf
+$ sudo chown strfry:strfry /usr/local/bin/strfry
+$ sudo vi /etc/strfry.conf
+# Edit the db = "./strfry-db/" line to: db = "/var/lib/strfry/"
+# Edit bind=0.0.0.0 and nofiles=0
 ~~~
 
 ## Test running strfry
 ~~~
-$ ./strfry relay
+$ sudo -iu strfry
+$ /usr/local/bin/strfry --config=/etc/strfry.conf relay
+# Ctrl+c
+$ exit
 ~~~
 
 ## Configure Systemd
@@ -53,23 +70,21 @@ $ sudo nano /etc/systemd/system/strfry.service
 # "/home/strfry/strfry" with the directory where you cloned the repo.
 
 [Unit]
-Description=strfry
-After=network.target
-StartLimitIntervalSec=0
+Description=strfry relay service
 
 [Service]
 User=strfry
+ExecStart=/usr/local/bin/strfry --config=/etc/strfry.conf relay
 Restart=on-failure
 RestartSec=5
 ProtectHome=yes
 NoNewPrivileges=yes
 ProtectSystem=full
 LimitCORE=1000000000
-WorkingDirectory=/home/strfry/strfry
-ExecStart=/home/strfry/strfry relay
 
 [Install]
 WantedBy=multi-user.target
+
 
 sudo systemctl enable strfry
 sudo systemctl start strfry
