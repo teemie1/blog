@@ -137,7 +137,9 @@ Password – admin
 On browser
 Settings Icon ->> Configuration ->> data sources
 Add Data sources and select Prometheus
-Install Node Exporter
+~~~
+## Install Node Exporter
+~~~
 sudo useradd --no-create-home --shell /bin/false node_exporter
 cd /tmp
 wget https://github.com/prometheus/node_exporter/releases/download/v1.5.0/node_exporter-1.5.0.linux-amd64.tar.gz
@@ -167,17 +169,20 @@ Restart=always
 RestartSec=10s
 [Install]
 WantedBy=multi-user.target
+
 sudo systemctl daemon-reload
 sudo systemctl enable node_exporter
 sudo systemctl start node_exporter
 sudo systemctl status node_exporter
+~~~
 
-Configure the Node Exporter as a Prometheus target
+### Configure the Node Exporter as a Prometheus target
+~~~
 cd /etc/prometheus
 sudo nano prometheus.yml
 - targets: [‘localhost:9090’, ‘localhost:9100’]
 sudo systemctl restart prometheus
 sudo ufw allow 9100/tcp
 https://localhost:9100/targets
-
-Creating Grafana Dashboard to Monitor Linux Server
+~~~
+### Creating Grafana Dashboard to Monitor Linux Server
