@@ -191,3 +191,10 @@ sudo ufw allow 9100/tcp
 https://localhost:9100/targets
 ~~~
 ### Creating Grafana Dashboard to Monitor Linux Server
+~~~
+Add dashboard
+Go to Dashboards
+Select "New" --> "New Dashboard"
+Select "Import Dashboard"
+Fill "1860" (Node Exporter Full) and click "Load"
+~~~
