@@ -6,15 +6,15 @@
 sudo useradd --no-create-home --shell /bin/false prometheus
 sudo useradd --no-create-home --shell /bin/false node_exporter
 sudo mkdir /etc/prometheus
-sudo mkdir /mnt/data/prometheus
-sudo ln -s /mnt/data/prometheus /var/lib/prometheus
+sudo mkdir /data/prometheus
+sudo ln -s /data/prometheus /var/lib/prometheus
 ~~~
 
 ### Update Prometheus user
 ~~~
 sudo chown prometheus:prometheus /etc/prometheus
 sudo chown prometheus:prometheus /var/lib/prometheus
-sudo chown prometheus:prometheus /mnt/data/prometheus
+sudo chown prometheus:prometheus /data/prometheus
 ~~~
 
 ### Download Prometheus Binary File
