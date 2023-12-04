@@ -197,4 +197,5 @@ Go to Dashboards
 Select "New" --> "New Dashboard"
 Select "Import Dashboard"
 Fill "1860" (Node Exporter Full) and click "Load"
+Search more dashboard template at https://grafana.com/grafana/dashboards
 ~~~
