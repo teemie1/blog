@@ -1,12 +1,11 @@
 # Add Icon for strfry relay
 
-## Edit file landing page
+## Edit nginx for favicon.ico
 ~~~
-sudo -iu strfry
-nano /home/strfry/strfry/src/tmpls/landing.tmpl
-# Add Lines in <head>
-<link rel="icon" type="image/x-icon" href="https://satsdays.com/bangkok.png">
-
-# Compile strfry again, stop strfry and copy new compiled strfry to /usr/local/bin then start strfry with new icon image.
+sudo nano /etc/nginx/sites-available/default
+# Add Lines
+    location = /favicon.ico {
+    alias /var/www/html/bangkok.png;
+    }
 
 ~~~
