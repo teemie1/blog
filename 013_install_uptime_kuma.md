@@ -10,6 +10,8 @@ $ sudo docker ps -a
 ## Go to Uptime Kuma
 ~~~
 # Browse to http://[IP Address of Server]:3001
+# Default User: admin
+# Default Password: admin
 ~~~
 
 ## 
