@@ -11,10 +11,14 @@ sudo adduser --gecos "" admin
 sudo usermod -a -G sudo,adm,cdrom,dip,plugdev,lxd admin
 sudo apt update && sudo apt full-upgrade
 sudo mkdir /data
-udo chown admin:admin /data
+sudo chown admin:admin /data
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
 sudo ufw allow 22/tcp comment 'allow SSH from anywhere'
+sudo ufw allow 9735/tcp comment 'allow lightning from anywhere'
+sudo ufw allow 4001/tcp comment 'allow RTL from anywhere'
+sudo ufw allow 80/tcp comment 'allow http from anywhere'
+sudo ufw allow 443/tcp comment 'allow https from anywhere'
 sudo ufw logging off
 sudo ufw enable
 sudo apt install nginx
@@ -68,7 +72,6 @@ deb     [arch=amd64 signed-by=/usr/share/keyrings/tor-archive-keyring.gpg] https
 deb-src [arch=amd64 signed-by=/usr/share/keyrings/tor-archive-keyring.gpg] https://deb.torproject.org/torproject.org jammy main
 ~~~
 ~~~
-sudo su
 wget -qO- https://deb.torproject.org/torproject.org/A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc | gpg --dearmor | tee /usr/share/keyrings/tor-archive-keyring.gpg >/dev/null
 sudo apt update
 sudo apt install tor deb.torproject.org-keyring
