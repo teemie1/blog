@@ -73,7 +73,7 @@ rpc-file-mode=0660
 
 # default fees and channel min size
 fee-base=1000
-fee-per-satoshi=1
+fee-per-satoshi=1000
 min-capacity-sat=100000
 
 ## optional
@@ -101,5 +101,59 @@ always-use-proxy=false
 # CLEARNET
 bind-addr=0.0.0.0:9735
 announce-addr=node09.satsdays.com:9735
+
+# Plugin
+clnrest-port=3010
+clnrest-protocol=https
+clnrest-host=127.0.0.1
+
+~~~
+
+## certbot snap install
+~~~
+sudo apt install snapd
+sudo apt remove certbot
+sudo snap install --classic certbot
+~~~
+
+## LNbits - CLN
+/home/lnbits/lnbits/.env
+~~~
+LNBITS_BACKEND_WALLET_CLASS=CoreLightningWallet
+CORELIGHTNING_RPC="/home/lnbits/.lightning/testnet/lightning-rpc"
+
+~~~
+
+## RTL - CLN
+~~~
+{
+  "port": "3000",
+  "SSO": {
+    "rtlSSO": 0,
+    "rtlCookiePath": "",
+    "logoutRedirectLink": ""
+  },
+  "nodes": [
+    {
+      "index": 1,
+      "lnNode": "Node 09",
+      "lnImplementation": "CLN",
+      "Authentication": {
+        "runePath": "/home/rtl/node09_rune.txt",
+        "configPath": "/data/lightningd/config"
+      },
+      "Settings": {
+        "userPersona": "OPERATOR",
+        "themeMode": "DAY",
+        "themeColor": "INDIGO",
+        "fiatConversion": true,
+        "currencyUnit": "THB",
+        "logLevel": "ERROR",
+        "lnServerUrl": "https://127.0.0.1:3010",
+        "enableOffers": true
+      }
+    }
+  ],
+  "defaultNodeIndex": 1,
 
 ~~~
