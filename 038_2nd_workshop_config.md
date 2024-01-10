@@ -133,6 +133,10 @@ maxpendingchannels=5
 externalip=node08.satsdays.com
 # specify an interface and port (default 9735) to listen on
 listen=0.0.0.0:9735
+# RPC open to all connections on Port 10009
+rpclisten=0.0.0.0:10009
+# REST open to all connections on Port 8080
+restlisten=0.0.0.0:8080
 
 # Password: automatically unlock wallet with the password in this file
 # -- comment out to manually unlock wallet, and see RaspiBolt guide for more secure options
@@ -175,8 +179,16 @@ db.bolt.auto-compact-min-age=168h
 
 [Bitcoin]
 bitcoin.active=true
-bitcoin.mainnet=true
+bitcoin.testnet=true
 bitcoin.node=bitcoind
+
+[Bitcoind]
+bitcoind.rpcuser=bitcoin
+bitcoind.rpcpass="BTC-LN_W0rk$h0p"
+bitcoind.rpchost=node09.satsdays.com
+bitcoind.zmqpubrawblock=tcp://node09.satsdays.com:28332
+bitcoind.zmqpubrawtx=tcp://node09.satsdays.com:28333
+bitcoind.estimatemode=ECONOMICAL
 
 [tor]
 tor.active=true
@@ -185,6 +197,77 @@ tor.v3=true
 tor.streamisolation=false
 # activate hybrid connectivity
 tor.skip-proxy-for-clearnet-targets=true
+~~~
+~~~
+lnd
+sudo su - lnd
+lncli create
+exit
+sudo nano /etc/systemd/system/lnd.service
+~~~
+~~~
+# RaspiBolt: systemd unit for lnd
+# /etc/systemd/system/lnd.service
+
+[Unit]
+Description=LND Lightning Network Daemon
+Wants=bitcoind.service
+After=bitcoind.service
+
+[Service]
+
+# Service execution
+###################
+ExecStart=/usr/local/bin/lnd
+ExecStop=/usr/local/bin/lncli stop
+
+# Process management
+####################
+Type=simple
+Restart=always
+RestartSec=30
+TimeoutSec=240
+LimitNOFILE=128000
+
+# Directory creation and permissions
+####################################
+User=lnd
+
+# /run/lightningd
+RuntimeDirectory=lightningd
+RuntimeDirectoryMode=0710
+
+# Hardening measures
+####################
+# Provide a private /tmp and /var/tmp.
+PrivateTmp=true
+
+# Mount /usr, /boot/ and /etc read-only for the process.
+ProtectSystem=full
+
+# Disallow the process and all of its children to gain
+# new privileges through execve().
+NoNewPrivileges=true
+
+# Use a new /dev namespace only populated with API pseudo devices
+# such as /dev/null, /dev/zero and /dev/random.
+PrivateDevices=true
+
+# Deny the creation of writable and executable memory mappings.
+MemoryDenyWriteExecute=true
+
+[Install]
+WantedBy=multi-user.target
+
+~~~
+~~~
+sudo systemctl enable lnd
+sudo systemctl start lnd
+systemctl status lnd
+sudo -iu admin
+ln -s /data/lnd /home/admin/.lnd
+sudo chmod -R g+X /data/lnd/data/
+sudo chmod g+r /data/lnd/data/chain/bitcoin/mainnet/admin.macaroon
 ~~~
 
 ## Bitcoin Core Configuration File
