@@ -91,6 +91,101 @@ sudo systemctl reload tor
 sudo ss -tulpn | grep LISTEN | grep tor
 
 ~~~
+## LND Installation
+~~~
+cd /tmp
+VERSION="0.17.3"
+wget https://github.com/lightningnetwork/lnd/releases/download/v$VERSION-beta/lnd-linux-amd64-v$VERSION-beta.tar.gz
+wget https://github.com/lightningnetwork/lnd/releases/download/v$VERSION-beta/manifest-v$VERSION-beta.txt
+wget https://github.com/lightningnetwork/lnd/releases/download/v$VERSION-beta/manifest-roasbeef-v$VERSION-beta.sig
+sha256sum --check manifest-v$VERSION-beta.txt --ignore-missing
+curl https://raw.githubusercontent.com/lightningnetwork/lnd/master/scripts/keys/roasbeef.asc | gpg --import
+gpg --verify manifest-roasbeef-v$VERSION-beta.sig manifest-v$VERSION-beta.txt
+tar -xvf lnd-linux-amd64-v$VERSION-beta.tar.gz
+sudo install -m 0755 -o root -g root -t /usr/local/bin lnd-linux-amd64-v$VERSION-beta/*
+lnd --version
+sudo adduser --disabled-password --gecos "" lnd
+sudo usermod -a -G debian-tor lnd
+sudo adduser admin lnd
+sudo mkdir /data/lnd
+sudo chown -R lnd:lnd /data/lnd
+
+sudo su - lnd
+ln -s /data/lnd /home/lnd/.lnd
+ls -la
+nano /data/lnd/password.txt
+
+# Fill "BTC-LN_W0rk$h0p
+
+chmod 600 /data/lnd/password.txt
+nano /data/lnd/lnd.conf
+~~~
+
+~~~
+# lnd configuration
+# /data/lnd/lnd.conf
+
+[Application Options]
+alias=node08
+debuglevel=info
+maxpendingchannels=5
+# set an external IP address
+externalip=node08.satsdays.com
+# specify an interface and port (default 9735) to listen on
+listen=0.0.0.0:9735
+
+# Password: automatically unlock wallet with the password in this file
+# -- comment out to manually unlock wallet, and see RaspiBolt guide for more secure options
+wallet-unlock-password-file=/data/lnd/password.txt
+wallet-unlock-allow-create=true
+
+# Automatically regenerate certificate when near expiration
+tlsautorefresh=true
+# Do not include the interface IPs or the system hostname in TLS certificate.
+tlsdisableautofill=true
+# Explicitly define any additional domain names for the certificate that will be created.
+# tlsextradomain=raspibolt.local
+# tlsextradomain=raspibolt.public.domainname.com
+
+# Channel settings
+bitcoin.basefee=1000
+bitcoin.feerate=1
+minchansize=100000
+accept-keysend=true
+accept-amp=true
+protocol.wumbo-channels=true
+coop-close-target-confs=24
+
+# Set to enable support for the experimental taproot channel type
+protocol.simple-taproot-chans=true
+
+# Watchtower
+wtclient.active=true
+
+# Performance
+gc-canceled-invoices-on-startup=true
+gc-canceled-invoices-on-the-fly=true
+ignore-historical-gossip-filters=1
+stagger-initial-reconnect=true
+
+# Database
+[bolt]
+db.bolt.auto-compact=true
+db.bolt.auto-compact-min-age=168h
+
+[Bitcoin]
+bitcoin.active=true
+bitcoin.mainnet=true
+bitcoin.node=bitcoind
+
+[tor]
+tor.active=true
+tor.v3=true
+# deactivate streamisolation for hybrid-mode
+tor.streamisolation=false
+# activate hybrid connectivity
+tor.skip-proxy-for-clearnet-targets=true
+~~~
 
 ## Bitcoin Core Configuration File
 ### /data/bitcoin/bitcoin.conf
