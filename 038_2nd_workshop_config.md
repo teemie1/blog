@@ -267,8 +267,12 @@ sudo systemctl start lnd
 systemctl status lnd
 sudo -iu admin
 ln -s /data/lnd /home/admin/.lnd
+exit
 sudo chmod -R g+X /data/lnd/data/
 sudo chmod g+r /data/lnd/data/chain/bitcoin/testnet/admin.macaroon
+sudo vi /etc/profile
+# Add line
+alias lncli='lncli --network testnet'
 ~~~
 
 ## Bitcoin Core Configuration File
