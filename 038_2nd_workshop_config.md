@@ -19,6 +19,7 @@ sudo ufw allow 9735/tcp comment 'allow lightning from anywhere'
 sudo ufw allow 4001/tcp comment 'allow RTL from anywhere'
 sudo ufw allow 80/tcp comment 'allow http from anywhere'
 sudo ufw allow 443/tcp comment 'allow https from anywhere'
+sudo ufw allow 8080/tcp comment 'allow restapi from anywhere'
 sudo ufw logging off
 sudo ufw enable
 sudo apt install nginx
@@ -267,7 +268,7 @@ systemctl status lnd
 sudo -iu admin
 ln -s /data/lnd /home/admin/.lnd
 sudo chmod -R g+X /data/lnd/data/
-sudo chmod g+r /data/lnd/data/chain/bitcoin/mainnet/admin.macaroon
+sudo chmod g+r /data/lnd/data/chain/bitcoin/testnet/admin.macaroon
 ~~~
 
 ## Bitcoin Core Configuration File
