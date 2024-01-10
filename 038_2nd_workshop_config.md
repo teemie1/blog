@@ -5,7 +5,7 @@ Select 6$/month on Digital Ocean
 ~~~
 # Login as root
 apt update
-apt upgrade
+apt upgrade -y
 sudo delgroup admin
 sudo adduser --gecos "" admin
 sudo usermod -a -G sudo,adm,cdrom,dip,plugdev,lxd admin
