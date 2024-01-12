@@ -352,7 +352,96 @@ sudo journalctl -f -u rtl
 ## LNbits Installation
 
 ~~~
+sudo apt update
+sudo apt install software-properties-common 
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt install python3.9 python3.9-distutils
+sudo nano /etc/nginx/sites-available/lnbits-reverse-proxy.conf
+~~~
+~~~
+server {
+    server_name node08.satsdays.com;
+    location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_pass http://127.0.0.1:5000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+}
+~~~
+~~~
+sudo ln -s /etc/nginx/sites-available/lnbits-reverse-proxy.conf /etc/nginx/sites-enables
+sudo nginx -t
+sudo systemctl reload nginx
+sudo snap install certbot --classic
+sudo certbot --nginx -d payjo.in
+sudo adduser --disabled-password --gecos "" lnbits
+sudo adduser lnbits lnd
+sudo mkdir /data/lnbits
+sudo chown -R lnbits:lnbits /data/lnbits
+sudo su - lnbits
+ln -s /data/lnd /home/lnbits/.lnd
+ln -s /data/lnbits /home/lnbits/.lnbits
+curl -sSL https://install.python-poetry.org | python3 -
+export PATH="/home/lnbits/.local/bin:$PATH"
+git clone https://github.com/lnbits/lnbits.git
+cd lnbits  
+git checkout 0.11.3
+poetry env use python3.9
+poetry install --only main
+cp .env.example .env
+nano .env
+~~~
+~~~
+LNBITS_DATA_FOLDER="/home/lnbits/.lnbits"
+LNBITS_BACKEND_WALLET_CLASS=LndRestWallet
+LND_REST_ENDPOINT=https://127.0.0.1:8080
+LND_REST_CERT="/home/lnbits/.lnd/tls.cert"
+LND_REST_MACAROON="/home/lnbits/.lnd/data/chain/bitcoin/mainnet/admin.macaroon"
+~~~
+~~~
+chmod 600 /home/lnbits/lnbits/.env
+cd ~/lnbits
+poetry run lnbits --port 5000 --host 0.0.0.0
+exit
+sudo nano /etc/systemd/system/lnbits.service
+~~~
+~~~
+# RaspiBolt: systemd unit for LNbits
+# /etc/systemd/system/lnbits.service
 
+[Unit]
+Description=LNbits
+After=lnd.service
+PartOf=lnd.service
+
+[Service]
+WorkingDirectory=/home/lnbits/lnbits
+
+ExecStart=/home/lnbits/.local/bin/poetry run lnbits --port 5000 --host 0.0.0.0 --reload
+User=lnbits
+Restart=always
+TimeoutSec=120
+RestartSec=30
+StandardOutput=journal
+StandardError=journal
+
+# Hardening measures
+PrivateTmp=true
+ProtectSystem=full
+NoNewPrivileges=true
+PrivateDevices=true
+
+[Install]
+WantedBy=multi-user.target
+~~~
+~~~
+sudo systemctl enable lnbits.service
+sudo systemctl start lnbits.service
+sudo systemctl status lnbits.service
+sudo journalctl -f -u lnbits
 ~~~
 
 ## Bitcoin Core Configuration File
