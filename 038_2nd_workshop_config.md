@@ -274,6 +274,56 @@ sudo vi /etc/profile
 # Add line
 alias lncli='lncli --network testnet'
 ~~~
+## RTL Installation
+~~~
+cd ~
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt install nodejs ca-certificates curl gnupg
+sudo nano /etc/nginx/streams-enabled/rtl-reverse-proxy.conf
+~~~
+
+~~~
+upstream rtl {
+  server 127.0.0.1:3000;
+}
+server {
+  listen 4001 ssl;
+  proxy_pass rtl;
+}
+~~~
+~~~
+sudo nginx -t
+sudo systemctl reload nginx
+sudo adduser --disabled-password --gecos "" rtl
+sudo cp /data/lnd/data/chain/bitcoin/mainnet/admin.macaroon /home/rtl/admin.macaroon
+sudo chown rtl:rtl /home/rtl/admin.macaroon
+sudo su - rtl
+curl https://keybase.io/suheb/pgp_keys.asc | gpg --import
+git clone https://github.com/Ride-The-Lightning/RTL.git
+cd RTL
+git tag | grep -E "v[0-9]+.[0-9]+.[0-9]+$" | sort --version-sort | tail -n 1
+> v0.15.0
+git checkout v0.15.0
+git verify-tag v0.15.0
+npm install --omit=dev --legacy-peer-deps
+cp Sample-RTL-Config.json ./RTL-Config.json
+nano RTL-Config.json
+~~~
+~~~
+  "multiPass": "BTC-LN_W0rk$h0p"
+  "macaroonPath": "/home/rtl"
+  "configPath": "/data/lnd/lnd.conf"
+
+  "lnServerUrl": "https://127.0.0.1:8080"
+  "swapServerUrl": "https://127.0.0.1:8081"
+  "boltzServerUrl": "https://127.0.0.1:9003"
+~~~
+
+## LNbits Installation
+
+~~~
+
+~~~
 
 ## Bitcoin Core Configuration File
 ### /data/bitcoin/bitcoin.conf
