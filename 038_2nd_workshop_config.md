@@ -295,7 +295,7 @@ server {
 sudo nginx -t
 sudo systemctl reload nginx
 sudo adduser --disabled-password --gecos "" rtl
-sudo cp /data/lnd/data/chain/bitcoin/mainnet/admin.macaroon /home/rtl/admin.macaroon
+sudo cp /data/lnd/data/chain/bitcoin/testnet/admin.macaroon /home/rtl/admin.macaroon
 sudo chown rtl:rtl /home/rtl/admin.macaroon
 sudo su - rtl
 curl https://keybase.io/suheb/pgp_keys.asc | gpg --import
@@ -310,6 +310,7 @@ cp Sample-RTL-Config.json ./RTL-Config.json
 nano RTL-Config.json
 ~~~
 ~~~
+  "userPersona": "OPERATOR"
   "multiPass": "BTC-LN_W0rk$h0p"
   "macaroonPath": "/home/rtl"
   "configPath": "/data/lnd/lnd.conf"
@@ -317,6 +318,35 @@ nano RTL-Config.json
   "lnServerUrl": "https://127.0.0.1:8080"
   "swapServerUrl": "https://127.0.0.1:8081"
   "boltzServerUrl": "https://127.0.0.1:9003"
+~~~
+~~~
+node rtl
+exit
+sudo nano /etc/systemd/system/rtl.service
+~~~
+~~~
+# RaspiBolt: systemd unit for Ride the Lightning
+# /etc/systemd/system/rtl.service
+
+[Unit]
+Description=Ride the Lightning
+After=lnd.service
+
+[Service]
+WorkingDirectory=/home/rtl/RTL
+ExecStart=/usr/bin/node rtl
+User=rtl
+
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
+~~~
+~~~
+sudo systemctl enable rtl
+sudo systemctl start rtl
+sudo journalctl -f -u rtl
 ~~~
 
 ## LNbits Installation
