@@ -372,11 +372,11 @@ server {
 }
 ~~~
 ~~~
-sudo ln -s /etc/nginx/sites-available/lnbits-reverse-proxy.conf /etc/nginx/sites-enables
+sudo ln -s /etc/nginx/sites-available/lnbits-reverse-proxy.conf /etc/nginx/sites-enabled
 sudo nginx -t
 sudo systemctl reload nginx
 sudo snap install certbot --classic
-sudo certbot --nginx -d payjo.in
+sudo certbot --nginx -d node08.satsdays.com
 sudo adduser --disabled-password --gecos "" lnbits
 sudo adduser lnbits lnd
 sudo mkdir /data/lnbits
@@ -392,14 +392,14 @@ git checkout 0.11.3
 poetry env use python3.9
 poetry install --only main
 cp .env.example .env
-nano .env
+vi .env
 ~~~
 ~~~
 LNBITS_DATA_FOLDER="/home/lnbits/.lnbits"
 LNBITS_BACKEND_WALLET_CLASS=LndRestWallet
 LND_REST_ENDPOINT=https://127.0.0.1:8080
 LND_REST_CERT="/home/lnbits/.lnd/tls.cert"
-LND_REST_MACAROON="/home/lnbits/.lnd/data/chain/bitcoin/mainnet/admin.macaroon"
+LND_REST_MACAROON="/home/lnbits/.lnd/data/chain/bitcoin/testnet/admin.macaroon"
 ~~~
 ~~~
 chmod 600 /home/lnbits/lnbits/.env
