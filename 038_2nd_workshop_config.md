@@ -139,10 +139,11 @@ nano /data/lnd/lnd.conf
 
 [Application Options]
 alias=node08
+externalip=node08.satsdays.com
+backupfilepath=/data/backup/node08/channel.backup
+
 debuglevel=info
 maxpendingchannels=5
-# set an external IP address
-externalip=node08.satsdays.com
 # specify an interface and port (default 9735) to listen on
 listen=0.0.0.0:9735
 # RPC open to all connections on Port 10009
@@ -150,7 +151,6 @@ rpclisten=0.0.0.0:10009
 # REST open to all connections on Port 8080
 restlisten=0.0.0.0:8080
 
-backupfilepath=/data/backup/node08/channel.backup
 
 # Password: automatically unlock wallet with the password in this file
 # -- comment out to manually unlock wallet, and see RaspiBolt guide for more secure options
@@ -498,6 +498,36 @@ password: in file data/lndg-admin.txt
 
 ## BOS & Rebalance-LND Installation
 ~~~
+# Install BOS
+sudo adduser --disabled-password --gecos "" bos
+sudo adduser bos lnd
+sudo su - bos
+ln -s /data/lnd /home/bos/.lnd
+echo 'export PATH=$PATH:/home/bos/balanceofsatoshis' >> /home/bos/.bashrc
+source /home/bos/.bashrc
+git clone https://github.com/alexbosworth/balanceofsatoshis.git
+cd balanceofsatoshis
+VERSION=$(git tag | sort --version-sort | tail -n 1); echo $VERSION
+git verify-tag $VERSION
+npm install
+bos -V
+exit
+
+# Install Rebalance-LND
+sudo apt-get install python3-pip
+pip3 --version
+sudo adduser --disabled-password --gecos "" rebalance-lnd
+sudo adduser rebalance-lnd lnd
+sudo su - rebalance-lnd
+git clone https://github.com/C-Otto/rebalance-lnd.git
+cd rebalance-lnd/
+pip3 install -r requirements.txt .
+echo 'export PATH=$PATH:/home/rebalance-lnd/rebalance-lnd' >> /home/rebalance-lnd/.bashrc
+source /home/rebalance-lnd/.bashrc
+rebalance.py
+ln -s /data/lnd/ /home/rebalance-lnd/.lnd
+cd ~/
+
 
 ~~~
 
