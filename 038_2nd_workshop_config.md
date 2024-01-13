@@ -4,6 +4,7 @@
 Select 6$/month on Digital Ocean
 ~~~
 # Login as root
+NODENAME=node08
 apt update
 apt upgrade -y
 sudo delgroup admin
@@ -92,6 +93,16 @@ sudo systemctl reload tor
 sudo ss -tulpn | grep LISTEN | grep tor
 
 ~~~
+
+## Backup Path
+~~~
+sudo apt install nfs-common
+sudo mkdir -p /data/backup
+sudo mount node09.satsdays.com:/data/backup /data/backup
+sudo mkdir /data/backup/$NODENAME
+sudo chmod 777 /data/backup/$NODENAME
+~~~
+
 ## LND Installation
 ~~~
 cd /tmp
@@ -138,6 +149,8 @@ listen=0.0.0.0:9735
 rpclisten=0.0.0.0:10009
 # REST open to all connections on Port 8080
 restlisten=0.0.0.0:8080
+
+backupfilepath=/data/backup/node08/channel.backup
 
 # Password: automatically unlock wallet with the password in this file
 # -- comment out to manually unlock wallet, and see RaspiBolt guide for more secure options
@@ -274,6 +287,8 @@ sudo vi /etc/profile
 # Add line
 alias lncli='lncli --network testnet'
 ~~~
+
+
 ## RTL Installation
 ~~~
 cd ~
@@ -376,7 +391,7 @@ sudo ln -s /etc/nginx/sites-available/lnbits-reverse-proxy.conf /etc/nginx/sites
 sudo nginx -t
 sudo systemctl reload nginx
 sudo snap install certbot --classic
-sudo certbot --nginx -d node08.satsdays.com
+sudo certbot --nginx -d $NODENAME.satsdays.com
 sudo adduser --disabled-password --gecos "" lnbits
 sudo adduser lnbits lnd
 sudo mkdir /data/lnbits
@@ -442,6 +457,48 @@ sudo systemctl enable lnbits.service
 sudo systemctl start lnbits.service
 sudo systemctl status lnbits.service
 sudo journalctl -f -u lnbits
+~~~
+## LNDg Installation
+~~~
+sudo apt install docker-compose
+sudo ufw allow 8889/tcp comment 'allow LNDg'
+sudo apt install virtualenv
+sudo adduser root lnd
+sudo adduser root www-data
+sudo adduser www-data root
+ln -s /data/lnd /root/.lnd
+
+git clone https://github.com/cryptosharks131/lndg.git
+cd lndg
+nano docker-compose.yaml
+~~~
+~~~
+services:
+  lndg:
+    build: .
+    volumes:
+      - /root/.lnd:/root/.lnd:ro
+      - /root/lndg/data:/lndg/data:rw
+    command:
+      - sh
+      - -c
+      - python initialize.py -net 'testnet' -server '127.0.0.1:10009' -d && supervisord && python manage.py runserver 0.0.0.0:8889
+    network_mode: "host"
+~~~
+~~~
+# Deploy the Docker image
+docker-compose up -d
+
+# Retrieve the admin password for login
+nano data/lndg-admin.txt
+Browse to http://node08.satsdays.com:8889
+user: lndg-admin
+password: in file data/lndg-admin.txt
+~~~
+
+## BOS & Rebalance-LND Installation
+~~~
+
 ~~~
 
 ## Bitcoin Core Configuration File
