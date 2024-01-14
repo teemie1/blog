@@ -415,6 +415,8 @@ LNBITS_BACKEND_WALLET_CLASS=LndRestWallet
 LND_REST_ENDPOINT=https://127.0.0.1:8080
 LND_REST_CERT="/home/lnbits/.lnd/tls.cert"
 LND_REST_MACAROON="/home/lnbits/.lnd/data/chain/bitcoin/testnet/admin.macaroon"
+LNBITS_ADMIN_UI=true
+LNBITS_SITE_TITLE="LNbits-Node08"
 ~~~
 ~~~
 chmod 600 /home/lnbits/lnbits/.env
@@ -457,6 +459,11 @@ sudo systemctl enable lnbits.service
 sudo systemctl start lnbits.service
 sudo systemctl status lnbits.service
 sudo journalctl -f -u lnbits
+sudo -iu lnbits
+cd ~/lnbits
+poetry run lnbits-cli superuser
+# Record admin user id
+https://node08.satsdays.com/admin?usr=[USER ID]
 ~~~
 ## LNDg Installation
 ~~~
