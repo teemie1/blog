@@ -1,0 +1,330 @@
+(function (w, d) {
+  // Finalyic - freaking great in-site analytics for FinTech
+
+  // Config variables
+  var serverUrl = w.location.href;
+  var rootUrl = w.location.origin;
+
+  var baseUrl = "http://localhost:8080";
+
+  if (serverUrl.search("local") !== -1) {
+    baseUrl = "http://localhost:8080";
+  } else if (serverUrl.search("staging2") !== -1) {
+    baseUrl = "https://ant-qa.finnomena.com";
+  } else if (serverUrl.search("line-qa") !== -1) {
+    baseUrl = "https://ant-qa.finnomena.com";
+  } else if (serverUrl.search("staging3") !== -1) {
+    baseUrl = "https://ant-qa.finnomena.com";
+  } else {
+    // Production API
+    baseUrl = "https://ant.finnomena.com";
+  }
+
+  //FOR LOCAL TEST
+  // var baseUrl = 'http://127.0.0.1:8080';
+
+  var cookieName = "finnakies";
+  var sessionCookieName = "finnakies-ss";
+
+  // Helper functions-------------------------------------------------------------------
+  var helpers = {
+    getUrlParameter: function (sParam) {
+      var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split("&"),
+        sParameterName,
+        i;
+
+      for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split("=");
+
+        if (sParameterName[0] === sParam) {
+          return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+      }
+    },
+
+    getFullCurrentUrl: function () {
+      return window.location.href;
+    },
+
+    getCurrentUrl: function () {
+      pathname = w.location.pathname;
+
+      pathname = this.destroyUtm(pathname);
+
+      if (pathname[pathname.length - 1] === "/" && pathname.length > 1) {
+        pathname = pathname.slice(0, pathname.length - 1);
+      }
+
+      return pathname;
+    },
+
+    getReferrer: function () {
+      var ref = d.referrer;
+
+      if (ref.search(w.location.hostname) !== -1) {
+        ref = "/" + ref.match(/\/\/.*?\/(.*?)\/?(\?.*)?$/)[1];
+        ref = this.destroyUtm(ref);
+      }
+
+      if (ref[ref.length - 1] === "/" && ref.length > 1) {
+        ref = ref.slice(0, ref.length - 1);
+      }
+
+      return ref;
+    },
+
+    getTitle: function () {
+      return d.title;
+    },
+
+    destroyUtm: function (url) {
+      return url.indexOf("?") !== -1 ? url.substr(0, url.indexOf("?")) : url;
+    },
+
+    checkSafari: function () {
+      return (
+        navigator.userAgent.indexOf("Safari") != -1 &&
+        navigator.userAgent.indexOf("Chrome") == -1
+      );
+    }
+  };
+
+  // Cookies handle ------------------------------------------------------------------------
+  var cookieHandlers = {
+    randomId: function (num) {
+      var text = "";
+      var possible = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+      for (var i = 0; i < num; i++)
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+      return text;
+    },
+    dateCookieFormat: function (date) {
+      var d = date.getDate();
+      var m = date.getMonth() + 1; //Month from 0 to 11
+      var y = date.getFullYear();
+      return '' + y + '' + (m <= 9 ? '0' + m : m) + '' + (d <= 9 ? '0' + d : d);
+    },
+
+    createCookie: function (cookieName, cookieType) {
+      var unique = this.randomId(7);
+
+      var day = new Date();
+
+      unique += '' + this.dateCookieFormat(day)
+
+      var expires = "";
+      if (cookieType == "session") {
+      } else {
+        day.setTime(day.getTime() + 720 * 24 * 60 * 60 * 1000);
+        expires = "expires=" + day.toUTCString() + ";";
+      }
+
+      d.cookie = cookieName + "=" + unique + ";" + expires + "path=/";
+      return unique;
+    },
+
+    getCookie: function (cookieName) {
+      if (d.cookie.length > 0) {
+        cookieStart = d.cookie.indexOf(cookieName + "=");
+        if (cookieStart != -1) {
+          cookieStart = cookieStart + cookieName.length + 1;
+          cookieEnd = d.cookie.indexOf(";", cookieStart);
+          if (cookieEnd == -1) {
+            cookieEnd = d.cookie.length;
+          }
+          return unescape(d.cookie.substring(cookieStart, cookieEnd));
+        }
+      }
+      return "";
+    },
+
+    checkCookie: function (cookieName, cookieType) {
+      if (
+        this.getCookie(cookieName) === "" ||
+        this.getCookie(cookieName) === "0"
+      ) {
+        return this.createCookie(cookieName, cookieType);
+      } else {
+        return this.getCookie(cookieName);
+      }
+    }
+  };
+
+  // Image creation functions-------------------------------------------------------------
+  var imageFactory = {
+    objectToQuery: function (query, options) {
+      if (options !== {} && typeof options === "object") {
+        for (var key in options) {
+          if (options[key] || options[key] === 0) {
+            if (typeof options[key] === "object") {
+              query = this.objectToQuery(query, options[key]);
+              continue;
+            }
+            if (query === "") {
+              query += "?" + key + "=" + encodeURIComponent(options[key]);
+              continue;
+            }
+            query += "&" + key + "=" + encodeURIComponent(options[key]);
+          }
+        }
+        return query;
+      } else {
+        return query;
+      }
+    },
+
+    createEventImage: function (options) {
+      var bodyTag = d.getElementsByTagName("body")[0];
+      var imgTag = d.createElement("img");
+
+      var queryString = this.objectToQuery("", options);
+
+      imgTag.src = baseUrl + queryString;
+
+      if (!helpers.checkSafari()) {
+        imgTag.width = 1;
+        imgTag.height = 1;
+        imgTag.style = "display:none";
+
+        bodyTag.appendChild(imgTag);
+      }
+    }
+  };
+
+  // Mandate preparing
+  var mandatePrepare = function (eventType) {
+    var mandate = {};
+
+    mandate["un"] = cookieHandlers.checkCookie(cookieName, null);
+    mandate['e_t_i'] = cookieHandlers.getCookie('exclusive_tracking_id') || null;
+    mandate["ss"] = cookieHandlers.checkCookie(sessionCookieName, "session");
+    mandate['external_id'] = cookieHandlers.getCookie('external_id') || null;
+    // Check for UTM tagging
+    mandate["ch"] = helpers.getUrlParameter("ch");
+    mandate["ch_me"] = helpers.getUrlParameter("ch_me");
+    mandate["ch_ad"] = helpers.getUrlParameter("ch_ad");
+    mandate["ch_ca"] = helpers.getUrlParameter("ch_ca");
+    mandate["ex_id"] = helpers.getUrlParameter("ex_id");
+    mandate["ad_id"] = helpers.getUrlParameter("ad_id");
+    mandate['f_aid'] = helpers.getUrlParameter('f_aid');
+    mandate['f_cid'] = helpers.getUrlParameter('f_cid');
+
+    mandate["cu"] = helpers.getCurrentUrl();
+    mandate["re"] = helpers.getReferrer();
+    mandate["fu"] = helpers.getFullCurrentUrl();
+
+    return mandate;
+  };
+
+  var alterAction = function (action, currentUrl) {
+    if (currentUrl === "/") {
+      return action.replace(/post|page/, "home");
+    }
+    let urlSplit = currentUrl.split("/");
+    if (urlSplit[1] === "author") {
+      return action.replace(/post|page/, urlSplit[1]);
+    }
+    return action;
+  };
+
+  var googleAnalyticPrepare = function (eventType) {
+    var mandate = {};
+    // Check for Google Adwords data
+    mandate["g_id"] = helpers.getUrlParameter("g_id");
+    mandate["g_cid"] = helpers.getUrlParameter("g_cid");
+    mandate["g_aid"] = helpers.getUrlParameter("g_aid");
+    mandate["g_fid"] = helpers.getUrlParameter("g_fid");
+    mandate["g_tid"] = helpers.getUrlParameter("g_tid");
+    mandate["g_in"] = helpers.getUrlParameter("g_in");
+    mandate["g_ph"] = helpers.getUrlParameter("g_ph");
+    mandate["g_mt"] = helpers.getUrlParameter("g_mt");
+    mandate["g_ne"] = helpers.getUrlParameter("g_ne");
+    mandate["g_de"] = helpers.getUrlParameter("g_de");
+    mandate["g_dm"] = helpers.getUrlParameter("g_dm");
+    mandate["g_im"] = helpers.getUrlParameter("g_im");
+    mandate["g_ct"] = helpers.getUrlParameter("g_ct");
+    mandate["g_cr"] = helpers.getUrlParameter("g_cr");
+    mandate["g_ke"] = helpers.getUrlParameter("g_ke");
+    mandate["g_pl"] = helpers.getUrlParameter("g_pl");
+    mandate["g_ta"] = helpers.getUrlParameter("g_ta");
+    mandate["g_ap"] = helpers.getUrlParameter("g_ap");
+    mandate["bt_id"] = helpers.getUrlParameter("bt_id");
+
+    return mandate;
+  };
+
+  //***********************************************************************
+  // This is main event firing controller
+  //***********************************************************************
+  var newFna = function (action, eventType, eventCategory, attrTagging) {
+    if (attrTagging == null || !attrTagging) {
+      attrTagging = {};
+    }
+
+    if (!action || !eventType || !eventCategory) {
+      console.error("Please provide action, event_type, event_category");
+      return;
+    }
+
+    mandate = mandatePrepare(eventType);
+
+    // alter action in case of author and home
+    action = alterAction(action, helpers.getCurrentUrl());
+
+    // if action is open_page then try to find google analytic and append to mandate obj
+    if (action === "open_page" || action === "open_home" || action === "open_author") {
+      Object.assign(mandate, googleAnalyticPrepare(eventType));
+    }
+
+    try {
+      imageFactory.createEventImage({
+        'ac': action,
+        'et': eventType,
+        'ec': eventCategory,
+        'mandate': mandate,
+        'attrTagging': attrTagging
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // Check for event in queqe and redefine 'fna' function---------------------
+  var clearQandRedefine = function () {
+    if (w.fna.q) {
+      for (var i = 0; i < w.fna.q.length; i++) {
+        newFna.apply(this, w.fna.q[i]);
+      }
+    }
+
+    // Redefine function
+    w.fna = newFna;
+  };
+
+  // Ad Hoc -> Ajax call for matching db
+  var ajaxMatching = function () {
+    try {
+      var request = new XMLHttpRequest();
+      request.open(
+        "POST",
+        rootUrl + "/wp-content/themes/finno_v2/services/fna-mapping.php",
+        true
+      );
+      request.setRequestHeader(
+        "Content-Type",
+        "application/x-www-form-urlencoded; charset=UTF-8"
+      );
+      request.send("cookie_id=" + cookieHandlers.getCookie(cookieName));
+    } catch (err) { }
+  };
+
+  var missionFlow = function () {
+    clearQandRedefine();
+    // ajaxMatching();
+  };
+
+  missionFlow();
+})(window, document);

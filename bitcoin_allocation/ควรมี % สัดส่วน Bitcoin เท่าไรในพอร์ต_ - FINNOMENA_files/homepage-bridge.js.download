@@ -1,0 +1,18 @@
+jQuery(document).ready(function ($) {	
+	$(document).on("click", ".hpb-nav-item", function (e) {
+		$('.homepage-bridge-item').removeClass('hide-item');
+		let type = $(this).attr('data-type');
+		$('.hpb-nav').attr('data-current', type)
+		const name = "active-tab"
+		if(type == 'fund'){
+			document.cookie = name + "=" + type + "; path=/";
+			$('#hpb-stock').addClass('hide-item');
+		}else{
+			document.cookie = name + "=" + type + "; path=/";
+			$('#hpb-fund').addClass('hide-item');
+		}
+		$('.hpb-nav-item').removeClass('active');
+		$(this).addClass('active')
+		e.preventDefault();
+	});	
+});
