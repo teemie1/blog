@@ -17,10 +17,11 @@ sudo ufw default deny incoming
 sudo ufw default allow outgoing
 sudo ufw allow 22/tcp comment 'allow SSH from anywhere'
 sudo ufw allow 9735/tcp comment 'allow lightning from anywhere'
-sudo ufw allow 4001/tcp comment 'allow RTL from anywhere'
+sudo ufw allow 8889/tcp comment 'allow LNDg from anywhere'
 sudo ufw allow 80/tcp comment 'allow http from anywhere'
 sudo ufw allow 443/tcp comment 'allow https from anywhere'
 sudo ufw allow 8080/tcp comment 'allow restapi from anywhere'
+sudo ufw allow 10009/tcp comment 'allow rpc from anywhere'
 sudo ufw logging off
 sudo ufw enable
 sudo apt install nginx
