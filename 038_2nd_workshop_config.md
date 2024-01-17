@@ -163,7 +163,7 @@ tlsautorefresh=true
 # Do not include the interface IPs or the system hostname in TLS certificate.
 tlsdisableautofill=true
 # Explicitly define any additional domain names for the certificate that will be created.
-# tlsextradomain=raspibolt.local
+tlsextradomain=node08.satsdays.com
 # tlsextradomain=raspibolt.public.domainname.com
 
 # Channel settings
