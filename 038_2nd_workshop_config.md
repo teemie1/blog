@@ -697,3 +697,26 @@ CORELIGHTNING_RPC="/home/lnbits/.lightning/testnet/lightning-rpc"
   "defaultNodeIndex": 1,
 
 ~~~
+## Eclair Configuration File
+~~~
+eclair.chain=testnet
+eclair.server.public-ips=[146.190.111.127]
+eclair.server.binding-ip=0.0.0.0
+eclair.node-alias=node10
+eclair.node-color=49daaa
+eclair.server.port=9735
+eclair.api.enabled=true
+eclair.api.binding-ip=0.0.0.0
+eclair.api.port=8080
+eclair.api.password="eclair"
+eclair.tor.enabled=true
+eclair.tor.auth=safecookie
+eclair.socks5.enabled=true
+eclair.bitcoind.rpcport=18332
+eclair.bitcoind.rpcuser="bitcoin"
+eclair.bitcoind.rpcpassword="BTC-LN_W0rk$h0p"
+eclair.bitcoind.host=node09.satsdays.com
+eclair.bitcoind.zmqblock="tcp://node09.satsdays.com:28332"
+eclair.bitcoind.zmqtx="tcp://node09.satsdays.com:28333"
+eclair.bitcoind.wallet="teemie"
+~~~
