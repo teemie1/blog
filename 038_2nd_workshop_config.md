@@ -412,7 +412,7 @@ cp .env.example .env
 vi .env
 ~~~
 ~~~
-LNBITS_DATA_FOLDER="/home/lnbits/.lnbits"
+#LNBITS_DATA_FOLDER="/home/lnbits/.lnbits"
 LNBITS_BACKEND_WALLET_CLASS=LndRestWallet
 LND_REST_ENDPOINT=https://127.0.0.1:8080
 LND_REST_CERT="/home/lnbits/.lnd/tls.cert"
