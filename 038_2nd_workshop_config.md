@@ -509,23 +509,8 @@ user: lndg-admin
 password: in file data/lndg-admin.txt
 ~~~
 
-## BOS & Rebalance-LND Installation
+## Rebalance-LND Installation
 ~~~
-# Install BOS
-sudo adduser --disabled-password --gecos "" bos
-sudo adduser bos lnd
-sudo su - bos
-ln -s /data/lnd /home/bos/.lnd
-echo 'export PATH=$PATH:/home/bos/balanceofsatoshis' >> /home/bos/.bashrc
-source /home/bos/.bashrc
-git clone https://github.com/alexbosworth/balanceofsatoshis.git
-cd balanceofsatoshis
-VERSION=$(git tag | sort --version-sort | tail -n 1); echo $VERSION
-git verify-tag $VERSION
-npm install
-bos -V
-exit
-
 # Install Rebalance-LND
 sudo apt-get install python3-pip
 pip3 --version
