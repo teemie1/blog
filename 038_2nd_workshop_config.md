@@ -469,6 +469,7 @@ https://node08.satsdays.com/admin?usr=[USER ID]
 ~~~
 ## LNDg Installation
 ~~~
+cd ~
 sudo apt install docker-compose
 sudo ufw allow 8889/tcp comment 'allow LNDg'
 sudo apt install virtualenv
