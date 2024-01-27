@@ -102,6 +102,7 @@ sudo mkdir -p /data/backup
 sudo mount node09.satsdays.com:/data/backup /data/backup
 sudo mkdir /data/backup/$NODENAME
 sudo chmod 777 /data/backup/$NODENAME
+sudo echo "node09.satsdays.com:/data/backup        /data/backup    nfs" >> /etc/fstab
 ~~~
 
 ## LND Installation
@@ -480,6 +481,8 @@ ln -s /data/lnd /root/.lnd
 
 git clone https://github.com/cryptosharks131/lndg.git
 cd lndg
+mkdir data
+echo "BTC-LN_W0rk\$h0p" > data/lndg-admin.txt
 nano docker-compose.yaml
 ~~~
 ~~~
