@@ -925,6 +925,7 @@ CORELIGHTNING_RPC="/home/lnbits/.lightning/testnet/lightning-rpc"
   "defaultNodeIndex": 9,
   "multiPassHashed": "4ef8cf6aa9420c80d69b08acad2002162fe0ee235790b09e20d12b77cd806e44"
 }
+~~~
 ### Create rune
 ~~~
 lightning-cli createrune
