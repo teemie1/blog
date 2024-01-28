@@ -708,7 +708,8 @@ CORELIGHTNING_RPC="/home/lnbits/.lightning/testnet/lightning-rpc"
 
 ~~~
 
-## RTL - CLN
+## RTL - Node09 
+###/home/rtl/RTL/RTL-Config.json
 ~~~
 {
   "port": "3000",
@@ -720,6 +721,150 @@ CORELIGHTNING_RPC="/home/lnbits/.lightning/testnet/lightning-rpc"
   "nodes": [
     {
       "index": 1,
+      "lnNode": "Node 01",
+      "lnImplementation": "LND",
+      "Authentication": {
+        "macaroonPath": "/data/backup/node01"
+      },
+      "Settings": {
+        "userPersona": "OPERATOR",
+        "themeMode": "DAY",
+        "themeColor": "INDIGO",
+        "fiatConversion": true,
+        "currencyUnit": "THB",
+        "logLevel": "ERROR",
+        "unannouncedChannels": false,
+        "lnServerUrl": "https://node01.satsdays.com:8080"
+      }
+    },
+    {
+      "index": 2,
+      "lnNode": "Node 02",
+      "lnImplementation": "LND",
+      "Authentication": {
+        "macaroonPath": "/data/backup/node02"
+      },
+      "Settings": {
+        "userPersona": "OPERATOR",
+        "themeMode": "DAY",
+        "themeColor": "INDIGO",
+        "fiatConversion": true,
+        "currencyUnit": "THB",
+        "logLevel": "ERROR",
+        "unannouncedChannels": false,
+        "lnServerUrl": "https://node02.satsdays.com:8080"
+      }
+    },
+    {
+      "index": 3,
+      "lnNode": "Node 03",
+      "lnImplementation": "LND",
+      "Authentication": {
+        "macaroonPath": "/data/backup/node03"
+      },
+      "Settings": {
+        "userPersona": "OPERATOR",
+        "themeMode": "DAY",
+        "themeColor": "INDIGO",
+        "fiatConversion": true,
+        "currencyUnit": "THB",
+        "logLevel": "ERROR",
+        "unannouncedChannels": false,
+        "lnServerUrl": "https://node03.satsdays.com:8080"
+      }
+    },
+    {
+      "index": 4,
+      "lnNode": "Node 04",
+      "lnImplementation": "LND",
+      "Authentication": {
+        "macaroonPath": "/data/backup/node04"
+      },
+      "Settings": {
+        "userPersona": "OPERATOR",
+        "themeMode": "DAY",
+        "themeColor": "INDIGO",
+        "fiatConversion": true,
+        "currencyUnit": "THB",
+        "logLevel": "ERROR",
+        "unannouncedChannels": false,
+        "lnServerUrl": "https://node04.satsdays.com:8080"
+      }
+    },
+      {
+      "index": 5,
+      "lnNode": "Node 05",
+      "lnImplementation": "LND",
+      "Authentication": {
+        "macaroonPath": "/data/backup/node05"
+      },
+      "Settings": {
+        "userPersona": "OPERATOR",
+        "themeMode": "DAY",
+        "themeColor": "INDIGO",
+        "fiatConversion": true,
+        "currencyUnit": "THB",
+        "logLevel": "ERROR",
+        "unannouncedChannels": false,
+        "lnServerUrl": "https://node05.satsdays.com:8080"
+      }
+    },
+      {
+      "index": 6,
+      "lnNode": "Node 06",
+      "lnImplementation": "LND",
+      "Authentication": {
+        "macaroonPath": "/data/backup/node06"
+      },
+      "Settings": {
+        "userPersona": "OPERATOR",
+        "themeMode": "DAY",
+        "themeColor": "INDIGO",
+        "fiatConversion": true,
+        "currencyUnit": "THB",
+        "logLevel": "ERROR",
+        "unannouncedChannels": false,
+        "lnServerUrl": "https://node06.satsdays.com:8080"
+      }
+    },
+      {
+      "index": 7,
+      "lnNode": "Node 07",
+      "lnImplementation": "LND",
+      "Authentication": {
+        "macaroonPath": "/data/backup/node07"
+      },
+      "Settings": {
+        "userPersona": "OPERATOR",
+        "themeMode": "DAY",
+        "themeColor": "INDIGO",
+        "fiatConversion": true,
+        "currencyUnit": "THB",
+        "logLevel": "ERROR",
+        "unannouncedChannels": false,
+        "lnServerUrl": "https://node07.satsdays.com:8080"
+      }
+    },
+    {
+      "index": 8,
+      "lnNode": "Node 08",
+      "lnImplementation": "LND",
+      "Authentication": {
+        "macaroonPath": "/home/rtl/node08"
+      },
+      "Settings": {
+        "userPersona": "OPERATOR",
+        "themeMode": "DAY",
+        "themeColor": "INDIGO",
+        "fiatConversion": true,
+        "currencyUnit": "THB",
+        "logLevel": "ERROR",
+        "unannouncedChannels": false,
+        "lnServerUrl": "https://node08.satsdays.com:8080"
+      }
+    },
+    {
+      "index": 9,
       "lnNode": "Node 09",
       "lnImplementation": "CLN",
       "Authentication": {
@@ -729,16 +874,70 @@ CORELIGHTNING_RPC="/home/lnbits/.lightning/testnet/lightning-rpc"
       "Settings": {
         "userPersona": "OPERATOR",
         "themeMode": "DAY",
-        "themeColor": "INDIGO",
+        "themeColor": "YELLOW",
         "fiatConversion": true,
         "currencyUnit": "THB",
         "logLevel": "ERROR",
         "lnServerUrl": "https://127.0.0.1:3010",
-        "enableOffers": true
+        "enableOffers": true,
+        "unannouncedChannels": false
+      }
+    },
+    {
+      "index": 10,
+      "lnNode": "Node 10",
+      "lnImplementation": "ECL",
+      "Authentication": {
+        "lnApiPassword": "eclair"
+      },
+      "Settings": {
+        "userPersona": "OPERATOR",
+        "themeMode": "DAY",
+        "themeColor": "TEAL",
+        "fiatConversion": true,
+        "currencyUnit": "THB",
+        "logLevel": "ERROR",
+        "unannouncedChannels": false,
+        "lnServerUrl": "http://node10.satsdays.com:8080"
+      }
+    },
+    {
+      "index": 11,
+      "lnNode": "Node 11",
+      "lnImplementation": "CLN",
+      "Authentication": {
+        "runePath": "/home/rtl/node11_rune.txt",
+        "configPath": "/data/lightningd2/config"
+      },
+      "Settings": {
+        "userPersona": "OPERATOR",
+        "themeMode": "DAY",
+        "themeColor": "YELLOW",
+        "fiatConversion": true,
+        "currencyUnit": "THB",
+        "logLevel": "ERROR",
+        "lnServerUrl": "https://127.0.0.1:3011",
+        "enableOffers": true,
+        "unannouncedChannels": false
       }
     }
   ],
-  "defaultNodeIndex": 1,
+  "defaultNodeIndex": 9,
+  "multiPassHashed": "4ef8cf6aa9420c80d69b08acad2002162fe0ee235790b09e20d12b77cd806e44"
+}
+### Create rune
+~~~
+lightning-cli createrune
+lightning-cli showrunes
+~~~
+### /home/rtl/node09_rune.txt
+~~~
+LIGHTNING_RUNE="5rNbZkJ27SVhuLQduWHfMGSvcGH_Zc_tyqFQJ89FTnM9MA=="
+~~~
+### /home/rtl/node11_rune.txt
+~~~
+LIGHTNING_RUNE="LfyhLUsorgW4I-PonB2fvvbCEVKsNWyamJ3_8fwHnuE9MA=="
+~~~
 
 ~~~
 ## Eclair Configuration File
