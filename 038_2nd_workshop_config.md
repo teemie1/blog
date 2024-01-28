@@ -587,6 +587,13 @@ rpcallowip=0.0.0.0/0
 ~~~
 
 ## Core Lightning Configuration File
+
+### Install prereq for clnrest
+~~~
+sudo -iu lightningd
+pip install -r /usr/libexec/c-lightning/plugins/clnrest/requirements.txt
+~~~
+
 ### /data/lightningd/config
 ~~~
 # MiniBolt: cln configuration
@@ -636,7 +643,55 @@ clnrest-port=3010
 clnrest-protocol=https
 clnrest-host=127.0.0.1
 
+experimental-offers
+experimental-splicing
+experimental-dual-fund
+experimental-anchors
+
 ~~~
+### Service File for CLN
+~~~
+# MiniBolt: systemd unit for lightningd
+# /etc/systemd/system/lightningd.service
+
+[Unit]
+Description=Core Lightning daemon
+Requires=bitcoind.service
+After=bitcoind.service
+Requires=postgresql.service
+After=postgresql.service
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=/bin/sh -c '/usr/bin/lightningd \
+                       --conf=/data/lightningd/config \
+                       --daemon \
+                       --pid-file=/run/lightningd/lightningd.pid'
+
+ExecStop=/bin/sh -c '/usr/bin/lightning-cli stop'
+
+RuntimeDirectory=lightningd
+
+User=lightningd
+
+# process management
+Type=simple
+PIDFile=/run/lightningd/lightningd.pid
+Restart=on-failure
+TimeoutSec=240
+RestartSec=30
+
+# hardening measures
+PrivateTmp=true
+ProtectSystem=full
+NoNewPrivileges=true
+PrivateDevices=true
+
+[Install]
+WantedBy=multi-user.target
+~~~
+
 
 ## certbot snap install
 ~~~
