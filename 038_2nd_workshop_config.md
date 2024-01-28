@@ -709,7 +709,7 @@ CORELIGHTNING_RPC="/home/lnbits/.lightning/testnet/lightning-rpc"
 ~~~
 
 ## RTL - Node09 
-###/home/rtl/RTL/RTL-Config.json
+### /home/rtl/RTL/RTL-Config.json
 ~~~
 {
   "port": "3000",
