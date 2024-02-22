@@ -955,7 +955,7 @@ LIGHTNING_RUNE="5rNbZkJ27SVhuLQduWHfMGSvcGH_Zc_tyqFQJ89FTnM9MA=="
 LIGHTNING_RUNE="LfyhLUsorgW4I-PonB2fvvbCEVKsNWyamJ3_8fwHnuE9MA=="
 ~~~
 
-~~~
+
 ## Eclair Configuration File
 ~~~
 eclair.chain=testnet
@@ -978,4 +978,199 @@ eclair.bitcoind.host=node09.satsdays.com
 eclair.bitcoind.zmqblock="tcp://node09.satsdays.com:28332"
 eclair.bitcoind.zmqtx="tcp://node09.satsdays.com:28333"
 eclair.bitcoind.wallet="teemie"
+~~~
+
+## LNbits - Eclair
+~~~
+#For more information on .env files, their content and format: https://pypi.org/project/python-dotenv/
+
+######################################
+########## Funding Source ############
+######################################
+
+# which fundingsources are allowed in the admin ui
+LNBITS_ALLOWED_FUNDING_SOURCES="VoidWallet, FakeWallet, CoreLightningWallet, CoreLightningRestWallet, LndRestWallet, EclairWallet, LndWallet, LnTipsWallet, LNPayWallet, LNbitsWallet, AlbyWallet, OpenNodeWallet"
+
+LNBITS_BACKEND_WALLET_CLASS=EclairWallet
+# VoidWallet is just a fallback that works without any actual Lightning capabilities,
+# just so you can see the UI before dealing with this file.
+
+# Invoice expiry for LND, CLN, Eclair, LNbits funding sources
+LIGHTNING_INVOICE_EXPIRY=3600
+
+# Set one of these blocks depending on the wallet kind you chose above:
+
+# ClicheWallet
+CLICHE_ENDPOINT=ws://127.0.0.1:12000
+
+# SparkWallet
+SPARK_URL=http://localhost:9737/rpc
+SPARK_TOKEN=myaccesstoken
+
+# CoreLightningWallet
+CORELIGHTNING_RPC="/home/bob/.lightning/bitcoin/lightning-rpc"
+
+# CoreLightningRestWallet
+CORELIGHTNING_REST_URL=http://127.0.0.1:8185/
+CORELIGHTNING_REST_MACAROON="/path/to/clnrest/access.macaroon"  # or BASE64/HEXSTRING
+CORELIGHTNING_REST_CERT="/path/to/clnrest/tls.cert"
+
+# LnbitsWallet
+LNBITS_ENDPOINT=https://legend.lnbits.com
+LNBITS_KEY=LNBITS_ADMIN_KEY
+
+# LndWallet
+LND_GRPC_ENDPOINT=127.0.0.1
+LND_GRPC_PORT=10009
+LND_GRPC_CERT="/home/bob/.lnd/tls.cert"
+LND_GRPC_MACAROON="/home/bob/.lnd/data/chain/bitcoin/mainnet/admin.macaroon"  # or HEXSTRING
+# To use an AES-encrypted macaroon, set
+# LND_GRPC_MACAROON="eNcRyPtEdMaCaRoOn"
+
+# LndRestWallet
+LND_REST_ENDPOINT=https://127.0.0.1:8080/
+LND_REST_CERT="/home/bob/.lnd/tls.cert"
+LND_REST_MACAROON="/home/bob/.lnd/data/chain/bitcoin/mainnet/admin.macaroon"  # or HEXSTRING
+# To use an AES-encrypted macaroon, set
+# LND_REST_MACAROON_ENCRYPTED="eNcRyPtEdMaCaRoOn"
+
+# LNPayWallet
+LNPAY_API_ENDPOINT=https://api.lnpay.co/v1/
+# Secret API Key under developers tab
+LNPAY_API_KEY=LNPAY_API_KEY
+# Wallet Admin in Wallet Access Keys
+LNPAY_WALLET_KEY=LNPAY_ADMIN_KEY
+
+# AlbyWallet
+ALBY_API_ENDPOINT=https://api.getalby.com/
+ALBY_ACCESS_TOKEN=ALBY_ACCESS_TOKEN
+
+# OpenNodeWallet
+OPENNODE_API_ENDPOINT=https://api.opennode.com/
+OPENNODE_KEY=OPENNODE_ADMIN_KEY
+
+# FakeWallet
+FAKE_WALLET_SECRET="ToTheMoon1"
+LNBITS_DENOMINATION=sats
+
+# EclairWallet
+ECLAIR_URL=http://127.0.0.1:8080
+ECLAIR_PASS=eclair
+
+# LnTipsWallet
+# Enter /api in LightningTipBot to get your key
+LNTIPS_API_KEY=LNTIPS_ADMIN_KEY
+LNTIPS_API_ENDPOINT=https://ln.tips
+
+######################################
+########### Admin Settings ###########
+######################################
+
+# Enable Admin GUI, available for the first user in LNBITS_ADMIN_USERS if available
+# Warning: Enabling this will make LNbits ignore this configuration file. Your settings will
+# be stored in your database and you will be able to change them only through the Admin UI.
+# Disable this to make LNbits use this config file again.
+LNBITS_ADMIN_UI=true
+SUPER_USER=b4243c86d5b34969baea0cca463af07a
+
+# Change theme
+LNBITS_SITE_TITLE="LNbits-Node10"
+LNBITS_SITE_TAGLINE="free and open-source lightning wallet"
+LNBITS_SITE_DESCRIPTION="Some description about your service, will display if title is not 'LNbits'"
+# Choose from bitcoin, mint, flamingo, freedom, salvador, autumn, monochrome, classic, cyber
+LNBITS_THEME_OPTIONS="classic, bitcoin, flamingo, freedom, mint, autumn, monochrome, salvador, cyber"
+# LNBITS_CUSTOM_LOGO="https://lnbits.com/assets/images/logo/logo.svg"
+
+HOST=127.0.0.1
+PORT=5000
+
+# uvicorn variable, uncomment to allow https behind a proxy
+# FORWARDED_ALLOW_IPS="*"
+
+# Server security, rate limiting ips, blocked ips, allowed ips
+LNBITS_RATE_LIMIT_NO="200"
+LNBITS_RATE_LIMIT_UNIT="minute"
+LNBITS_ALLOWED_IPS=""
+LNBITS_BLOCKED_IPS=""
+
+# Allow users and admins by user IDs (comma separated list)
+# if set new users will not be able to create accounts
+LNBITS_ALLOWED_USERS=""
+LNBITS_ADMIN_USERS=""
+# ID of the super user. The user ID must exist.
+# SUPER_USER=""
+
+# Extensions only admin can access
+LNBITS_ADMIN_EXTENSIONS="ngrok, admin"
+
+# Disable account creation for new users
+# LNBITS_ALLOW_NEW_ACCOUNTS=false
+
+# Enable Node Management without activating the LNBITS Admin GUI
+# by setting the following variables to true.
+LNBITS_NODE_UI=false
+LNBITS_PUBLIC_NODE_UI=false
+# Enabling the transactions tab can cause crashes on large Core Lightning nodes.
+LNBITS_NODE_UI_TRANSACTIONS=false
+
+LNBITS_DEFAULT_WALLET_NAME="LNbits wallet"
+
+# Ad space description
+# LNBITS_AD_SPACE_TITLE="Supported by"
+# csv ad space, format "<url>;<img-light>;<img-dark>, <url>;<img-light>;<img-dark>", extensions can choose to honor
+# LNBITS_AD_SPACE="https://shop.lnbits.com/;https://raw.githubusercontent.com/lnbits/lnbits/main/lnbits/static/images/lnbits-shop-light.png;https://raw.githubusercontent.com/lnbits/lnbits/main/lnbits/static/images/lnbits-shop-dark.png"
+
+# Hides wallet api, extensions can choose to honor
+LNBITS_HIDE_API=false
+
+# LNBITS_EXTENSIONS_MANIFESTS="https://raw.githubusercontent.com/lnbits/lnbits-extensions/main/extensions.json,https://raw.githubusercontent.com/lnbits/lnbits-extensions/main/extensions-trial.json"
+# GitHub has rate-limits for its APIs. The limit can be increased specifying a GITHUB_TOKEN
+# LNBITS_EXT_GITHUB_TOKEN=github_pat_xxxxxxxxxxxxxxxxxx
+
+# Path where extensions will be installed (defaults to `./lnbits/`).
+# Inside this directory the `extensions` and `upgrades` sub-directories will be created.
+# LNBITS_EXTENSIONS_PATH="/path/to/some/dir"
+
+# Extensions to be installed by default. If an extension from this list is uninstalled then it will be re-installed on the next restart.
+# The extension must be removed from this list in order to not be re-installed.
+LNBITS_EXTENSIONS_DEFAULT_INSTALL="tpos"
+
+# Database: to use SQLite, specify LNBITS_DATA_FOLDER
+#           to use PostgreSQL, specify LNBITS_DATABASE_URL=postgres://...
+#           to use CockroachDB, specify LNBITS_DATABASE_URL=cockroachdb://...
+# for both PostgreSQL and CockroachDB, you'll need to install
+#   psycopg2 as an additional dependency
+LNBITS_DATA_FOLDER="/home/lnbits/.lnbits"
+# LNBITS_DATABASE_URL="postgres://user:password@host:port/databasename"
+
+# the service fee (in percent)
+LNBITS_SERVICE_FEE=0.0
+# the wallet where fees go to
+# LNBITS_SERVICE_FEE_WALLET=
+# the maximum fee per transaction (in satoshis)
+# LNBITS_SERVICE_FEE_MAX=1000
+# disable fees for internal transactions
+# LNBITS_SERVICE_FEE_IGNORE_INTERNAL=true
+
+# value in millisats
+LNBITS_RESERVE_FEE_MIN=2000
+# value in percent
+LNBITS_RESERVE_FEE_PERCENT=1.0
+
+# Limit fiat currencies allowed to see in UI
+# LNBITS_ALLOWED_CURRENCIES="EUR, USD"
+
+######################################
+###### Logging and Development #######
+######################################
+
+DEBUG=false
+BUNDLE_ASSETS=true
+
+# logging into LNBITS_DATA_FOLDER/logs/
+ENABLE_LOG_TO_FILE=true
+
+# https://loguru.readthedocs.io/en/stable/api/logger.html#file
+LOG_ROTATION="100 MB"
+LOG_RETENTION="3 months"
 ~~~
