@@ -27,5 +27,10 @@ $ systemctl restart postgresql
 $ docker run --restart always -d --name joplin --env-file .env --add-host=host.docker.internal:host-gateway -p 22300:22300 joplin/server:latest
 
 # Verify log
-$ docker logs 
+$ docker logs joplin
+
+# Check postgresql
+$ sudo -iu postgres
+$ psql -U joplinusr --host=localhost --port=5432 "dbname=joplindb"
+\d
 ~~~
