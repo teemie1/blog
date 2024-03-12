@@ -24,7 +24,7 @@ $ vi /etc/postgresql/14/main/pg_hba.conf
 $ systemctl restart postgresql
 
 # Run docker container for joplin
-$ docker run --restart always --env-file .env --add-host=host.docker.internal:host-gateway -p 22300:22300 joplin/server:latest
+$ docker run --restart always -d --name joplin --env-file .env --add-host=host.docker.internal:host-gateway -p 22300:22300 joplin/server:latest
 
 # Verify log
 $ docker logs 
