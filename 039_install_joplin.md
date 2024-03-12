@@ -35,4 +35,9 @@ $ docker logs joplin
 $ sudo -iu postgres
 $ psql -U joplinusr --host=localhost --port=5432 "dbname=joplindb"
 \d
+\q
+$ exit
+
+# Open UFW
+$ ufw allow 22300 comment 'Allow Joplin'
 ~~~
