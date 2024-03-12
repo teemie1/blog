@@ -6,6 +6,8 @@ $ mkdir joplin ; cd joplin
 $ wget https://raw.githubusercontent.com/laurent22/joplin/dev/.env-sample
 $ mv .env-sample .env
 $ vi .env
+APP_BASE_URL=http://10.7.0.1:22300
+APP_PORT=22300
 DB_CLIENT=pg
 POSTGRES_PASSWORD=[PASSWORD]
 POSTGRES_DATABASE=joplindb
