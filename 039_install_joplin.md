@@ -40,4 +40,8 @@ $ exit
 
 # Open UFW
 $ ufw allow 22300 comment 'Allow Joplin'
+
+# Default admin user
+Username: admin@localhost
+Password: admin
 ~~~
