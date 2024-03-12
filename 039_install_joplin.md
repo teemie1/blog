@@ -41,6 +41,8 @@ $ exit
 # Open UFW
 $ ufw allow 22300 comment 'Allow Joplin'
 
+# Open browser http://10.7.0.1:22300
+
 # Default admin user
 Username: admin@localhost
 Password: admin
