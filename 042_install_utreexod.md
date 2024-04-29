@@ -12,6 +12,7 @@ go version go1.22.2 linux/amd64
 ## Install Rust
 ~~~
 $ curl --proto '=https' --tlsv1.3 https://sh.rustup.rs -sSf | sh
+$ source $HOME/.cargo/env
 $ rustc --version
 $ sudo apt update
 $ sudo apt upgrade
