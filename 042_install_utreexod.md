@@ -1,5 +1,11 @@
 # Install Utreexod on Ubuntu
 
+## Preparation
+~~~
+$ sudo -i
+$ ufw allow 8333 comment 'Allow utreexod'
+~~~
+
 ## Install Go
 ~~~
 $ snap install go
