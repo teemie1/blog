@@ -114,6 +114,9 @@ $ gpg --verify SHA256SUMS.asc
 # Install Core Lightning
 $ cd /
 $ sudo tar -xvf /tmp/clightning-v24.02.2-Ubuntu-22.04.tar.xz    # this will extract lightningd binary to the system
+
+sudo -iu lightningd
+pip install -r /usr/libexec/c-lightning/plugins/clnrest/requirements.txt
 ~~~
 ## Prepare environment for Core Lightning
 ~~~
