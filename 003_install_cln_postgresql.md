@@ -174,6 +174,15 @@ always-use-proxy=false
 bind-addr=0.0.0.0:9735
 announce-addr=[Public Ip]:9735
 
+# Plugin
+clnrest-port=3010
+clnrest-protocol=https
+clnrest-host=127.0.0.1
+
+experimental-offers
+experimental-splicing
+experimental-dual-fund
+experimental-anchors
 ~~~
 ## Autostart on boot
 ~~~
