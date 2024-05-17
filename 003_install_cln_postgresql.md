@@ -96,11 +96,11 @@ $ sudo systemctl restart bitcoind
 
 # Download Core Lightning Software and Checksum
 $ cd /tmp
-$ wget https://github.com/ElementsProject/lightning/releases/download/v23.05.2/clightning-v23.05.2-Ubuntu-22.04.tar.xz
-$ wget https://github.com/ElementsProject/lightning/releases/download/v23.05.2/SHA256SUMS
-$ wget https://github.com/ElementsProject/lightning/releases/download/v23.05.2/SHA256SUMS.asc
+$ wget https://github.com/ElementsProject/lightning/releases/download/v24.02.2/clightning-v24.02.2-Ubuntu-22.04.tar.xz
+$ wget https://github.com/ElementsProject/lightning/releases/download/v24.02.2/SHA256SUMS
+$ wget https://github.com/ElementsProject/lightning/releases/download/v24.02.2/SHA256SUMS.asc
 $ sha256sum --ignore-missing --check SHA256SUMS
-clightning-v23.05.2-Ubuntu-22.04.tar.xz: OK
+clightning-v24.02.2-Ubuntu-22.04.tar.xz: OK
 
 # Download and verify key with gpg
 $ wget https://raw.githubusercontent.com/ElementsProject/lightning/master/contrib/keys/rustyrussell.txt
@@ -113,7 +113,7 @@ $ gpg --verify SHA256SUMS.asc
 
 # Install Core Lightning
 $ cd /
-$ sudo tar -xvf /tmp/clightning-v23.05.2-Ubuntu-22.04.tar.xz    # this will extract lightningd binary to the system
+$ sudo tar -xvf /tmp/clightning-v24.02.2-Ubuntu-22.04.tar.xz    # this will extract lightningd binary to the system
 ~~~
 ## Prepare environment for Core Lightning
 ~~~
@@ -139,7 +139,7 @@ $ nano config
 # MiniBolt: cln configuration
 # /home/lightningd/.lightning/config
 
-alias=teemie⚡ 
+alias=Satsdays.Com⚡ 
 rgb=FFA500
 network=bitcoin
 log-file=/data/lightningd/cln.log
@@ -149,7 +149,7 @@ rpc-file-mode=0660
 
 # default fees and channel min size
 fee-base=1000
-fee-per-satoshi=1
+fee-per-satoshi=1000
 min-capacity-sat=1000000
 
 ## optional
@@ -167,12 +167,12 @@ wallet=postgres://lightningusr:[PASSWORD]@localhost:5432/lightningdb
 
 # network
 proxy=127.0.0.1:9050
-addr=statictor:127.0.0.1:9051/torport=9736
+addr=statictor:127.0.0.1:9051/torport=9735
 always-use-proxy=false
 
 # CLEARNET
-bind-addr=0.0.0.0:9736
-announce-addr=[Public Ip]:9736
+bind-addr=0.0.0.0:9735
+announce-addr=[Public Ip]:9735
 
 ~~~
 ## Autostart on boot
@@ -272,6 +272,6 @@ $ exit
 ~~~
 ## Open port on firewall
 ~~~
-$ sudo ufw allow 9736 comment 'allow CLN from outside'
+$ sudo ufw allow 9735 comment 'allow CLN from outside'
 ~~~
 Ref: [https://github.com/gabridome/docs/blob/master/c-lightning_with_postgresql_reliability.md](https://github.com/gabridome/docs/blob/master/c-lightning_with_postgresql_reliability.md)
