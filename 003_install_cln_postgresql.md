@@ -1,8 +1,8 @@
 # การติดตั้ง Core Lightning เพื่อใช้งานร่วมกับ PostgreSQL Database
 
-NODE1: 10.8.1.2
+NODE1: 10.7.0.1
 
-NODE2: 10.8.1.4
+NODE2: 10.7.0.11
 
 ## Install PostgreSQL on both machine via Ubuntu Repository
 ติดตั้ง PostgreSQL 14.8 ลงบน NODE ทั้งสอง
@@ -13,15 +13,14 @@ $ sudo apt install postgresql
 # เช็ค PostgreSQL Version ที่ติดตั้งเรียบร้อย
 $ sudo -i -u postgres
 $ psql
-psql (14.8 (Ubuntu 14.8-0ubuntu0.22.04.1))
+psql (14.11 (Ubuntu 14.11-0ubuntu0.22.04.1))
 Type "help" for help.
 
 postgres=# select version();
                                                                 version
 ----------------------------------------------------------------------------------------------------------------------------------------
- PostgreSQL 14.8 (Ubuntu 14.8-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0, 64-bit
+ PostgreSQL 14.11 (Ubuntu 14.11-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0, 64-bit
 (1 row)
-
 ~~~
 
 ## Change postgres password
@@ -44,16 +43,26 @@ postgres   72320   72314  0 11:06 ?        00:00:00 postgres: 14/main: stats col
 postgres   72321   72314  0 11:06 ?        00:00:00 postgres: 14/main: logical replication launcher
 tee        73378   69983  0 11:33 pts/0    00:00:00 grep --color=auto postgres
 
-$ sudo systemctl status postgresql
-● postgresql.service - PostgreSQL RDBMS
-     Loaded: loaded (/lib/systemd/system/postgresql.service; enabled; vendor preset: enabled)
-     Active: active (exited) since Wed 2023-07-26 11:06:44 +07; 26min ago
-    Process: 72332 ExecStart=/bin/true (code=exited, status=0/SUCCESS)
-   Main PID: 72332 (code=exited, status=0/SUCCESS)
-        CPU: 2ms
+$ sudo systemctl status postgresql@14-main.service
+● postgresql@14-main.service - PostgreSQL Cluster 14-main
+     Loaded: loaded (/lib/systemd/system/postgresql@.service; enabled-runtime; vendor preset: enabled)
+     Active: active (running) since Wed 2024-04-17 11:31:12 +07; 4 weeks 2 days ago
+   Main PID: 4001186 (postgres)
+      Tasks: 8 (limit: 28391)
+     Memory: 126.5M
+        CPU: 6h 26min 49.079s
+     CGroup: /system.slice/system-postgresql.slice/postgresql@14-main.service
+             ├─  89887 "postgres: 14/main: walsender lnd 10.7.0.11(52428) streaming 23/7130FD00" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" >
+             ├─4001186 /usr/lib/postgresql/14/bin/postgres -D /var/lib/postgresql/14/main -c config_file=/etc/postgresql/14/main/postgresql.conf
+             ├─4001188 "postgres: 14/main: checkpointer " "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" >
+             ├─4001189 "postgres: 14/main: background writer " "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" ">
+             ├─4001190 "postgres: 14/main: walwriter " "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" >
+             ├─4001191 "postgres: 14/main: autovacuum launcher " "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "">
+             ├─4001192 "postgres: 14/main: stats collector " "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" >
+             └─4001193 "postgres: 14/main: logical replication launcher " "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "">
 
-Jul 26 11:06:44 bitwarden systemd[1]: Starting PostgreSQL RDBMS...
-Jul 26 11:06:44 bitwarden systemd[1]: Finished PostgreSQL RDBMS.
+Apr 17 11:31:10 nuc11 systemd[1]: Starting PostgreSQL Cluster 14-main...
+Apr 17 11:31:12 nuc11 systemd[1]: Started PostgreSQL Cluster 14-main.
 
 $ sudo tail -f /var/log/postgresql/postgresql-14-main.log
 2023-07-26 11:06:41.891 +07 [72314] LOG:  starting PostgreSQL 14.8 (Ubuntu 14.8-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0, 64-bit
@@ -80,6 +89,7 @@ $ exit
 $ sudo nano /data/bitcoin/bitcoin.conf
 blocksonly=0
 prune=n
+bind=10.7.0.1
 
 # Restart Bitcoin Core
 $ sudo systemctl restart bitcoind
