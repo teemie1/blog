@@ -98,7 +98,7 @@ $ sudo su - postgres -c 'psql -c "select usename, application_name, client_addr,
 # Login NODE1
 $ sudo tar -cvf /tmp/cln_config.tar /data/lightningd*
 $ sudo chown tee.tee /tmp/cln_config.tar
-$ scp /tmp/cln_config.tar 10.8.1.4:/tmp
+$ scp /tmp/cln_config.tar root@10.7.0.11:/tmp
 
 # Login NODE2
 $ cd /
@@ -124,7 +124,7 @@ $ sudo ufw allow 9737/tcp comment 'allow cln(secondary) from anywhere'
 ~~~
 # Login NODE2
 $ sudo -i -u lightningd
-$ /usr/bin/lightningd  --alias=teemie⚡ \
+$ /usr/bin/lightningd  --alias=Satsdays.Com⚡ \
                        --rgb=FFA500 \
                        --bitcoin-rpcuser=umbrel \
                        --bitcoin-rpcpassword='[PASSWORD of Bitcoind on Umbrel]' \
