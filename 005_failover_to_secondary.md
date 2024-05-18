@@ -124,29 +124,28 @@ $ sudo ufw allow 9737/tcp comment 'allow cln(secondary) from anywhere'
 ~~~
 # Login NODE2
 $ sudo -i -u lightningd
-$ /usr/bin/lightningd  --alias=Satsdays.Com⚡ \
+$ /usr/bin/lightningd  --alias=Satsdays.Com💰⚡ \
                        --rgb=FFA500 \
-                       --bitcoin-rpcuser=[USER] \
-                       --bitcoin-rpcpassword='[PASSWORD of Bitcoind on Umbrel]' \
+                       --bitcoin-rpcuser=tee \
+                       --bitcoin-rpcpassword='PASSWORD' \
                        --bitcoin-rpcport=8332 \
-                       --bitcoin-rpcconnect=10.8.0.205 \
+                       --bitcoin-rpcconnect=10.7.0.1 \
                        --network=bitcoin \
                        --log-file=/data/lightningd/cln.log \
                        --log-level=debug \
                        --rpc-file-mode=0660 \
                        --fee-base=1000 \
-                       --fee-per-satoshi=1 \
+                       --fee-per-satoshi=1000 \
                        --min-capacity-sat=1000000 \
                        --large-channels \
                        --funding-confirms=2 \
                        --autocleaninvoice-cycle=86400 \
                        --autocleaninvoice-expired-by=86400 \
-                       --wallet='postgres://lightningusr:[PASSWORD]@localhost:5432/lightningdb' \
+                       --wallet='postgres://lightningusr:PASSWORD@localhost:5432/lightningdb' \
                        --bind-addr=0.0.0.0:9737 \
-                       --announce-addr=165.232.161.68:9737 \
+                       --announce-addr=157.245.59.46:9737 \
                        --always-use-proxy=false \
-                       --encrypted-hsm \
-                       --daemon 
+                       --daemon
 
 ~~~
 
