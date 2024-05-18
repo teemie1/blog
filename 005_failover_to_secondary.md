@@ -126,7 +126,7 @@ $ sudo ufw allow 9737/tcp comment 'allow cln(secondary) from anywhere'
 $ sudo -i -u lightningd
 $ /usr/bin/lightningd  --alias=Satsdays.Com⚡ \
                        --rgb=FFA500 \
-                       --bitcoin-rpcuser=umbrel \
+                       --bitcoin-rpcuser=[USER] \
                        --bitcoin-rpcpassword='[PASSWORD of Bitcoind on Umbrel]' \
                        --bitcoin-rpcport=8332 \
                        --bitcoin-rpcconnect=10.8.0.205 \
