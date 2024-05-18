@@ -1,7 +1,7 @@
 # Scenario 2: Failback from NODE2 to NODE1
- - NODE1: 10.8.1.2, 10.8.0.2
- - NODE2: 10.8.1.4, 10.8.0.4
- - VPS: 165.232.161.68, 10.8.0.1
+ - NODE1: 10.7.0.1
+ - NODE2: 10.7.0.11
+ - VPS: 157.245.59.46
 
 ## Stop Core Lightning on NODE2
 ~~~
@@ -32,10 +32,10 @@ $ rm /var/lib/postgresql/14/main/standby.signal
 # Change configuration file
 $ nano /etc/postgresql/14/main/postgresql.conf
 # Comment out
-#primary_conninfo = 'host=10.8.1.4 port=5432 user=lightningusr password=''[PASSWORD]'' application_name=lightningd dbname=replication'
+#primary_conninfo = 'host=10.7.0.1 port=5432 user=lightningusr password=''[PASSWORD]'' application_name=lightningd dbname=replication'
 #primary_slot_name = 'node_a_slot'
 # Add lines
-listen_addresses = 'localhost,10.8.1.2' # required for streaming replication
+listen_addresses = 'localhost,10.7.0.11' # required for streaming replication
 wal_level = replica
 wal_log_hints = on
 max_wal_senders = 3
