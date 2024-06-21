@@ -25,6 +25,7 @@ sudo ufw allow 10009/tcp comment 'allow rpc from anywhere'
 sudo ufw logging off
 sudo ufw enable
 sudo apt install nginx
+sudo apt install -y libnginx-mod-stream
 sudo openssl req -x509 -nodes -newkey rsa:4096 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt -subj "/CN=localhost" -days 3650
 sudo mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
 sudo mkdir /etc/nginx/streams-available
