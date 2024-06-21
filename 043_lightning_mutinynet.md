@@ -103,12 +103,13 @@ python3 rpcauth.py minibolt YourPasswordB
 nano /home/bitcoin/.bitcoin/bitcoin.conf
 ~~~
 ~~~
-# MiniBolt: bitcoind configuration
+# Mutinynet: bitcoind configuration
 # /home/bitcoin/.bitcoin/bitcoin.conf
 
 ## Bitcoin daemon
 server=1
 txindex=1
+chain=signet
 
 # Additional logs
 debug=tor
@@ -146,6 +147,8 @@ i2psam=127.0.0.1:7656
 
 ## Connections
 rpcauth=<replace with your own auth line generated in the previous step>
+zmqpubrawblock=tcp://127.0.0.1:28332
+zmqpubrawtx=tcp://127.0.0.1:28333
 
 # Initial block download optimizations (set dbcache size in megabytes 
 # (4 to 16384, default: 300) according to the available RAM of your device,
@@ -153,6 +156,19 @@ rpcauth=<replace with your own auth line generated in the previous step>
 # Remember to comment after IBD!
 dbcache=2048
 blocksonly=1
+[signet]
+signetchallenge=512102f7561d208dd9ae99bf497273e16f389bdbd6c4742ddb8e6b216e64fa2928ad8f51ae
+addnode=45.79.52.207:38333
+dnsseed=0
+signetblocktime=30
+rpcport=38332
+bind=127.0.0.1
+rpcbind=127.0.0.1
+rpcuser=bitcoin
+rpcpassword=password
+#wallet=jm_wallet
+#fallbackfee=0.0003
+
 ~~~
 ~~~
 chmod 640 /home/bitcoin/.bitcoin/bitcoin.conf
