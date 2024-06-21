@@ -86,8 +86,9 @@ sudo ss -tulpn | grep LISTEN | grep tor
 ## Install Bitcoin Core in Mutinynet
 ~~~
 cd /tmp
-wget https://XXX
-sudo install -m 0755 -o root -g root -t /usr/local/bin bitcoin-$VERSION/bin/bitcoin-cli bitcoin-$VERSION/bin/bitcoind
+wget https://github.com/benthecarman/bitcoin/releases/download/mutinynet-cat-lnhance/bitcoin-c23afab47fbe-x86_64-linux-gnu.tar.gz
+tar -xvf bitcoin-c23afab47fbe-x86_64-linux-gnu.tar.gz
+sudo install -m 0755 -o root -g root -t /usr/local/bin bitcoin-c23afab47fbe/bin/bitcoin-cli bitcoin-c23afab47fbe/bin/bitcoind
 bitcoind --version
 sudo adduser --gecos "" --disabled-password bitcoin
 sudo adduser tee bitcoin
@@ -98,8 +99,8 @@ sudo su - bitcoin
 ln -s /data/bitcoin /home/bitcoin/.bitcoin
 ls -la
 cd .bitcoin
-wget https://raw.githubusercontent.com/bitcoin/bitcoin/master/share/rpcauth/rpcauth.py
-python3 rpcauth.py minibolt YourPasswordB
+
+python3 /tmp/bitcoin-c23afab47fbe/share/rpcauth/rpcauth.py tee [PASSWORD]
 nano /home/bitcoin/.bitcoin/bitcoin.conf
 ~~~
 ~~~
