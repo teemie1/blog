@@ -131,6 +131,18 @@ $ sudo su - lightningd
 $ ln -s /data/lightningd /home/lightningd/.lightning
 $ ln -s /data/bitcoin /home/lightningd/.bitcoin
 ~~~
+## Install prerequisite
+~~~
+exit
+sudo apt install  python3-pip
+apt install pkg-config
+ mv /usr/lib/python3.12/EXTERNALLY-MANAGED /usr/lib/python3.12/EXTERNALLY-MANAGED.old
+vi /usr/libexec/c-lightning/plugins/clnrest/requirements.txt
+# Change coincurve>=18.0.0
+sudo -iu lightningd
+pip install coincurve
+pip install -r /usr/libexec/c-lightning/plugins/clnrest/requirements.txt
+~~~
 ## Configure CLN & PostgreSQL
 ~~~
 $ sudo -i -u lightningd    # already created user for lightningd
