@@ -234,3 +234,187 @@ sudo systemctl start bitcoind
 ln -s /data/bitcoin /home/tee/.bitcoin
 
 ~~~
+## Install LND
+~~~
+cd /tmp
+VERSION="0.18.2"
+wget https://github.com/lightningnetwork/lnd/releases/download/v$VERSION-beta/lnd-linux-amd64-v$VERSION-beta.tar.gz
+wget https://github.com/lightningnetwork/lnd/releases/download/v$VERSION-beta/manifest-v$VERSION-beta.txt
+wget https://github.com/lightningnetwork/lnd/releases/download/v$VERSION-beta/manifest-roasbeef-v$VERSION-beta.sig
+sha256sum --check manifest-v$VERSION-beta.txt --ignore-missing
+curl https://raw.githubusercontent.com/lightningnetwork/lnd/master/scripts/keys/roasbeef.asc | gpg --import
+gpg --verify manifest-roasbeef-v$VERSION-beta.sig manifest-v$VERSION-beta.txt
+tar -xvf lnd-linux-amd64-v$VERSION-beta.tar.gz
+sudo install -m 0755 -o root -g root -t /usr/local/bin lnd-linux-amd64-v$VERSION-beta/*
+lnd --version
+sudo adduser --disabled-password --gecos "" lnd
+sudo usermod -a -G debian-tor lnd
+sudo adduser tee lnd
+sudo mkdir /data/lnd
+sudo chown -R lnd:lnd /data/lnd
+
+sudo su - lnd
+ln -s /data/lnd /home/lnd/.lnd
+ls -la
+nano /data/lnd/password.txt
+
+# Fill "BTC-LN_W0rk$h0p
+
+chmod 600 /data/lnd/password.txt
+nano /data/lnd/lnd.conf
+~~~
+
+~~~
+# lnd configuration
+# /data/lnd/lnd.conf
+
+[Application Options]
+alias=teemie-lnd
+#backupfilepath=/data/backup/channel.backup
+
+debuglevel=info
+maxpendingchannels=5
+# specify an interface and port (default 9735) to listen on
+listen=0.0.0.0:9745
+# RPC open to all connections on Port 10009
+rpclisten=0.0.0.0:10009
+# REST open to all connections on Port 8080
+restlisten=0.0.0.0:8080
+
+
+# Password: automatically unlock wallet with the password in this file
+# -- comment out to manually unlock wallet, and see RaspiBolt guide for more secure options
+wallet-unlock-password-file=/data/lnd/password.txt
+wallet-unlock-allow-create=true
+
+# Automatically regenerate certificate when near expiration
+tlsautorefresh=true
+# Do not include the interface IPs or the system hostname in TLS certificate.
+tlsdisableautofill=true
+# Explicitly define any additional domain names for the certificate that will be created.
+#tlsextradomain=teemie-lnd.satsdays.com
+# tlsextradomain=raspibolt.public.domainname.com
+
+# Channel settings
+bitcoin.basefee=1000
+bitcoin.feerate=1
+minchansize=100000
+accept-keysend=true
+accept-amp=true
+protocol.wumbo-channels=true
+coop-close-target-confs=24
+
+# Set to enable support for the experimental taproot channel type
+protocol.simple-taproot-chans=true
+
+# Watchtower
+wtclient.active=true
+
+# Performance
+gc-canceled-invoices-on-startup=true
+gc-canceled-invoices-on-the-fly=true
+ignore-historical-gossip-filters=1
+stagger-initial-reconnect=true
+
+# Database
+[bolt]
+db.bolt.auto-compact=true
+db.bolt.auto-compact-min-age=168h
+
+[Bitcoin]
+bitcoin.signet=true
+bitcoin.node=bitcoind
+
+[Bitcoind]
+bitcoind.rpcuser=bitcoin
+bitcoind.rpcpass="BTC-LN_W0rk$h0p"
+bitcoind.rpchost=127.0.0.1
+bitcoind.zmqpubrawblock=tcp://127.0.0.1:28332
+bitcoind.zmqpubrawtx=tcp://127.0.0.1:28333
+bitcoind.estimatemode=ECONOMICAL
+
+[tor]
+tor.active=true
+tor.v3=true
+# deactivate streamisolation for hybrid-mode
+tor.streamisolation=false
+# activate hybrid connectivity
+tor.skip-proxy-for-clearnet-targets=true
+~~~
+~~~
+lnd
+sudo su - lnd
+lncli create
+exit
+sudo nano /etc/systemd/system/lnd.service
+~~~
+~~~
+# RaspiBolt: systemd unit for lnd
+# /etc/systemd/system/lnd.service
+
+[Unit]
+Description=LND Lightning Network Daemon
+Wants=bitcoind.service
+After=bitcoind.service
+
+[Service]
+
+# Service execution
+###################
+ExecStart=/usr/local/bin/lnd
+ExecStop=/usr/local/bin/lncli stop
+
+# Process management
+####################
+Type=simple
+Restart=always
+RestartSec=30
+TimeoutSec=240
+LimitNOFILE=128000
+
+# Directory creation and permissions
+####################################
+User=lnd
+
+# /run/lightningd
+RuntimeDirectory=lightningd
+RuntimeDirectoryMode=0710
+
+# Hardening measures
+####################
+# Provide a private /tmp and /var/tmp.
+PrivateTmp=true
+
+# Mount /usr, /boot/ and /etc read-only for the process.
+ProtectSystem=full
+
+# Disallow the process and all of its children to gain
+# new privileges through execve().
+NoNewPrivileges=true
+
+# Use a new /dev namespace only populated with API pseudo devices
+# such as /dev/null, /dev/zero and /dev/random.
+PrivateDevices=true
+
+# Deny the creation of writable and executable memory mappings.
+MemoryDenyWriteExecute=true
+
+[Install]
+WantedBy=multi-user.target
+~~~
+~~~
+sudo systemctl enable lnd
+sudo systemctl start lnd
+systemctl status lnd
+sudo -iu tee
+ln -s /data/lnd /home/tee/.lnd
+exit
+sudo chmod -R g+X /data/lnd/data/
+sudo chmod g+r /data/lnd/data/chain/bitcoin/signet/admin.macaroon
+sudo vi /etc/profile
+# Add line
+alias lncli='lncli --network signet'
+~~~
+~~~
+
+~~~
