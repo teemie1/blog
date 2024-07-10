@@ -104,23 +104,21 @@ python3 /tmp/bitcoin-c23afab47fbe/share/rpcauth/rpcauth.py tee [PASSWORD]
 nano /home/bitcoin/.bitcoin/bitcoin.conf
 ~~~
 ~~~
-# Mutinynet: bitcoind configuration
-# /home/bitcoin/.bitcoin/bitcoin.conf
+# RaspiBolt: bitcoind configuration for testnet node
 
-## Bitcoin daemon
-server=1
+#[chain]
+# main, test, signet, regtest
+#chain=test
+signet=1
+
+# [core]
+sysperms=1
+#blocksonly=1
 txindex=1
-chain=signet
-
-# Additional logs
-debug=tor
-debug=i2p
-
-# Assign read permission to the Bitcoin group users
-startupnotify=chmod g+r /home/bitcoin/.bitcoin/.cookie
-
-# Disable debug.log
-nodebuglogfile=1
+# disable dbcache after full sync
+dbcache=512
+blocksonly=0
+prune=n
 
 # Avoid assuming that a block and its ancestors are valid,
 # and potentially skipping their script verification.
@@ -136,28 +134,38 @@ peerblockfilters=1
 # Maintain coinstats index used by the gettxoutsetinfo RPC
 coinstatsindex=1
 
-# Network
+
+# [wallet]
+disablewallet=1
+
+# [network]
 listen=1
-bind=127.0.0.1
-
-# Connect to clearnet using Tor SOCKS5 proxy
+listenonion=1
 proxy=127.0.0.1:9050
+maxconnections=40
+maxuploadtarget=5000
+whitelist=download@127.0.0.1          # for Electrs
 
-# I2P SAM proxy to reach I2P peers and accept I2P connections
-i2psam=127.0.0.1:7656
+# [rpc]
+rpcauth=bitcoin:c7041907c2c3abd7c6ec5defe168820e$156354266eb26789f6aed178f6d9d16d4a86caec96ed7ebe710d5efa3329364b
+#Your password:
+#BTC-LN_W0rk$h0p
+server=1
 
-## Connections
-rpcauth=<replace with your own auth line generated in the previous step>
-zmqpubrawblock=tcp://127.0.0.1:28332
-zmqpubrawtx=tcp://127.0.0.1:28333
+# [zeromq]
+zmqpubrawblock=tcp://0.0.0.0:28332
+zmqpubrawtx=tcp://0.0.0.0:28333
 
-# Initial block download optimizations (set dbcache size in megabytes 
-# (4 to 16384, default: 300) according to the available RAM of your device,
-# recommended: dbcache=1/2 x RAM available e.g: 4GB RAM -> dbcache=2048)
-# Remember to comment after IBD!
-dbcache=2048
-blocksonly=1
+# Options specific to chain, rpcport set to default values
+[main]
+# rpcport=8332
+#bind=0.0.0.0
+#rpcbind=0.0.0.0
+
+[test]
+
 [signet]
+# rpcport=38332
 signetchallenge=512102f7561d208dd9ae99bf497273e16f389bdbd6c4742ddb8e6b216e64fa2928ad8f51ae
 addnode=45.79.52.207:38333
 dnsseed=0
@@ -165,11 +173,11 @@ signetblocktime=30
 rpcport=38332
 bind=127.0.0.1
 rpcbind=127.0.0.1
-rpcuser=bitcoin
-rpcpassword=password
-#wallet=jm_wallet
-#fallbackfee=0.0003
+fallbackfee=0.0003
 
+
+[regtest]
+# rpcport=18443
 ~~~
 ~~~
 chmod 640 /home/bitcoin/.bitcoin/bitcoin.conf
