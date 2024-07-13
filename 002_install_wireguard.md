@@ -23,6 +23,7 @@ $ cat publickey
 $ sudo nano /etc/wireguard/wg0.conf
 [Interface]
 Address = 10.8.0.1/24
+SaveConfig = true
 PostUp = ufw route allow in on wg1 out on enp3s0
 PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eno1 -j MASQUERADE
 
