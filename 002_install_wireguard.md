@@ -23,26 +23,34 @@ $ cat publickey
 $ sudo nano /etc/wireguard/wg0.conf
 [Interface]
 Address = 10.8.0.1/24
+PostUp = ufw route allow in on wg1 out on enp3s0
+PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eno1 -j MASQUERADE
+
+PreDown = ufw route delete allow in on wg1 out on enp3s0
+PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eno1 -j MASQUERADE
+
 ListenPort = 51820
-PrivateKey = [privatekey of server]
+PrivateKey = [PRIVATE KEY OF SERVER]
 
 [Peer]
-PublicKey = [publickey of client]
-AllowedIPs = 10.8.0.2/24
+PublicKey = [PUBLIC KEY OF CLIENT]
+AllowedIPs = 10.8.0.21/32
+
 ~~~
 
 ## แก้ไขไฟล์ wg0.conf บน client
 ~~~
 $ sudo nano /etc/wireguard/wg0.conf
 [Interface]
-Address = 10.8.0.2/24
-PrivateKey = [privatekey of client]
+PrivateKey = [PRIVAT KEY OF CLIENT]
+Address = 10.8.0.21/24
 
 [Peer]
-PublicKey = [publickey of server]
-Endpoint = [ip of server]:51820
+PublicKey = [PUBLIC KEY OF SERVER]
 AllowedIPs = 10.8.0.0/24
+Endpoint = [IP OF SERVER]:51820
 PersistentKeepalive = 25
+
 ~~~
 ## Start wireguard ทั้งสองเครื่อง
 
