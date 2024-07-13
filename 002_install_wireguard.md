@@ -82,3 +82,9 @@ PING 10.8.0.1 (10.8.0.1) 56(84) bytes of data.
 
 ~~~
 ทั้งสองเครื่องสามารถเชื่อมต่อ wireguard กันสำเร็จเรียบร้อย ใช้ IP:10.8.0.x ในการติดต่อหากันได้สำเร็จ
+
+## Add peer online without restart wireguard
+~~~
+wg set wg0 peer "[PUBLIC KEY OF CLIENT]" allowed-ips 10.8.0.2/32
+ip -4 route add 10.8.0.2/32 dev wg0
+~~~
