@@ -25,6 +25,7 @@ RELAY_DESCRIPTION="This relay is Web Of Trust Relay for Siamstr Community"
 RELAY_URL="wss://wot.siamstr.com"
 DB_PATH="db"
 INDEX_PATH="templates/index.html"
+STATIC_PATH="/home/wot/wot-relay"
 ~~~
 Go build
 ~~~
