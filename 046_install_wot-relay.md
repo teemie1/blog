@@ -2,7 +2,8 @@
 
 ## Install Golang
 ~~~
-sudo apt-get update && sudo apt-get -y install golang-go 
+sudo apt-get update && sudo apt-get -y install golang-go
+go version
 ~~~
 
 ## Install wot-relay
