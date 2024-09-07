@@ -43,10 +43,10 @@ After=network.target
 
 [Service]
 User=wot
-ExecStart=/home/wot/wot-relay
+ExecStart=/home/wot/wot-relay/wot-relay
 WorkingDirectory=/home/wot/wot-relay
 Restart=always
-EnvironmentFile=/home/wot/.env
+EnvironmentFile=/home/wot/wot-relay/.env
 
 [Install]
 WantedBy=multi-user.target
