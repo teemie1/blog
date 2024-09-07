@@ -52,5 +52,6 @@ sudo systemctl enable wot-relay
 
 ## Access relay
 ~~~
+ufw allow 3334/tcp comment 'Allow for wot-relay'
 http://localhost:3334
 ~~~
