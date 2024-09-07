@@ -8,6 +8,10 @@ go version
 
 ## Install wot-relay
 ~~~
+sudo adduser --disabled-password --gecos "" wot
+sudo usermod -a -G tee wot
+sudo adduser tee wot
+sudo -iu wot
 git clone https://github.com/bitvora/wot-relay.git
 cd wot-relay
 cp .env.example .env
@@ -36,10 +40,11 @@ Description=WOT Relay Service
 After=network.target
 
 [Service]
-ExecStart=/path/to/wot-relay
-WorkingDirectory=/path/to/wot-relay
+User=wot
+ExecStart=/home/wot/wot-relay
+WorkingDirectory=/home/wot/wot-relay
 Restart=always
-EnvironmentFile=/path/to/.env
+EnvironmentFile=/home/wot/.env
 
 [Install]
 WantedBy=multi-user.target
