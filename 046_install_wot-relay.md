@@ -1,5 +1,8 @@
 # Install Web of trust relay (wot-relay)
 
+From https://github.com/bitvora/wot-relay
+
+
 ## Install Golang
 ~~~
 sudo apt-get update && sudo apt-get -y install golang-go
