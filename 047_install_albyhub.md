@@ -23,4 +23,6 @@ services:
 
 ~~~
 sudo docker compose up -d --build
+sudo ufw allow 8080/tcp comment 'Allow alby hub'
 ~~~
+Browse to https://[IP Address]:8080
