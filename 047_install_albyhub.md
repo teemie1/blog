@@ -20,7 +20,7 @@ services:
       - WORK_DIR=/data/albyhub
       - LOG_EVENTS=true
 ~~~
-
+reference: https://github.com/getAlby/hub/blob/master/docker-compose.yml
 ~~~
 sudo docker compose up -d --build
 sudo ufw allow 8080/tcp comment 'Allow alby hub'
