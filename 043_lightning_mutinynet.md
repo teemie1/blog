@@ -85,20 +85,20 @@ sudo ss -tulpn | grep LISTEN | grep tor
 ~~~
 ## Install Bitcoin Core in Mutinynet
 ~~~
+sudo adduser --gecos "" --disabled-password bitcoinm
+sudo adduser tee bitcoinm
+sudo adduser bitcoinm debian-tor
+sudo mkdir /data/bitcoinm
+sudo chown bitcoinm:bitcoinm /data/bitcoinm
+sudo su - bitcoinm
+ln -s /data/bitcoinm /home/bitcoinm/.bitcoin
+ls -la
 cd /tmp
 wget https://github.com/benthecarman/bitcoin/releases/download/mutinynet-cat-lnhance/bitcoin-c23afab47fbe-x86_64-linux-gnu.tar.gz
 tar -xvf bitcoin-c23afab47fbe-x86_64-linux-gnu.tar.gz
-sudo install -m 0755 -o root -g root -t /usr/local/bin bitcoin-c23afab47fbe/bin/bitcoin-cli bitcoin-c23afab47fbe/bin/bitcoind
+sudo install -m 0755 -o root -g root -t /home/bitcoinm bitcoin-c23afab47fbe/bin/bitcoin-cli bitcoin-c23afab47fbe/bin/bitcoind
 bitcoind --version
-sudo adduser --gecos "" --disabled-password bitcoin
-sudo adduser tee bitcoin
-sudo adduser bitcoin debian-tor
-sudo mkdir /data/bitcoin
-sudo chown bitcoin:bitcoin /data/bitcoin
-sudo su - bitcoin
-ln -s /data/bitcoin /home/bitcoin/.bitcoin
-ls -la
-cd .bitcoin
+cd ~/.bitcoin
 
 python3 /tmp/bitcoin-c23afab47fbe/share/rpcauth/rpcauth.py tee [PASSWORD]
 nano /home/bitcoin/.bitcoin/bitcoin.conf
