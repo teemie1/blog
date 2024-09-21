@@ -96,10 +96,14 @@ ls -la
 cd /tmp
 wget https://github.com/benthecarman/bitcoin/releases/download/mutinynet-cat-lnhance/bitcoin-c23afab47fbe-x86_64-linux-gnu.tar.gz
 tar -xvf bitcoin-c23afab47fbe-x86_64-linux-gnu.tar.gz
-sudo install -m 0755 -o root -g root -t /home/bitcoinm bitcoin-c23afab47fbe/bin/bitcoin-cli bitcoin-c23afab47fbe/bin/bitcoind
+install -m 0755 -o bitcoinm -g bitcoinm -t /home/bitcoinm bitcoin-c23afab47fbe/bin/bitcoin-cli bitcoin-c23afab47fbe/bin/bitcoind
+vi ~/.profile
+# Add lines
+alias bitcoin-cli='/home/bitcoinm/bitcoin-cli'
+alias bitcoind='/home/bitcoinm/bitcoind'
+
 bitcoind --version
 cd ~/.bitcoin
-
 python3 /tmp/bitcoin-c23afab47fbe/share/rpcauth/rpcauth.py tee [PASSWORD]
 nano /home/bitcoin/.bitcoin/bitcoin.conf
 ~~~
@@ -182,7 +186,7 @@ fallbackfee=0.0003
 ~~~
 chmod 640 /home/bitcoin/.bitcoin/bitcoin.conf
 exit
-sudo nano /etc/systemd/system/bitcoind.service
+sudo nano /etc/systemd/system/bitcoinm.service
 ~~~
 ~~~
 # MiniBolt: systemd unit for bitcoind
@@ -194,14 +198,14 @@ Requires=network-online.target
 After=network-online.target
 
 [Service]
-ExecStart=/usr/local/bin/bitcoind -pid=/run/bitcoind/bitcoind.pid \
-                                  -conf=/home/bitcoin/.bitcoin/bitcoin.conf \
-                                  -datadir=/home/bitcoin/.bitcoin
+ExecStart=/home/bitcoinm/bitcoind -pid=/run/bitcoinm/bitcoinm.pid \
+                                  -conf=/home/bitcoinm/.bitcoin/bitcoin.conf \
+                                  -datadir=/home/bitcoinm/.bitcoin
 # Process management
 ####################
 Type=exec
 NotifyAccess=all
-PIDFile=/run/bitcoind/bitcoind.pid
+PIDFile=/run/bitcoinm/bitcoinm.pid
 
 Restart=on-failure
 TimeoutStartSec=infinity
@@ -209,9 +213,9 @@ TimeoutStopSec=600
 
 # Directory creation and permissions
 ####################################
-User=bitcoin
-Group=bitcoin
-RuntimeDirectory=bitcoind
+User=bitcoinm
+Group=bitcoinm
+RuntimeDirectory=bitcoinm
 RuntimeDirectoryMode=0710
 UMask=0027
 
@@ -228,10 +232,9 @@ SystemCallArchitectures=native
 WantedBy=multi-user.target
 ~~~
 ~~~
-sudo systemctl enable bitcoind
-journalctl -fu bitcoind
-sudo systemctl start bitcoind
-ln -s /data/bitcoin /home/tee/.bitcoin
+sudo systemctl enable bitcoinm
+journalctl -fu bitcoinm
+sudo systemctl start bitcoinm
 
 ~~~
 ## Install LND
