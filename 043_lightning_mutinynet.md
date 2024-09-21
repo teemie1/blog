@@ -157,8 +157,8 @@ rpcauth=bitcoin:c7041907c2c3abd7c6ec5defe168820e$156354266eb26789f6aed178f6d9d16
 server=1
 
 # [zeromq]
-zmqpubrawblock=tcp://0.0.0.0:28332
-zmqpubrawtx=tcp://0.0.0.0:28333
+zmqpubrawblock=tcp://0.0.0.0:48332
+zmqpubrawtx=tcp://0.0.0.0:48333
 
 # Options specific to chain, rpcport set to default values
 [main]
@@ -250,26 +250,26 @@ gpg --verify manifest-roasbeef-v$VERSION-beta.sig manifest-v$VERSION-beta.txt
 tar -xvf lnd-linux-amd64-v$VERSION-beta.tar.gz
 sudo install -m 0755 -o root -g root -t /usr/local/bin lnd-linux-amd64-v$VERSION-beta/*
 lnd --version
-sudo adduser --disabled-password --gecos "" lnd
-sudo usermod -a -G debian-tor lnd
-sudo adduser tee lnd
-sudo mkdir /data/lnd
-sudo chown -R lnd:lnd /data/lnd
+sudo adduser --disabled-password --gecos "" lndm
+sudo usermod -a -G debian-tor lndm
+sudo adduser tee lndm
+sudo mkdir /data/lndm
+sudo chown -R lndm:lndm /data/lndm
 
-sudo su - lnd
-ln -s /data/lnd /home/lnd/.lnd
+sudo su - lndm
+ln -s /data/lndm /home/lndm/.lnd
 ls -la
-nano /data/lnd/password.txt
+nano /data/lndm/password.txt
 
 # Fill "BTC-LN_W0rk$h0p
 
-chmod 600 /data/lnd/password.txt
-nano /data/lnd/lnd.conf
+chmod 600 /data/lndm/password.txt
+nano /data/lndm/lnd.conf
 ~~~
 
 ~~~
 # lnd configuration
-# /data/lnd/lnd.conf
+# /data/lndm/lnd.conf
 
 [Application Options]
 alias=teemie-lnd
@@ -287,7 +287,7 @@ restlisten=0.0.0.0:8080
 
 # Password: automatically unlock wallet with the password in this file
 # -- comment out to manually unlock wallet, and see RaspiBolt guide for more secure options
-wallet-unlock-password-file=/data/lnd/password.txt
+wallet-unlock-password-file=/data/lndm/password.txt
 wallet-unlock-allow-create=true
 
 # Automatically regenerate certificate when near expiration
@@ -332,8 +332,8 @@ bitcoin.node=bitcoind
 bitcoind.rpcuser=bitcoin
 bitcoind.rpcpass="BTC-LN_W0rk$h0p"
 bitcoind.rpchost=127.0.0.1
-bitcoind.zmqpubrawblock=tcp://127.0.0.1:28332
-bitcoind.zmqpubrawtx=tcp://127.0.0.1:28333
+bitcoind.zmqpubrawblock=tcp://127.0.0.1:48332
+bitcoind.zmqpubrawtx=tcp://127.0.0.1:48333
 bitcoind.estimatemode=ECONOMICAL
 
 [tor]
@@ -346,19 +346,19 @@ tor.skip-proxy-for-clearnet-targets=true
 ~~~
 ~~~
 lnd
-sudo su - lnd
+sudo su - lndm
 lncli create
 exit
-sudo nano /etc/systemd/system/lnd.service
+sudo nano /etc/systemd/system/lndm.service
 ~~~
 ~~~
-# RaspiBolt: systemd unit for lnd
-# /etc/systemd/system/lnd.service
+# RaspiBolt: systemd unit for lndm
+# /etc/systemd/system/lndm.service
 
 [Unit]
 Description=LND Lightning Network Daemon
-Wants=bitcoind.service
-After=bitcoind.service
+Wants=bitcoinm.service
+After=bitcoinm.service
 
 [Service]
 
@@ -380,7 +380,7 @@ LimitNOFILE=128000
 User=lnd
 
 # /run/lightningd
-RuntimeDirectory=lightningd
+RuntimeDirectory=lightningdm
 RuntimeDirectoryMode=0710
 
 # Hardening measures
@@ -406,9 +406,9 @@ MemoryDenyWriteExecute=true
 WantedBy=multi-user.target
 ~~~
 ~~~
-sudo systemctl enable lnd
-sudo systemctl start lnd
-systemctl status lnd
+sudo systemctl enable lndm
+sudo systemctl start lndm
+systemctl status lndm
 sudo -iu tee
 ln -s /data/lnd /home/tee/.lnd
 exit
