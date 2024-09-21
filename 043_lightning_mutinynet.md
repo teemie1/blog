@@ -443,7 +443,17 @@ $ sudo su - lightningdm
 $ ln -s /data/lightningdm /home/lightningdm/.lightning
 $ ln -s /data/bitcoinm /home/lightningdm/.bitcoin
 
-
+~~~
+### Install prerequisite
+~~~
+exit
+sudo apt-get install python3-json5 python3-flask python3-gunicorn
+sudo -iu lightningdm
+pip3 install --user flask-cors flask-restx pyln-client flask-socketio gevent gevent-websocket
+pip3 install --user pyln-client websockets
+~~~
+### Configure CLN & PostgreSQL
+~~~
 $ cd /home/lightningdm/.lightning
 $ nano config
 ~~~
