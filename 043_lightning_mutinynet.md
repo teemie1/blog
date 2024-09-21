@@ -418,6 +418,141 @@ sudo vi /etc/profile
 # Add line
 alias lncli='lncli --network signet'
 ~~~
+
+## Install Core Lightning
+~~~
+cd /tmp
+VERSION="v24.08.1"
+$ wget https://github.com/ElementsProject/lightning/releases/download/$VERSION/clightning-$VERSION-Ubuntu-24.04.tar.xz
+$ wget https://github.com/ElementsProject/lightning/releases/download/$VERSION/SHA256SUMS
+$ wget https://github.com/ElementsProject/lightning/releases/download/$VERSION/SHA256SUMS.asc
+$ sha256sum --ignore-missing --check SHA256SUMS
+
+# Install Core Lightning
+$ cd /
+$ sudo tar -xvf /tmp/clightning-$VERSION-Ubuntu-24.04.tar.xz    # this will extract lightningd binary to the system
+
+$ sudo adduser --disabled-password --gecos "" lightningdm
+$ sudo usermod -a -G bitcoinm,debian-tor lightningdm
+$ sudo adduser tee lightningdm
+$ sudo mkdir /data/lightningdm
+$ sudo mkdir /data/lightningdm-plugins-available
+$ sudo chown -R lightningdm:lightningdm /data/lightningdm
+$ sudo chown -R lightningdm:lightningdm /data/lightningdm-plugins-available
+$ sudo su - lightningdm
+$ ln -s /data/lightningdm /home/lightningdm/.lightning
+$ ln -s /data/bitcoinm /home/lightningdm/.bitcoin
+
+
+$ cd /home/lightningdm/.lightning
+$ nano config
+~~~
+~~~
+# MiniBolt: cln configuration
+# /home/lightningdm/.lightning/config
+
+alias=teemie-cln
+rgb=FFA500
+network=signet
+log-file=/data/lightningdm/cln.log
+log-level=info
+# for admin to interact with lightning-cli
+rpc-file-mode=0660
+
+# default fees and channel min size
+fee-base=1000
+fee-per-satoshi=1000
+min-capacity-sat=1000000
+
+## optional
+# wumbo channels
+#large-channels
+# channel confirmations needed
+funding-confirms=2
+# autoclean (86400=daily)
+#autocleaninvoice-cycle=86400
+#autocleaninvoice-expired-by=86400
+# Bitcoin Core Connection
+bitcoin-rpcuser=bitcoin
+bitcoin-rpcpassword=BTC-LN_W0rk$h0p
+bitcoin-rpcconnect=127.0.0.1
+bitcoin-rpcport=38332
+
+# wallet settings (PostgreSQL DB)
+wallet=postgres://[DB USER]:[DB PASSWORD]@localhost:5432/lightningdb
+
+
+# network
+proxy=127.0.0.1:9050
+addr=statictor:127.0.0.1:9051/torport=9735
+always-use-proxy=false
+
+# CLEARNET
+bind-addr=0.0.0.0:9735
+#announce-addr=[Public Ip]:9735
+
+# Plugin
+clnrest-port=3010
+clnrest-protocol=https
+clnrest-host=127.0.0.1
+
+experimental-offers
+experimental-splicing
+experimental-dual-fund
+experimental-anchors
 ~~~
 
+
+~~~
+$ exit
+$ sudo nano /etc/systemd/system/lightningdm.service
+~~~
+
+~~~
+# MiniBolt: systemd unit for lightningdm
+# /etc/systemd/system/lightningdm.service
+
+[Unit]
+Description=Core Lightning daemon
+Requires=bitcoinm.service
+After=bitcoinm.service
+Requires=postgresql.service
+After=postgresql.service
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=/bin/sh -c '/usr/bin/lightningd \
+                       --conf=/data/lightningdm/config \
+                       --daemon \
+                       --pid-file=/run/lightningdm/lightningdm.pid'
+
+ExecStop=/bin/sh -c '/usr/bin/lightning-cli stop'
+
+RuntimeDirectory=lightningdm
+
+User=lightningdm
+
+# process management
+Type=simple
+PIDFile=/run/lightningdm/lightningdm.pid
+Restart=on-failure
+TimeoutSec=240
+RestartSec=30
+
+# hardening measures
+PrivateTmp=true
+ProtectSystem=full
+NoNewPrivileges=true
+PrivateDevices=true
+
+[Install]
+WantedBy=multi-user.target
+
+~~~
+
+~~~
+$ sudo systemctl enable lightningdm.service
+$ sudo systemctl start lightningdm.service
+$ sudo journalctl -f -u lightningdm
 ~~~
