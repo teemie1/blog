@@ -189,8 +189,8 @@ exit
 sudo nano /etc/systemd/system/bitcoinm.service
 ~~~
 ~~~
-# MiniBolt: systemd unit for bitcoind
-# /etc/systemd/system/bitcoind.service
+# MiniBolt: systemd unit for bitcoinm
+# /etc/systemd/system/bitcoinm.service
 
 [Unit]
 Description=Bitcoin Core Daemon
