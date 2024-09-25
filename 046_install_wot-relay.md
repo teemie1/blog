@@ -5,7 +5,8 @@ From https://github.com/bitvora/wot-relay
 
 ## Install Golang
 ~~~
-sudo apt-get update && sudo apt-get -y install golang-go
+sudo apt install snapd
+sudo snap install go --classic
 go version
 ~~~
 
@@ -30,10 +31,14 @@ DB_PATH="/home/wot/wot-relay/db"
 INDEX_PATH="/home/wot/wot-relay/templates/index.html"
 STATIC_PATH="/home/wot/wot-relay/templates/static"
 REFRESH_INTERVAL=24
+MINIMUM_FOLLOWERS=3 #how many followers before they're allowed in the WoT
+ARCHIVAL_SYNC="FALSE" # set to TRUE to archive every note from every person in the WoT (not recommended)
+ARCHIVE_REACTIONS="FALSE" # set to TRUE to archive every reaction from every person in the WoT (not recommended)
 ~~~
 Go build
 ~~~
-go build
+go build -ldflags "-X main.version=$(git describe --tags --always)"
+#go build
 ~~~
 
 ## Configure Systemd Service
