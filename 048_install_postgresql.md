@@ -16,7 +16,7 @@ sudo sh -c 'echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresq
 sudo apt update
 ~~~
 ## Install the latest version of PostgreSQL:
-# If you want a specific version, use 'postgresql-16' or similar instead of 'postgresql'
+If you want a specific version, use 'postgresql-16' or similar instead of 'postgresql'
 ~~~
 sudo apt -y install postgresql-14
 ~~~
