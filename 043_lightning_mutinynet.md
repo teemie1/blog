@@ -105,10 +105,10 @@ alias bitcoind='/home/bitcoinm/bitcoind'
 bitcoind --version
 cd ~/.bitcoin
 python3 /tmp/bitcoin-c23afab47fbe/share/rpcauth/rpcauth.py tee [PASSWORD]
-nano /home/bitcoin/.bitcoin/bitcoin.conf
+nano /home/bitcoinm/.bitcoin/bitcoin.conf
 ~~~
 ~~~
-# RaspiBolt: bitcoind configuration for testnet node
+# Bitcoind configuration for mutinynet node
 
 #[chain]
 # main, test, signet, regtest
@@ -184,7 +184,7 @@ fallbackfee=0.0003
 # rpcport=18443
 ~~~
 ~~~
-chmod 640 /home/bitcoin/.bitcoin/bitcoin.conf
+chmod 640 /home/bitcoinm/.bitcoin/bitcoin.conf
 exit
 sudo nano /etc/systemd/system/bitcoinm.service
 ~~~
