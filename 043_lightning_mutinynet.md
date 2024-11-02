@@ -178,7 +178,7 @@ rpcport=38332
 bind=127.0.0.1
 rpcbind=127.0.0.1
 fallbackfee=0.0003
-
+rpcallowip=0.0.0.0/0
 
 [regtest]
 # rpcport=18443
