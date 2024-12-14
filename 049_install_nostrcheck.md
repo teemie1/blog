@@ -5,5 +5,5 @@
 sudo -i
 git clone https://github.com/quentintaranpino/nostrcheck-server
 cd nostrcheck-server
-docker-compose up -d
+docker compose up -d
 ~~~
