@@ -1,6 +1,6 @@
 # Install Nostrcheck Server for Media Server
 
-## Download compost file from nostrcheck
+## Download github from nostrcheck and create docker container
 ~~~
 sudo -i
 cd /data
