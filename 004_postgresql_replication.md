@@ -85,8 +85,8 @@ $ tail /var/log/postgresql/postgresql-14-main.log
 ## Check replication at primary server
 ~~~
 # Check Replication Status
-$ sudo su - postgres -c 'psql -x -c "SELECT * from pg_stat_replication;"' 
-$ sudo su - postgres -c 'psql -c "select usename, application_name, client_addr, state, sync_priority, sync_state from pg_stat_replication;"'
+$ sudo su - postgres -c 'psql --host 10.7.0.2 --port 5433 -x -c "SELECT * from pg_stat_replication;"' 
+$ sudo su - postgres -c 'psql --host 10.7.0.2 --port 5433 -c "select usename, application_name, client_addr, state, sync_priority, sync_state from pg_stat_replication;"'
 
 ~~~
 ## Check block height at standby server
