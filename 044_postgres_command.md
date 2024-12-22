@@ -43,5 +43,9 @@ $ exit
 ~~~
 ## Change owner of database
 ~~~
-ALTER DATABASE lnbitsdb OWNER TO lnbitsusr;
+ALTER DATABASE lnbitsdb OWNER TO lnbits;
+~~~
+## Delete user
+~~~
+DROP USER lnbitsusr;
 ~~~
