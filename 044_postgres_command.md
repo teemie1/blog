@@ -41,3 +41,7 @@ $ psql -U lightningusr --host=localhost --port=5432 "dbname=lightningdb" -t -c "
 
 $ exit
 ~~~
+## Change owner of database
+~~~
+ALTER DATABASE lnbitsdb OWNER TO lnbitsusr;
+~~~
