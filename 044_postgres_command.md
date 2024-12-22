@@ -13,6 +13,10 @@ $ sudo -i -u postgres
 $ createuser --createdb --pwprompt --replication lightningusr # create user lightningusr (set a password)
 $ createdb -O lightningusr lightningdb # create database lightningdb
 ~~~
+## List Users
+~~~
+SELECT * FROM pg_user;
+~~~
 
 ## Connect to Database and list table
 ~~~
