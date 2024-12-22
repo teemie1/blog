@@ -24,8 +24,8 @@ $ sudo systemctl restart postgresql
 
 ## Create a replication slot:
 ~~~
-$ sudo -i -u postgres
-$ psql
+$ sudo -i -u postgres 
+$ psql --host=10.7.0.2 --port=5433
 postgres=# SELECT * FROM pg_create_physical_replication_slot('node_a_slot');
 slot_name | lsn
 -------------+-----
