@@ -12,15 +12,11 @@ $ sudo apt install postgresql
 
 # เช็ค PostgreSQL Version ที่ติดตั้งเรียบร้อย
 $ sudo -i -u postgres
-$ psql
-psql (14.11 (Ubuntu 14.11-0ubuntu0.22.04.1))
+$ psql -U lightningusr --host=10.7.0.2 --port=5433 dbname=lightningdb
+Password for user lightningusr: 
+psql (16.6 (Ubuntu 16.6-0ubuntu0.24.04.1), server 14.13 (Ubuntu 14.13-1.pgdg24.04+1))
+SSL connection (protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, compression: off)
 Type "help" for help.
-
-postgres=# select version();
-                                                                version
-----------------------------------------------------------------------------------------------------------------------------------------
- PostgreSQL 14.11 (Ubuntu 14.11-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0, 64-bit
-(1 row)
 ~~~
 
 ## Change postgres password
@@ -96,11 +92,11 @@ $ sudo systemctl restart bitcoind
 
 # Download Core Lightning Software and Checksum
 $ cd /tmp
-$ wget https://github.com/ElementsProject/lightning/releases/download/v24.02.2/clightning-v24.02.2-Ubuntu-22.04.tar.xz
-$ wget https://github.com/ElementsProject/lightning/releases/download/v24.02.2/SHA256SUMS
-$ wget https://github.com/ElementsProject/lightning/releases/download/v24.02.2/SHA256SUMS.asc
+$ wget https://github.com/ElementsProject/lightning/releases/download/v24.08.2/clightning-v24.08.2-Ubuntu-28.04.tar.xz
+$ wget https://github.com/ElementsProject/lightning/releases/download/v24.08.2/SHA256SUMS
+$ wget https://github.com/ElementsProject/lightning/releases/download/v24.08.2/SHA256SUMS.asc
 $ sha256sum --ignore-missing --check SHA256SUMS
-clightning-v24.02.2-Ubuntu-22.04.tar.xz: OK
+clightning-v24.08.2-Ubuntu-24.04.tar.xz: OK
 
 # Download and verify key with gpg
 $ wget https://raw.githubusercontent.com/ElementsProject/lightning/master/contrib/keys/rustyrussell.txt
@@ -113,7 +109,9 @@ $ gpg --verify SHA256SUMS.asc
 
 # Install Core Lightning
 $ cd /
-$ sudo tar -xvf /tmp/clightning-v24.02.2-Ubuntu-22.04.tar.xz    # this will extract lightningd binary to the system
+$ sudo tar -xvf /tmp/clightning-v24.08.2-Ubuntu-24.04.tar.xz    # this will extract lightningd binary to the system
+
+$ sudo mv /usr/lib/python3.12/EXTERNALLY-MANAGED /usr/lib/python3.12/EXTERNALLY-MANAGED.old
 
 sudo -iu lightningd
 pip install -r /usr/libexec/c-lightning/plugins/clnrest/requirements.txt
