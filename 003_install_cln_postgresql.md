@@ -12,8 +12,8 @@ $ sudo apt install postgresql
 
 # เช็ค PostgreSQL Version ที่ติดตั้งเรียบร้อย
 $ sudo -i -u postgres
-$ psql -U lightningusr --host=10.7.0.2 --port=5433 dbname=lightningdb
-Password for user lightningusr: 
+$ psql --host=10.7.0.2 --port=5433
+Password for user postgres: 
 psql (16.6 (Ubuntu 16.6-0ubuntu0.24.04.1), server 14.13 (Ubuntu 14.13-1.pgdg24.04+1))
 SSL connection (protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, compression: off)
 Type "help" for help.
