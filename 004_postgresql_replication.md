@@ -60,7 +60,7 @@ $ sudo systemctl restart postgresql
 $ sudo systemctl stop postgresql
 $ sudo mv /var/lib/postgresql/14/main/ /var/lib/postgresql/14/main.backup
 $ sudo -i -u postgres
-$ pg_basebackup -h 10.8.1.2 -U lightningusr -D /var/lib/postgresql/14/main/ -P --password --slot node_a_slot
+$ pg_basebackup -h 10.8.1.2 -p 5433 -U lightningusr -D /var/lib/postgresql/14/main/ -P --password --slot node_a_slot
 # enter the password for user lightningusr when prompted
 
 $ touch /var/lib/postgresql/14/main/standby.signal
