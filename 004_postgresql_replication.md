@@ -42,6 +42,7 @@ $ exit
 
 ## Open the postgresql.conf file on primary and set the following configuration.
 ~~~
+$ sudo locale-gen en_US.UTF-8
 $ sudo vi /etc/postgresql/14/main/postgresql.conf
 listen_addresses = 'localhost,10.8.1.2' # required for streaming replication
 wal_level = replica
@@ -57,6 +58,7 @@ $ sudo systemctl restart postgresql
 
 ## Setting Up the Standby server for streaming replication
 ~~~
+$ sudo locale-gen en_US.UTF-8
 $ sudo systemctl stop postgresql
 $ sudo mv /var/lib/postgresql/14/main/ /var/lib/postgresql/14/main.backup
 $ sudo -i -u postgres
@@ -85,14 +87,14 @@ $ tail /var/log/postgresql/postgresql-14-main.log
 ## Check replication at primary server
 ~~~
 # Check Replication Status
-$ sudo su - postgres -c 'psql --host 10.7.0.2 --port 5433 -x -c "SELECT * from pg_stat_replication;"' 
-$ sudo su - postgres -c 'psql --host 10.7.0.2 --port 5433 -c "select usename, application_name, client_addr, state, sync_priority, sync_state from pg_stat_replication;"'
+$ sudo su - postgres -c 'psql --host localhost --port 5433 -x -c "SELECT * from pg_stat_replication;"' 
+$ sudo su - postgres -c 'psql --host localhost --port 5433 -c "select usename, application_name, client_addr, state, sync_priority, sync_state from pg_stat_replication;"'
 
 ~~~
 ## Check block height at standby server
 ~~~
 $ sudo -i -u postgres
-$ psql -U lightningusr --host=localhost --port=5432 "dbname=lightningdb" -t -c "SELECT max(height) from blocks;"
+$ psql -U lightningusr --host=localhost --port=5433 "dbname=lightningdb" -t -c "SELECT max(height) from blocks;"
 Password for user lightningusr:
  800337
 
