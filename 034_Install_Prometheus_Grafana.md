@@ -20,16 +20,16 @@ sudo chown prometheus:prometheus /data/prometheus
 ### Download Prometheus Binary File
 ~~~
 cd /tmp
-wget https://github.com/prometheus/prometheus/releases/download/v2.48.0/prometheus-2.48.0.linux-amd64.tar.gz
-wget https://github.com/prometheus/prometheus/releases/download/v2.48.0/prometheus-web-ui-2.48.0.tar.gz
-wget https://github.com/prometheus/prometheus/releases/download/v2.48.0/sha256sums.txt
+wget https://github.com/prometheus/prometheus/releases/download/v3.0.1/prometheus-3.0.1.linux-amd64.tar.gz
+wget https://github.com/prometheus/prometheus/releases/download/v3.0.1/prometheus-web-ui-3.0.1.tar.gz
+wget https://github.com/prometheus/prometheus/releases/download/v3.0.1/sha256sums.txt
 ~~~
 ### Install Prometheus and Grafana on Ubuntu
 ~~~
-sha256sum prometheus-2.48.0.linux-amd64.tar.gz
-sha256sum prometheus-web-ui-2.48.0.tar.gz
-tar -xvf prometheus-2.48.0.linux-amd64.tar.gz
-cd prometheus-2.48.0.linux-amd64.tar.gz
+sha256sum prometheus-3.0.1.linux-amd64.tar.gz
+sha256sum prometheus-web-ui-3.0.1.tar.gz
+tar -xvf prometheus-3.0.1.linux-amd64.tar.gz
+cd prometheus-3.0.1.linux-amd64.tar.gz
 ~~~
 ### Copy Prometheus Binary files
 ~~~
