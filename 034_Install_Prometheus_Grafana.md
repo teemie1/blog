@@ -146,11 +146,14 @@ Add Data sources and select Prometheus
 ~~~
 sudo useradd --no-create-home --shell /bin/false node_exporter
 cd /tmp
-wget https://github.com/prometheus/node_exporter/releases/download/v1.7.0/node_exporter-1.7.0.linux-amd64.tar.gz
-sudo tar xvzf node_exporter-1.7.0.linux-amd64.tar.gz
-cd node_exporter-1.7.0.linux-amd64
+wget https://github.com/prometheus/node_exporter/releases/download/v1.8.2/node_exporter-1.8.2.linux-amd64.tar.gz
+rm sha256sums.txt
+wget https://github.com/prometheus/node_exporter/releases/download/v1.8.2/sha256sums.txt
+sha256sum --ignore-missing --check sha256sums.txt
+sudo tar xvzf node_exporter-1.8.2.linux-amd64.tar.gz
+cd node_exporter-1.8.2.linux-amd64
 sudo cp node_exporter /usr/local/bin
-sudo chown node_exporter.node_exporter /usr/local/bin/node_exporter
+sudo chown node_exporter:node_exporter /usr/local/bin/node_exporter
 cd /lib/systemd/system
 sudo nano node_exporter.service
 [Unit]
@@ -193,7 +196,6 @@ https://localhost:9100/targets
 ~~~
 Add dashboard
 Go to Dashboards
-Select "New" --> "New Dashboard"
 Select "Import Dashboard"
 Fill "1860" (Node Exporter Full) and click "Load"
 Search more dashboard template at https://grafana.com/grafana/dashboards
