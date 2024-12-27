@@ -139,7 +139,7 @@ Username – admin
 Password – admin
 
 On browser
-Settings Icon ->> Configuration ->> data sources
+Connection ->> data sources
 Add Data sources and select Prometheus
 ~~~
 ## Install Node Exporter
