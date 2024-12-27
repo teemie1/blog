@@ -38,7 +38,7 @@ services:
             - POSTGRES_PORT=5432
             - POSTGRES_HOST=db
 
-$ sudo docker-compose -f docker-compose.yml up -d
+$ sudo docker compose -f docker-compose.yml up -d
 $ docker logs joplin-app
 ~~~
 
