@@ -24,11 +24,11 @@ $ sudo nano /etc/wireguard/wg0.conf
 [Interface]
 Address = 10.8.0.1/24
 SaveConfig = true
-PostUp = ufw route allow in on wg1 out on enp3s0
-PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eno1 -j MASQUERADE
+PostUp = ufw route allow in on %i out on eth0
+PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 
-PreDown = ufw route delete allow in on wg1 out on enp3s0
-PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eno1 -j MASQUERADE
+PreDown = ufw route delete allow in on %i out on eth0
+PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
 
 ListenPort = 51820
 PrivateKey = [PRIVATE KEY OF SERVER]
@@ -37,6 +37,12 @@ PrivateKey = [PRIVATE KEY OF SERVER]
 PublicKey = [PUBLIC KEY OF CLIENT]
 AllowedIPs = 10.8.0.21/32
 
+~~~
+## แก้ไขไฟล์ /etc/sysctl.conf บน server
+~~~
+$ vi /etc/sysctl.conf
+# uncomment
+net.ipv4.ip_forward=1
 ~~~
 
 ## แก้ไขไฟล์ wg0.conf บน client
