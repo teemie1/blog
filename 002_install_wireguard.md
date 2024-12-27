@@ -43,6 +43,8 @@ AllowedIPs = 10.8.0.21/32
 $ vi /etc/sysctl.conf
 # uncomment
 net.ipv4.ip_forward=1
+
+$ reboot
 ~~~
 
 ## แก้ไขไฟล์ wg0.conf บน client
