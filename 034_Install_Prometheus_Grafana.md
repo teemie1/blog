@@ -141,6 +141,7 @@ Password – admin
 On browser
 Connection ->> data sources
 Add Data sources and select Prometheus
+Fill prometheus server url: http://localhost:9090
 ~~~
 ## Install Node Exporter
 ~~~
