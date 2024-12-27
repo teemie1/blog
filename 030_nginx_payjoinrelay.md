@@ -62,3 +62,9 @@ $ sudo netfilter-persistent save
 $ sudo systemctl enable netfilter-persistent
 
 ~~~
+
+## certbot command
+~~~
+$ certbot certificates
+$ certbot renew
+~~~
