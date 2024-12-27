@@ -26,10 +26,9 @@ wget https://github.com/prometheus/prometheus/releases/download/v3.0.1/sha256sum
 ~~~
 ### Install Prometheus and Grafana on Ubuntu
 ~~~
-sha256sum prometheus-3.0.1.linux-amd64.tar.gz
-sha256sum prometheus-web-ui-3.0.1.tar.gz
+sha256sum --ignore-missing --check sha256sums.txt
 tar -xvf prometheus-3.0.1.linux-amd64.tar.gz
-cd prometheus-3.0.1.linux-amd64.tar.gz
+cd prometheus-3.0.1.linux-amd64
 ~~~
 ### Copy Prometheus Binary files
 ~~~
@@ -44,14 +43,14 @@ sudo chown prometheus:prometheus /usr/local/bin/promtool
 
 ### Copy Prometheus Console Libraries
 ~~~
-sudo cp -r consoles /etc/prometheus
-sudo cp -r console_libraries /etc/prometheus
+#sudo cp -r consoles /etc/prometheus
+#sudo cp -r console_libraries /etc/prometheus
 sudo cp -r prometheus.yml /etc/prometheus
 ~~~
 ### Update Prometheus ownership on Directories
 ~~~
-sudo chown -R prometheus:prometheus /etc/prometheus/consoles
-sudo chown -R prometheus:prometheus /etc/prometheus/console_libraries
+#sudo chown -R prometheus:prometheus /etc/prometheus/consoles
+#sudo chown -R prometheus:prometheus /etc/prometheus/console_libraries
 sudo chown -R prometheus:prometheus /etc/prometheus/prometheus.yml
 ~~~
 ### Check Prometheus Version
