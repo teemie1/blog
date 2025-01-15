@@ -64,11 +64,13 @@ location / {
 }
 ~~~
 ~~~
-sudo ln -s /etc/nginx/sites-available/sample.com /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/wordpress.conf /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl restart nginx
 ~~~
-##
+## Open browser
+
+Now, open your web browser and access WordPress using the URL http://example.com. 
 ~~~
 
 ~~~
