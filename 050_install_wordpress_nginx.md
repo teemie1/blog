@@ -25,6 +25,7 @@ $ php -v
 
 ## Install WordPress with Nginx
 ~~~
+sudo apt install unzip
 cd /tmp/ && wget https://wordpress.org/latest.zip
 unzip latest.zip -d /var/www
 chown -R www-data:www-data /var/www/wordpress/
