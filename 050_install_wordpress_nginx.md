@@ -4,6 +4,7 @@
 ~~~
 $ sudo apt install mysql-server
 $ sudo systemctl status mysql
+$ sudo systemctl enable mysql
 $ mysql -u root -p
 
 > CREATE DATABASE wordpress CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
