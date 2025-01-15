@@ -6,10 +6,11 @@ $ sudo apt install mysql-server
 $ sudo systemctl status mysql
 $ mysql -u root -p
 
-# CREATE DATABASE WordPress CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-# CREATE USER 'WordPressUser'@'localhost' IDENTIFIED BY 'your_password';
-# FLUSH PRIVILEGES;
-# EXIT;
+> CREATE DATABASE wordpress CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+> CREATE USER 'wordpress'@'localhost' IDENTIFIED BY 'your_password';
+> GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress'@'localhost';
+> FLUSH PRIVILEGES;
+> EXIT;
 
 ~~~
 
