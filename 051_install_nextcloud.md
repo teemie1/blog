@@ -60,7 +60,7 @@ $ docker compose up -d
 
 ## Configure nginx for nextcloud
 ~~~
-sudo nano /etc/nginx/conf.d/nextcloud.conf
+sudo nano /etc/nginx/sites-available/nextcloud.conf
 ~~~
 ~~~
 server {
@@ -90,6 +90,7 @@ server {
 }
 ~~~
 ~~~
+sudo ln -s /etc/nginx/sites-available/nextcloud.conf /etc/nginx/sites-enabled
 sudo nginx -t && sudo nginx -s reload
 sudo certbot --nginx -d <domain> -m <email_address> --agree-tos
 ~~~
