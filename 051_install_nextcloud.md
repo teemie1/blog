@@ -25,7 +25,7 @@ services:
     restart: unless-stopped
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb-file-per-table=1 --skip-innodb-read-only-compressed
     volumes:
-      - db:/var/lib/mysql
+      - ./data/db:/var/lib/mysql
     env_file:
       - db.env
 
@@ -43,7 +43,7 @@ services:
       - db
       - redis
     volumes:
-      - nextcloud:/var/www/html
+      - ./data/nextcloud:/var/www/html
     environment:
       - MYSQL_HOST=db
       - REDIS_HOST_PASSWORD=your_redis_password
@@ -52,9 +52,6 @@ services:
     depends_on:
       - db
       - redis
-volumes:
-  db:
-  nextcloud:
 ~~~
 ## Install Nextcloud on Docker
 ~~~
