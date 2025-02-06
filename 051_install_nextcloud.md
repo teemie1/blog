@@ -57,3 +57,41 @@ services:
 ~~~
 $ docker compose up -d
 ~~~
+
+## Configure nginx for nextcloud
+~~~
+sudo nano /etc/nginx/conf.d/nextcloud.conf
+~~~
+~~~
+server {
+    listen 80;
+    listen [::]:80;
+    root /var/www/html;
+    server_name <your_domain>;
+
+    location / {
+        proxy_pass http://localhost:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload";
+        client_max_body_size 0;
+    }
+
+    location /.well-known/carddav {
+      return 301 $scheme://$host/remote.php/dav;
+    }
+
+    location /.well-known/caldav {
+      return 301 $scheme://$host/remote.php/dav;
+    }
+
+}
+~~~
+~~~
+sudo nginx -t && sudo nginx -s reload
+sudo certbot --nginx -d <domain> -m <email_address> --agree-tos
+~~~
+
+
