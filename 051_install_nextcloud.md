@@ -55,5 +55,5 @@ services:
 ~~~
 ## Install Nextcloud on Docker
 ~~~
-$ docker-compose up -d
+$ docker compose up -d
 ~~~
