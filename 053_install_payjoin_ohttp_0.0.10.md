@@ -7,3 +7,8 @@ Ref: https://hub.docker.com/layers/dangould/ohttp-relay/0.0.10-rc0/images/sha256
 docker pull dangould/ohttp-relay:0.0.10-rc0
 docker run -d -e PORT=4000 -e GATEWAY_ORIGIN="https://payjo.in:443" --restart unless-stopped --name bob-ohttp-relay -p 4000:4000 dangould/ohttp-relay:0.0.10-rc0
 ~~~
+
+## CURL for testing
+~~~
+curl --proxy https://pj.bobspacebkk.com https://payjo.in/ohttp-config
+~~~
