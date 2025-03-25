@@ -16,3 +16,9 @@ For both desktop and web modes:
 sudo apt install pgadmin4
 ~~~
 
+# Alternative install pgAdmin with docker container
+
+~~~
+docker pull dpage/pgadmin4
+docker run --restart always --name pgadmin-container -p 5050:80 -e PGADMIN_DEFAULT_EMAIL=teemie@satsdays.com -e PGADMIN_DEFAULT_PASSWORD=XXXXXX -d dpage/pgadmin4
+~~~
