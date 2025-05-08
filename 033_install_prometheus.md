@@ -21,7 +21,7 @@ cd /tmp
 wget https://github.com/prometheus/prometheus/releases/download/v3.3.1/prometheus-3.3.1.linux-amd64.tar.gz
 wget https://github.com/prometheus/prometheus/releases/download/v3.3.1/sha256sums.txt
 Install Prometheus and Grafana on Ubuntu
-sha256sum prometheus-3.3.1.linux-amd64.tar.gz
+sha256sum --ignore-missing --check sha256sums.txt
 tar -xvf prometheus-3.3.1.linux-amd64.tar.gz
 cd prometheus-3.3.1.linux-amd64
 ~~~
