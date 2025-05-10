@@ -5,8 +5,9 @@
 sudo apt-get install -y \
   jq autoconf automake build-essential git libtool libsqlite3-dev libffi-dev \
   python3 python3-pip net-tools zlib1g-dev libsodium-dev gettext
-pip3 install --upgrade pip
-pip3 install --user poetry
+pip3 install --upgrade pip --break-system-packages
+pip3 install --user poetry --break-system-packages
+sudo apt install python3-poetry
 ~~~
 ## Clone lightning
 ~~~
