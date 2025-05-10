@@ -2,7 +2,7 @@
 
 ## Clone lightning
 ~~~
-cd 
+cd /tmp
 git clone https://github.com/ElementsProject/lightning.git
 cd lightning
 git checkout v25.02.1
