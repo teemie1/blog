@@ -2,6 +2,7 @@
 
 ## Install Prereq
 ~~~
+sudo -i
 sudo apt-get install -y \
   jq autoconf automake build-essential git libtool libsqlite3-dev libffi-dev \
   python3 python3-pip net-tools zlib1g-dev libsodium-dev gettext
@@ -28,4 +29,16 @@ poetry install
 ./configure
 RUST_PROFILE=release poetry run make
 sudo RUST_PROFILE=release make install
+~~~
+
+## Replace CLN
+~~~
+systemctl stop lnbits
+systemctl stop rtl
+systemctl stop lightningd
+mv /home/lightningd/lightningd /tmp/lightningd_old
+mv /tmp/lightningd /home/lightningd/lightningd
+systemctl start lightningd
+systemctl start lnbits
+systemctl start rtl
 ~~~
