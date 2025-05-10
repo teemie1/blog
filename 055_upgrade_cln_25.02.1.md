@@ -41,3 +41,8 @@ systemctl start lightningd
 systemctl start lnbits
 systemctl start rtl
 ~~~
+
+# Test CLNRest
+~~~
+curl -k -X POST 'https://localhost:3010/v1/listfunds' -H 'Rune: <rune>'
+~~~
