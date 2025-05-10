@@ -28,16 +28,15 @@ sudo apt-get install -y cargo rustfmt protobuf-compiler
 poetry install
 ./configure
 RUST_PROFILE=release poetry run make
-sudo RUST_PROFILE=release make install
+sudo RUST_PROFILE=release make install  # This will replace lightingd executable files of the system
 ~~~
 
-## Replace CLN
+## Restart CLN
 ~~~
 systemctl stop lnbits
 systemctl stop rtl
 systemctl stop lightningd
-mv /home/lightningd/lightningd /tmp/lightningd_old
-mv /tmp/lightningd /home/lightningd/lightningd
+
 systemctl start lightningd
 systemctl start lnbits
 systemctl start rtl
