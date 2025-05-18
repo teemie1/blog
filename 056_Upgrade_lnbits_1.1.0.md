@@ -16,3 +16,7 @@ git checkout v1.1.0
 poetry install --only main
 exit
 ~~~
+## Restart LNbits
+~~~
+sudo systemctl start lnbits
+~~~
