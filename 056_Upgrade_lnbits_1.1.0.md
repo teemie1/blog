@@ -5,7 +5,7 @@
 sudo systemctl stop lnbits
 sudo su - lnbits
 ~~~
-##
+## Upgrade LNbits v1.1.0
 ~~~
 cd /home/lnbits/lnbits
 git fetch
