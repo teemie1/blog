@@ -1,5 +1,5 @@
 # Upgrade LNbits 1.2.1
-
+# Not Work
 ## Stop LNbits
 ~~~
 sudo systemctl stop lnbits
@@ -23,6 +23,7 @@ git reset --hard HEAD
 git tag | grep -E "v[0-9]+.[0-9]+.[0-9]+$" | sort --version-sort | tail -n 1
 > v1.2.1
 git checkout v1.2.1
+poetry env use 3.13
 poetry install --only main
 exit
 ~~~
