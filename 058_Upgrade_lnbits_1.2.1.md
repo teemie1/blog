@@ -5,6 +5,16 @@
 sudo systemctl stop lnbits
 sudo su - lnbits
 ~~~
+## Install python3.13
+~~~
+sudo apt update
+sudo apt install software-properties-common
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt update
+sudo apt install python3.13
+python3.13 --version
+~~~
+
 ## Upgrade LNbits v1.2.1
 ~~~
 cd /home/lnbits/lnbits
