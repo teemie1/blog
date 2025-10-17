@@ -28,6 +28,16 @@ sudo snap install astral-uv --classic
 uv sync --all-extras --all-groups --frozen
 ./configure
 RUST_PROFILE=release uv run make
+
+~~~
+~~~
+If fail about .lock file run this for clear
+    rm Cargo.lock
+    cargo clean
+    cargo update
+
+~~~
+~~~
 sudo RUST_PROFILE=release make install  # This will replace lightingd executable files of the system
 ~~~
 
