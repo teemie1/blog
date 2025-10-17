@@ -36,7 +36,8 @@ If fail about .lock file run this for clear
     rm Cargo.lock
     cargo clean
     cargo update
-
+    rustup update stable
+    rustc --version
 ~~~
 ~~~
 sudo RUST_PROFILE=release make install  # This will replace lightingd executable files of the system
