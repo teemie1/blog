@@ -32,6 +32,7 @@ RUST_PROFILE=release uv run make
 ~~~
 ~~~
 If fail about .lock file run this for clear
+    rustup update
     rm Cargo.lock
     cargo clean
     cargo update
