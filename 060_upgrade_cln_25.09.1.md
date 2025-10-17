@@ -36,6 +36,8 @@ If fail about .lock file run this for clear
     rm Cargo.lock
     cargo clean
     cargo update
+    apt autoremove rustc
+    
     rustup update stable
     rustc --version
 ~~~
