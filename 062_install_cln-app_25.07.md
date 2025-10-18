@@ -1,5 +1,12 @@
 # Install CLN Application 25.07
 
+## Install prereq
+~~~
+sudo apt-get update
+sudo apt-get install -y build-essential libcairo2-dev libjpeg-dev libpango1.0-dev libgif-dev librsvg2-dev libpixman-1-dev pkg-config python3
+~~~
+
+
 ## Install latest NodeJS
 ~~~
 sudo -iu lightningd
