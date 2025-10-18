@@ -49,8 +49,10 @@ lightning-cli showrunes
 curl -k -X POST 'https://<HOST IP>:3010/v1/getinfo' -H 'Rune: <node-rune>'
 ~~~
 
-## Edit env file
+## Edit start script
 ~~~
+vi start_cln_app.sh
+
 export APP_PORT=2103
 export APP_HOST=10.7.0.3
 export APP_CONNECT=REST
@@ -71,6 +73,8 @@ export LIGHTNING_REST_CLIENT_KEY_FILE=/home/lightningd/.lightning/bitcoin/client
 export LIGHTNING_REST_CLIENT_CERT_FILE=/home/lightningd/.lightning/bitcoin/client.pem
 export LIGHTNING_REST_CA_CERT_FILE=/home/lightningd/.lightning/bitcoin/ca.pem
 export LIGHTNING_TLS_REJECT_UNAUTHORIZED=true
+
+npm run start
 
 vi .commando-env
 LIGHTNING_RUNE=bERYBDfug3XVtsmqHK4W86h6jYZaBpViFJXJPh6g8aw9Mw==
@@ -96,8 +100,8 @@ vi /etc/hosts
 ~~~
 ## Start CLN-App
 ~~~
- npm run start
 
+/home/lightningd/cln-application-25.07/start_cln_app.sh
 ~~~
 ## Open Port Firewall
 ~~~
