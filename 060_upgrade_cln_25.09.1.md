@@ -32,6 +32,7 @@ RUST_PROFILE=release uv run make
 ~~~
 ~~~
 If fail about .lock file run this for clear
+    snap install rustup --classic
     rustup update
     rm Cargo.lock
     cargo clean
@@ -43,12 +44,16 @@ If fail about .lock file run this for clear
 ~~~
 ~~~
 sudo RUST_PROFILE=release make install  # This will replace lightingd executable files of the system
+
+lightning-cli --version
 ~~~
 ## First Start CLN
 ~~~
 vi /mnt/data/lightning/config
 
 database-upgrade=true
+
+systemctl daemon-reload
 systemctl start lightningd
 ~~~
 ## Restart CLN
