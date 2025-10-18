@@ -132,4 +132,7 @@ systemctl start cln-app.service
 ~~~
 sudo ufw allow 2103
 ~~~
- Browse to http://<IP Address>:2103
+Browse by web browser 
+~~~
+http://<IP Address>:2103
+~~~
