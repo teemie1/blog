@@ -53,6 +53,7 @@ curl -k -X POST 'https://<HOST IP>:3010/v1/getinfo' -H 'Rune: <node-rune>'
 ~~~
 vi start_cln_app.sh
 
+#!/bin/bash
 export APP_PORT=2103
 export APP_HOST=10.7.0.3
 export APP_CONNECT=REST
@@ -74,7 +75,7 @@ export LIGHTNING_REST_CLIENT_CERT_FILE=/home/lightningd/.lightning/bitcoin/clien
 export LIGHTNING_REST_CA_CERT_FILE=/home/lightningd/.lightning/bitcoin/ca.pem
 export LIGHTNING_TLS_REJECT_UNAUTHORIZED=true
 
-npm run start
+/home/lightningd/.nvm/versions/node/v20.19.5/bin/npm run start
 
 vi .commando-env
 LIGHTNING_RUNE=bERYBDfug3XVtsmqHK4W86h6jYZaBpViFJXJPh6g8aw9Mw==
@@ -98,13 +99,37 @@ vi /etc/hosts
 10.7.0.3	cln
 
 ~~~
+## Configure Systemd for CLN-App
+~~~
+vi /etc/systemd/system/cln-app.service
+# /etc/systemd/system/cln-app.service
+
+[Unit]
+Description=CLN Application
+After=lightningd.service
+PartOf=lightningd.service
+
+[Service]
+WorkingDirectory=/home/lightningd/cln-application-25.07/
+
+ExecStart=/home/lightningd/cln-application-25.07/start_cln_app.sh
+User=lightningd
+TimeoutSec=120
+RestartSec=30
+StandardOutput=journal
+StandardError=journal
+
+
+[Install]
+WantedBy=multi-user.target
+~~~
 ## Start CLN-App
 ~~~
-
-/home/lightningd/cln-application-25.07/start_cln_app.sh
+systemctl enable cln-app.service
+systemctl start cln-app.service
 ~~~
 ## Open Port Firewall
 ~~~
 sudo ufw allow 2103
 ~~~
-
+ Browse to http://<IP Address>:2103
