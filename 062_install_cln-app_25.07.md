@@ -42,3 +42,65 @@ npm ci
 npm run build
 npm prune --omit=dev
 ~~~
+## Create rune for cln-app
+~~~
+lightning-cli createrune
+lightning-cli showrunes
+curl -k -X POST 'https://<HOST IP>:3010/v1/getinfo' -H 'Rune: <node-rune>'
+~~~
+
+## Edit env file
+~~~
+export APP_PORT=2103
+export APP_HOST=10.7.0.3
+export APP_CONNECT=REST
+export APP_MODE=production
+export APP_PROTOCOL=http
+export APP_CONFIG_FILE=/home/lightningd/cln-application-25.07/config.json
+export BITCOIN_HOST=localhost
+export BITCOIN_NETWORK=bitcoin
+
+export LIGHTNING_DATA_DIR=/home/lightningd/.lightning
+export LIGHTNING_VARS_FILE=/home/lightningd/cln-application-25.07/.commando-env
+export LIGHTNING_HOST=10.7.0.3
+
+export LIGHTNING_REST_PORT=3010
+export LIGHTNING_REST_PROTOCOL=https
+export LIGHTNING_REST_HOST=cln
+export LIGHTNING_REST_CLIENT_KEY_FILE=/home/lightningd/.lightning/bitcoin/client-key.pem
+export LIGHTNING_REST_CLIENT_CERT_FILE=/home/lightningd/.lightning/bitcoin/client.pem
+export LIGHTNING_REST_CA_CERT_FILE=/home/lightningd/.lightning/bitcoin/ca.pem
+export LIGHTNING_TLS_REJECT_UNAUTHORIZED=true
+
+vi .commando-env
+LIGHTNING_RUNE=bERYBDfug3XVtsmqHK4W86h6jYZaBpViFJXJPh6g8aw9Mw==
+LIGHTNING_PUBKEY=0234591e856f9c789cc36fac67e54641243e99003640b123b74f62a490f789a4dd
+
+vi config.json
+  {
+    "unit": "SATS",
+    "fiatUnit": "USD",
+    "appMode": "DARK",
+    "isLoading": false,
+    "error": null,
+    "singleSignOn": false,
+    "password": ""
+  }
+~~~
+## Edit /etc/hosts
+~~~
+vi /etc/hosts
+
+10.7.0.3	cln
+
+~~~
+## Start CLN-App
+~~~
+ npm run start
+
+~~~
+## Open Port Firewall
+~~~
+sudo ufw allow 2103
+~~~
+
