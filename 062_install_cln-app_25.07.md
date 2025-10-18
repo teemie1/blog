@@ -1,5 +1,12 @@
 # Install CLN Application 25.07
 
+## Install latest NodeJS
+~~~
+curl -sL https://deb.nodesource.com/setup_24.x | sudo -E bash -
+sudo apt-get install -y nodejs
+sudo npm update -g npm
+~~~
+
 ## Download CLN App
 ~~~
 sudo -iu lightningd
