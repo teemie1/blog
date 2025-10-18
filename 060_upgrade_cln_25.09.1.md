@@ -44,7 +44,13 @@ If fail about .lock file run this for clear
 ~~~
 sudo RUST_PROFILE=release make install  # This will replace lightingd executable files of the system
 ~~~
+## First Start CLN
+~~~
+vi /mnt/data/lightning/config
 
+database-upgrade=true
+systemctl start lightningd
+~~~
 ## Restart CLN
 ~~~
 systemctl stop lnbits
