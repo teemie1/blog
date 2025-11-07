@@ -88,15 +88,15 @@ sudo ss -tulpn | grep LISTEN | grep tor
 sudo adduser --gecos "" --disabled-password bitcoinm
 sudo adduser tee bitcoinm
 sudo adduser bitcoinm debian-tor
-sudo mkdir /data/bitcoinm
+sudo mkdir /bitcoinm
 sudo chown bitcoinm:bitcoinm /data/bitcoinm
 sudo su - bitcoinm
-ln -s /data/bitcoinm /home/bitcoinm/.bitcoin
+ln -s /bitcoinm /home/bitcoinm/.bitcoin
 ls -la
 cd /tmp
-wget https://github.com/benthecarman/bitcoin/releases/download/mutinynet-cat-lnhance/bitcoin-c23afab47fbe-x86_64-linux-gnu.tar.gz
-tar -xvf bitcoin-c23afab47fbe-x86_64-linux-gnu.tar.gz
-install -m 0755 -o bitcoinm -g bitcoinm -t /home/bitcoinm bitcoin-c23afab47fbe/bin/bitcoin-cli bitcoin-c23afab47fbe/bin/bitcoind
+wget https://github.com/benthecarman/bitcoin/releases/download/mutinynet-inq-29/bitcoin-38351585048e-x86_64-linux-gnu.tar.gz
+tar -xvf bitcoin-38351585048e-x86_64-linux-gnu.tar.gz
+install -m 0755 -o bitcoinm -g bitcoinm -t /home/bitcoinm bitcoin-38351585048e/bin/bitcoin-cli bitcoin-38351585048e/bin/bitcoind
 vi ~/.profile
 # Add lines
 alias bitcoin-cli='/home/bitcoinm/bitcoin-cli'
@@ -104,7 +104,7 @@ alias bitcoind='/home/bitcoinm/bitcoind'
 
 bitcoind --version
 cd ~/.bitcoin
-python3 /tmp/bitcoin-c23afab47fbe/share/rpcauth/rpcauth.py tee [PASSWORD]
+python3 /tmp/bitcoin-38351585048e/share/rpcauth/rpcauth.py tee [PASSWORD]
 nano /home/bitcoinm/.bitcoin/bitcoin.conf
 ~~~
 ~~~
