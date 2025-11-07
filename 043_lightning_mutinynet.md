@@ -489,7 +489,7 @@ bitcoin-rpcconnect=127.0.0.1
 bitcoin-rpcport=38332
 
 # wallet settings (PostgreSQL DB)
-wallet=postgres://[DB USER]:[DB PASSWORD]@localhost:5432/lightningdb
+wallet=postgres://[DB USER]:[DB PASSWORD]@localhost:5432/lightningdbm
 
 
 # network
