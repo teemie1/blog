@@ -532,7 +532,7 @@ Wants=network-online.target
 After=network-online.target
 
 [Service]
-ExecStart=/bin/sh -c '/usr/bin/lightningd \
+ExecStart=/bin/sh -c '/usr/local/bin/lightningd \
                        --conf=/data/lightningdm/config \
                        --daemon \
                        --pid-file=/run/lightningdm/lightningdm.pid'
