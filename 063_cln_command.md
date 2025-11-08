@@ -75,8 +75,9 @@ Splicing
        RESULT={"commitments_secured":false}
        while [[ $(echo $RESULT | jq -r ".commitments_secured") == "false" ]]
        do
-         PSBT_SPLICE_UPDATE=$(echo $(clncli1 splice_update $CHANNEL_ID $PSBT_SPLICE_INIT) | jq -r ".psbt")
-         echo $PSBT_SPLICE_UPDATE
+         RESULT=$(clncli1 splice_update $CHANNEL_ID $PSBT_SPLICE_INIT)
+         PSBT_SPLICE_UPDATE=$(echo $(RESULT) | jq -r ".psbt")
+         echo $RESULT
        done
 
        5: Sign the updated PSBT.
