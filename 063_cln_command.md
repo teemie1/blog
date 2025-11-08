@@ -1,4 +1,4 @@
-# Commands for Core Lightning
+# Commands for Core Lightning & dual funded & splicing
 
 Generate new address for receiving sats
 ~~~
@@ -24,4 +24,34 @@ List peers
 Open normal channel
 ~~~
 # lightning-cli -k fundchannel id=[PARTNER NODE ID] amount=[SATOSHI]
+~~~
+
+List channel
+~~~
+# lightning-cli listpeerchannels
+~~~
+
+Connect new peers
+~~~
+# lightning-cli connect [NODE ID]@[ADDRESS]:[PORT]
+~~~
+
+Generate invoice
+~~~
+# lightning-cli invoice 1000sat my-first-invoice "Payment for services"
+~~~
+
+Pay invoice
+~~~
+# lightning-cli pay [invoice]
+~~~
+
+Generate bolt12 offer
+~~~
+# lightning-cli offer amount=10000sat description="My awesome product"
+~~~
+
+Pay for offer & invoice
+~~~
+# lightning-cli xpay [invoice or offer bolt12]
 ~~~
