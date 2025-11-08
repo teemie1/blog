@@ -498,7 +498,7 @@ addr=statictor:127.0.0.1:9051/torport=9735
 always-use-proxy=false
 
 # CLEARNET
-bind-addr=0.0.0.0:9735
+bind-addr=127.0.0.1
 #announce-addr=[Public Ip]:9735
 
 # Plugin
