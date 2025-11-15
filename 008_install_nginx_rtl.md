@@ -95,12 +95,18 @@ $ sudo systemctl restart lightningd
 
 ## Install & Configuring RTL
 
-Copy magaroon & Install RTL
+Install NodeJS & RTL
 ~~~
 $ sudo adduser --disabled-password --gecos "" rtl
-$ sudo cp /data/lightningd-plugins-available/c-lightning-REST-0.10.5/certs/access.macaroon /home/rtl/
-$ sudo chown rtl:rtl /home/rtl/access.macaroon
 $ sudo su - rtl
+$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+$ source ~/.bashrc
+$ nvm install 22
+$ node -v
+# Output should be something like: v22.16.0
+$ npm -v
+# Output should be the bundled npm version
+
 $ curl https://keybase.io/suheb/pgp_keys.asc | gpg --import
 $ git clone https://github.com/Ride-The-Lightning/RTL.git
 $ cd RTL
@@ -117,7 +123,9 @@ $ sudo su - rtl
 $ nano /home/rtl/RTL/RTL-Config.json
 {
   "multiPass": "<yourfancypassword>",
-  "port": "3000",
+  "port": "4000",
+  "defaultNodeIndex": 1,
+  "dbDirectoryPath": "/home/rtl/RTL",
   "SSO": {
     "rtlSSO": 0,
     "rtlCookiePath": "",
@@ -126,41 +134,61 @@ $ nano /home/rtl/RTL/RTL-Config.json
   "nodes": [
     {
       "index": 1,
-      "lnNode": "teemie⚡",
+      "lnNode": "cln",
       "lnImplementation": "CLN",
-      "Authentication": {
-        "macaroonPath": "/home/rtl",
-        "configPath": "/data/lightningd/config"
+      "authentication": {
+        "configPath": "/data/lightningdm/config",
+        "runePath": "/home/rtl/cln/rune.txt"
       },
-      "Settings": {
+      "settings": {
         "userPersona": "OPERATOR",
         "themeMode": "DAY",
-        "themeColor": "INDIGO",
+        "themeColor": "YELLOW",
         "fiatConversion": true,
         "currencyUnit": "THB",
-        "logLevel": "ERROR",
-        "lnServerUrl": "https://127.0.0.1:3092",
-        "enableOffers": true
+        "logLevel": "INFO",
+        "lnServerUrl": "https://127.0.0.1:3010",
+        "enableOffers": true,
+        "unannouncedChannels": false
+      }
+    },
+    {
+      "index": 2,
+      "lnNode": "cln2",
+      "lnImplementation": "CLN",
+      "authentication": {
+        "configPath": "/data/lightningdm2/config",
+        "runePath": "/home/rtl/cln/rune2.txt"
+      },
+      "settings": {
+        "userPersona": "OPERATOR",
+        "themeMode": "DAY",
+        "themeColor": "YELLOW",
+        "fiatConversion": true,
+        "currencyUnit": "THB",
+        "logLevel": "INFO",
+        "lnServerUrl": "https://127.0.0.1:3011",
+        "enableOffers": true,
+        "unannouncedChannels": false
       }
     }
-  ],
-  "defaultNodeIndex": 1
+  ]
 }
+
 
 $ exit
 
 $ sudo nano /etc/systemd/system/rtl.service
-# MiniBolt: systemd unit for Ride the Lightning
 # /etc/systemd/system/rtl.service
 
 [Unit]
 Description=Ride the Lightning
-After=lightningd.service
-PartOf=lightningd.service
+After=lightningdm.service
+PartOf=lightningdm.service
 
 [Service]
 WorkingDirectory=/home/rtl/RTL
-ExecStart=/usr/bin/node rtl
+ExecStart=/home/rtl/.nvm/versions/node/v24.11.1/bin/node rtl
 User=rtl
 
 Restart=always
@@ -174,14 +202,13 @@ $ sudo systemctl start rtl
 
 Configure nginx
 ~~~
-$ sudo nano /etc/nginx/sites-enabled/rtl-reverse-proxy.conf
+$ sudo nano /etc/nginx/streams-enabled/rtl-reverse-proxy.conf
+upstream rtl {
+  server 127.0.0.1:4000;
+}
 server {
   listen 4001 ssl;
-  error_page 497 =301 https://$host:$server_port$request_uri;
-
-  location / {
-    proxy_pass http://127.0.0.1:3000;
-  }
+  proxy_pass rtl;
 }
 
 $ sudo nginx -t
