@@ -104,10 +104,12 @@ $ sudo su - rtl
 $ curl https://keybase.io/suheb/pgp_keys.asc | gpg --import
 $ git clone https://github.com/Ride-The-Lightning/RTL.git
 $ cd RTL
+$ git pull
 $ git tag | grep -E "v[0-9]+.[0-9]+.[0-9]+$" | sort --version-sort | tail -n 1
-$ git checkout v0.14.0
-$ git verify-tag v0.14.0
+$ git checkout v0.15.6
+$ git verify-tag v0.15.6
 $ npm install --omit=dev --legacy-peer-deps
+$ npm ci --omit=dev --legacy-peer-deps
 ~~~
 Configure RTL
 ~~~
