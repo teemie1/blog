@@ -50,11 +50,11 @@ $ sudo systemctl reload nginx
 ~~~
 $ cd ~
 $ curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-$ sudo apt install nodejs
+
 ~~~
 
 
-## c-lightning-Rest plugin
+## c-lightning-Rest plugin (No need anymore, use CLNRest instead)
 ~~~
 $ sudo su - lightningd
 $ wget https://github.com/Ride-The-Lightning/c-lightning-REST/archive/refs/tags/v0.10.5.tar.gz
@@ -94,7 +94,26 @@ $ sudo systemctl restart lightningd
 ~~~
 
 ## Install & Configuring RTL
+Create Runes
+~~~
+$ sudo -iu lightningdm
+$ lightning-cli createrune
+{
+   "runes": [
+      {
+         "rune": "[RUNE]",
+         "last_used": 1763194946.505493832,
+         "unique_id": "0",
+         "restrictions": [],
+         "restrictions_as_english": ""
+      }
+   ]
+}
+# Copy [RUNE] and save to file /home/rtl/cln/rune.txt
+# /home/rtl/cln/rune.txt
+LIGHTNING_RUNE="[RUNE]"
 
+~~~
 Install NodeJS & RTL
 ~~~
 $ sudo adduser --disabled-password --gecos "" rtl
