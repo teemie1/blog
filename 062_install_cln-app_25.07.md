@@ -1,4 +1,4 @@
-# Install CLN Application 25.07
+# Install CLN Application 25.07.3
 
 ## Install prereq
 ~~~
@@ -31,13 +31,13 @@ npm -v # Should print "10.8.2".
 ## Download CLN App
 ~~~
 sudo -iu lightningd
-wget https://github.com/ElementsProject/cln-application/archive/refs/tags/v25.07.tar.gz
-tar -xzf v25.07.tar.gz
+wget https://github.com/ElementsProject/cln-application/archive/refs/tags/v25.07.3.tar.gz
+tar -xzf v25.07.3.tar.gz
 ~~~
 
 ## Install and Compile
 ~~~
-cd cln-application-25.07
+cd cln-application-25.07.3
 npm ci
 npm run build
 npm prune --omit=dev
@@ -59,12 +59,12 @@ export APP_HOST=<IP Address>
 export APP_CONNECT=REST
 export APP_MODE=production
 export APP_PROTOCOL=http
-export APP_CONFIG_FILE=/home/lightningd/cln-application-25.07/config.json
+export APP_CONFIG_FILE=/home/lightningd/cln-application-25.07.3/config.json
 export BITCOIN_HOST=localhost
 export BITCOIN_NETWORK=bitcoin
 
 export LIGHTNING_DATA_DIR=/home/lightningd/.lightning
-export LIGHTNING_VARS_FILE=/home/lightningd/cln-application-25.07/.commando-env
+export LIGHTNING_VARS_FILE=/home/lightningd/cln-application-25.07.3/.commando-env
 export LIGHTNING_HOST=<IP Address>
 
 export LIGHTNING_REST_PORT=3010
@@ -110,9 +110,9 @@ After=lightningd.service
 PartOf=lightningd.service
 
 [Service]
-WorkingDirectory=/home/lightningd/cln-application-25.07/
+WorkingDirectory=/home/lightningd/cln-application-25.07.3/
 
-ExecStart=/home/lightningd/cln-application-25.07/start_cln_app.sh
+ExecStart=/home/lightningd/cln-application-25.07.3/start_cln_app.sh
 User=lightningd
 TimeoutSec=120
 RestartSec=30
