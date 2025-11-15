@@ -66,6 +66,7 @@ Splicing
 
        INITIALPSBT=$(echo $(clncli1 fundpsbt -k satoshi=1000000sat feerate=urgent startweight=800 excess_as_change=true) | jq -r ".psbt")
 
+  
        3: Initiate the splice by passing channel id and initialpsbt received from above steps.
 
        PSBT_SPLICE_INIT=$(echo $(clncli1 splice_init $CHANNEL_ID 1000000 $INITIALPSBT) | jq -r ".psbt")
@@ -73,12 +74,14 @@ Splicing
        4: Update PSBTs with the splice_update command.
 
        RESULT={"commitments_secured":false}
+       PSBT=$PSBT_SPLICE_INIT
        while [[ $(echo $RESULT | jq -r ".commitments_secured") == "false" ]]
        do
-         RESULT=$(clncli1 splice_update $CHANNEL_ID $PSBT_SPLICE_INIT)
-         PSBT_SPLICE_UPDATE=$(echo $(RESULT) | jq -r ".psbt")
+         RESULT=$(clncli1 splice_update $CHANNEL_ID $PSBT)
+         PSBT=$(echo $RESULT | jq -r ".psbt")
          echo $RESULT
        done
+       PSBT_SPLICE_UPDATE=$PSBT
 
        5: Sign the updated PSBT.
 
@@ -91,6 +94,11 @@ Splicing
 # lightning-cli splice_init <channel_id> <amount> [feerate] [force_feerate]
 # lightning-cli splice_update <channel_id> <psbt>
 # lightning-cli splice_signed <channel_id> <psbt>
+
+wallet -> 10000sat+fee
+10000sat -> 8338aef0
+
+# clncli1 dev-splice "wallet -> 10000sat+fee; 10000sat -> 3d6f313ba4cbf218b19f30f6b99a87fb82ec3657bfaf5e25363149d7c8553dc2"
 
 Example
 lightning-cli splice_init 3d6f313ba4cbf218b19f30f6b99a87fb82ec3657bfaf5e25363149d7c8553dc2 4000000
