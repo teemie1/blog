@@ -29,6 +29,7 @@ Open normal channel
 List channel
 ~~~
 # lightning-cli listpeerchannels
+# lightning-cli listpeerchannels | jq -r ".channels[0].channel_id"
 ~~~
 
 Connect new peers
