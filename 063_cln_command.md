@@ -67,3 +67,21 @@ wallet -> 10000sat+fee
 # clncli2 dev-splice "3d6f313ba4cbf218b19f30f6b99a87fb82ec3657bfaf5e25363149d7c8553dc2 -> 1000000sat"
 
 ~~~
+
+Dual Funded Channel
+~~~
+# vi /data/lightningdm2/config
+
+experimental-dual-fund
+funder-policy=match
+funder-policy-mod=100
+lease-fee-base-sat=500sat
+lease-fee-basis=50
+channel-fee-max-base-sat=100sat
+channel-fee-max-proportional-thousandths=2
+
+# sudo systemctl restart lightningdm2
+# clncli2 funderupdate
+# clncli1 connect 0287a3b8064006ce87621337c07f05152c7c6d0520fb0b1a7585700287b6a40d93@l32cdhwt2qhjm72c547qma6ucqjo7zu366khaxlj4mhsa7hhxj7ytlid.onion:9735
+# clncli1 fundchannel id=0287a3b8064006ce87621337c07f05152c7c6d0520fb0b1a7585700287b6a40d93 amount=1000000 request_amt=1000000 compact_lease="024800320002000001f40186a0"
+~~~
