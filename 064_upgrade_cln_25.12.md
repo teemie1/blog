@@ -4,9 +4,11 @@
 ~~~
 sudo -i
 cd /tmp
-wget https://github.com/ElementsProject/lightning/releases/download/v25.12/clightning-v25.12.zip
-unzip clightning-v25.12.zip
-cd clightning-v25.12
+rm -rf lightning
+git clone --recursive https://github.com/ElementsProject/lightning.git
+cd lightning
+git checkout v25.12
+
 ~~~
 
 ## Install update and rust
