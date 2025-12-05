@@ -19,6 +19,9 @@ sudo apt-get install -y cargo rustfmt protobuf-compiler
 
 ## Build CLN
 ~~~
+rustup update
+cargo update --manifest-path=cln-rpc/Cargo.toml
+
 uv sync --all-extras --all-groups --frozen
 ./configure
 RUST_PROFILE=release uv run make
