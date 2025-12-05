@@ -1,4 +1,4 @@
-# Upgrade Core Lightning 25.12
+# Upgrade Core Lightning 25.12 (failed)
 
 ## Clone lightning
 ~~~
