@@ -8,6 +8,7 @@ rm -rf lightning
 git clone --recursive https://github.com/ElementsProject/lightning.git
 cd lightning
 git checkout v25.12
+sudo rm -R /usr/local/libexec/c-lightning/plugins
 
 ~~~
 
@@ -17,6 +18,7 @@ sudo apt update
 sudo apt-get install -y valgrind libpq-dev shellcheck cppcheck \
   libsecp256k1-dev lowdown
 sudo apt-get install -y cargo rustfmt protobuf-compiler
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ~~~
 
 ## Build CLN
