@@ -12,7 +12,9 @@ cd clightning-v25.12
 ## Install update and rust
 ~~~
 sudo apt update
-sudo apt install lowdown
+sudo apt-get install -y valgrind libpq-dev shellcheck cppcheck \
+  libsecp256k1-dev lowdown
+sudo apt-get install -y cargo rustfmt protobuf-compiler
 ~~~
 
 ## Build CLN
