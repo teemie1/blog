@@ -1,4 +1,4 @@
-# Upgrade Core Lightning 25.09.1
+# Upgrade Core Lightning 25.12
 
 ## Clone lightning
 ~~~
