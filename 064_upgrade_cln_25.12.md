@@ -31,6 +31,7 @@ sudo apt remove rustfmt
 ~~~
 rustup update
 apt install -y python3-mako
+rustup default nightly
 
 uv sync --all-extras --all-groups --frozen
 ./configure
