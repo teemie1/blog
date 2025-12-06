@@ -30,6 +30,11 @@ sudo apt remove rustfmt
 ## Build CLN
 ~~~
 rustup update
+cargo update
+
+cargo update -p hyper-util@0.1.18 --precise 0.1.16
+cargo update -p hyper@1.8.1 --precise 1.6.0
+
 apt install -y python3-mako
 rustup default nightly
 
