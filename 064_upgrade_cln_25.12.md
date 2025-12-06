@@ -23,12 +23,13 @@ sudo apt-get install -y valgrind libpq-dev shellcheck cppcheck \
   libsecp256k1-dev lowdown
 sudo apt-get install -y cargo rustfmt protobuf-compiler
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+sudo apt remove cargo
+sudo apt remove rustfmt
 ~~~
 
 ## Build CLN
 ~~~
 rustup update
-cargo update --manifest-path=cln-rpc/Cargo.toml
 apt install -y python3-mako
 
 uv sync --all-extras --all-groups --frozen
