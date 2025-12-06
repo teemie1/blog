@@ -3,6 +3,10 @@
 ## Clone lightning
 ~~~
 sudo -i
+sudo apt update
+sudo apt upgrade
+reboot
+
 cd /tmp
 rm -rf lightning
 git clone --recursive https://github.com/ElementsProject/lightning.git
@@ -25,6 +29,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ~~~
 rustup update
 cargo update --manifest-path=cln-rpc/Cargo.toml
+apt install -y python3-mako
 
 uv sync --all-extras --all-groups --frozen
 ./configure
