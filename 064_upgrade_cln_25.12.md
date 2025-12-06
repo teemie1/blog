@@ -1,4 +1,4 @@
-# Upgrade Core Lightning 25.12 (failed)
+# Upgrade Core Lightning 25.12
 
 ## Clone lightning
 ~~~
@@ -12,10 +12,6 @@ wget https://github.com/ElementsProject/lightning/releases/download/v25.12/cligh
 unzip clightning-v25.12.zip
 cd clightning-v25.12
 
-rm -rf lightning
-git clone --recursive https://github.com/ElementsProject/lightning.git
-cd lightning
-git checkout v25.12
 sudo rm -R /usr/local/libexec/c-lightning/plugins
 
 ~~~
@@ -38,7 +34,7 @@ apt install -y python3-mako
 uv sync --all-extras --all-groups --frozen
 ./configure
 RUST_PROFILE=release uv run make
-sudo RUST_PROFILE=release make install  # This will replace lightingd executable files of the system
+RUST_PROFILE=release make install  # This will replace lightingd executable files of the system
 
 lightning-cli --version
 ~~~
