@@ -17,3 +17,9 @@ plugin=/data/lightningdm-plugins-available/sling
 
 systemctl restart lightningdm
 ~~~
+
+## Sling command
+~~~
+clncli1 sling-version
+
+~~~
