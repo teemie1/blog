@@ -20,5 +20,7 @@ systemctl restart lightningdm
 ## Summars command
 ~~~
 clncli1 summars
-
+lightning-cli summars summars-forwards=200 summars-pays=300 summars-invoices=300
+lightning-cli summars summars-columns=GRAPH_SATS,SCID summars-style=empty summars-sort-by=IN_SATS
+lightning-cli summars summars-columns=GRAPH_SATS,SCID,ALIAS,BASE,PPM summars-style=empty summars-sort-by=IN_SATS
 ~~~
