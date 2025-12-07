@@ -17,7 +17,7 @@ plugin=/data/lightningdm-plugins-available/summars
 systemctl restart lightningdm
 ~~~
 
-## Sling command
+## Summars command
 ~~~
 clncli1 summars
 
