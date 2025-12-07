@@ -22,4 +22,14 @@ systemctl restart lightningdm
 ~~~
 clncli1 sling-version
 
+# Push Channel
+clncli2 sling-job -k scid=2638506x14x0 direction=push amount=100000 maxppm=300 outppm=0 target=0.4
+
+# Pull Channel
+clncli1 sling-job -k scid=2667713x5x2 direction=pull amount=100000 maxppm=300 outppm=1000 target=0.4
+
+clncli2 sling-jobsettings
+clncli2 sling-go
+clncli2 sling-stats
+clncli2 sline-stop
 ~~~
