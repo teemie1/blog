@@ -82,6 +82,7 @@ channel-fee-max-proportional-thousandths=2
 
 # sudo systemctl restart lightningdm2
 # clncli2 funderupdate
+# clncli1 listnodes | jq '.nodes[] | select(.option_will_fund != null)'
 # clncli1 connect 0287a3b8064006ce87621337c07f05152c7c6d0520fb0b1a7585700287b6a40d93@l32cdhwt2qhjm72c547qma6ucqjo7zu366khaxlj4mhsa7hhxj7ytlid.onion:9735
 # clncli1 fundchannel id=0287a3b8064006ce87621337c07f05152c7c6d0520fb0b1a7585700287b6a40d93 amount=1000000 request_amt=1000000 compact_lease="024800320002000001f40186a0"
 ~~~
