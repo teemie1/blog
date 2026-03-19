@@ -47,9 +47,9 @@ listener = "[::]:443"
 # --- ACME TLS (requires `acme` feature) ---
 [acme]
 # Domain names for the TLS certificate
-domains = ["your-domain.example.com"]
+domains = ["pj.bobspacebkk.com"]
 # Contact addresses for the ACME account
-contact = ["mailto:contact@example.com"]
+contact = ["mailto:teemie@satsdays.com"]
 
 # --- Telemetry (requires `telemetry` feature) ---
 [telemetry]
@@ -72,4 +72,8 @@ blocked_regions = ["CU", "IR", "KP", "SY"]
 [v1]
 # URL to periodically fetch an updated blocked-address list from.
 blocked_addresses_url = "https://raw.githubusercontent.com/0xB10C/ofac-sanctioned-digital-currency-addresses/refs/heads/lists/sanctioned_addresses_XBT.txt"
+~~~
+
+~~~
+
 ~~~
