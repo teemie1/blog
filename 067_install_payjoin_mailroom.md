@@ -76,5 +76,5 @@ blocked_addresses_url = "https://raw.githubusercontent.com/0xB10C/ofac-sanctione
 ~~~
 
 ~~~
-docker compose up -d
+docker-compose up -d
 ~~~
