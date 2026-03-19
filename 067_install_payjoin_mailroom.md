@@ -17,6 +17,7 @@ vi docker-compose.yml
 services:
   payjoin-mailroom:
     image: payjoin/payjoin-mailroom:payjoin-mailroom-0.1.0
+    restart: always
     command: ["--config", "/config/config.toml"]
     environment:
       RUST_LOG: "info"
@@ -75,5 +76,5 @@ blocked_addresses_url = "https://raw.githubusercontent.com/0xB10C/ofac-sanctione
 ~~~
 
 ~~~
-
+docker compose up
 ~~~
