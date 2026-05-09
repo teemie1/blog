@@ -25,30 +25,20 @@ sudo rm -R /usr/local/libexec/c-lightning/plugins
 
 ## Install update and rust
 ~~~
-sudo apt update
-sudo apt-get install -y valgrind libpq-dev shellcheck cppcheck \
-  libsecp256k1-dev lowdown
-sudo apt-get install -y cargo rustfmt protobuf-compiler
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-sudo apt remove cargo
-sudo apt remove rustfmt
+sudo apt-get update
+sudo apt-get install -y \
+  jq autoconf automake build-essential git libtool libsqlite3-dev libffi-dev \
+  python3 python3-pip net-tools zlib1g-dev libsodium-dev gettext lowdown
+#pip3 install --upgrade pip
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ~~~
 
 ## Build CLN
 ~~~
-rustup update
-cargo update
-
-cargo update -p hyper-util@0.1.18 --precise 0.1.16
-cargo update -p hyper@1.8.1 --precise 1.6.0
-
-apt install -y python3-mako
-rustup default nightly
-
 uv sync --all-extras --all-groups --frozen
 ./configure
 RUST_PROFILE=release uv run make
-RUST_PROFILE=release make install  # This will replace lightingd executable files of the system
+sudo RUST_PROFILE=release make install
 
 lightning-cli --version
 ~~~
