@@ -40,6 +40,7 @@ sudo apt-get install -y \
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 rustup update stable
+cargo update
 rustup default stable
 ~~~
 
