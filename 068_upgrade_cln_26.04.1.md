@@ -31,6 +31,9 @@ sudo apt-get install -y \
   python3 python3-pip net-tools zlib1g-dev libsodium-dev gettext lowdown
 #pip3 install --upgrade pip
 curl -LsSf https://astral.sh/uv/install.sh | sh
+
+rustup update stable
+rustup default stable
 ~~~
 
 ## Build CLN
