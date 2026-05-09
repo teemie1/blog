@@ -15,6 +15,11 @@ cd clightning-v26.04.1
 sudo rm -R /usr/local/libexec/c-lightning/plugins
 
 ~~~
+## Backup existing CLN binary
+~~~
+mkdir /tmp/clightning-v25.12
+cp /usr/local/bin/lightning* /tmp/clightning-v25.12
+~~~
 
 ## Install update and rust
 ~~~
