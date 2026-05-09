@@ -1,5 +1,12 @@
 # Upgrade Core Lightning 26.04.1
 
+## Stop CLN
+~~~
+systemctl stop lnbits
+systemctl stop rtl
+systemctl stop lightningd
+~~~
+
 ## OS Upgrade & Backup existing CLN binary
 ~~~
 sudo -i
@@ -56,10 +63,6 @@ systemctl start lightningd
 ~~~
 ## Restart CLN
 ~~~
-systemctl stop lnbits
-systemctl stop rtl
-systemctl stop lightningd
-
 systemctl start lightningd
 systemctl start lnbits
 systemctl start rtl
