@@ -1,0 +1,66 @@
+# Upgrade Core Lightning 26.04.1
+
+## Clone lightning
+~~~
+sudo -i
+sudo apt update
+sudo apt upgrade
+reboot
+
+cd /tmp
+wget https://github.com/ElementsProject/lightning/releases/download/v26.04.1/clightning-v26.04.1.zip
+unzip clightning-v26.04.1.zip
+cd clightning-v26.04.1
+
+sudo rm -R /usr/local/libexec/c-lightning/plugins
+
+~~~
+
+## Install update and rust
+~~~
+sudo apt update
+sudo apt-get install -y valgrind libpq-dev shellcheck cppcheck \
+  libsecp256k1-dev lowdown
+sudo apt-get install -y cargo rustfmt protobuf-compiler
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+sudo apt remove cargo
+sudo apt remove rustfmt
+~~~
+
+## Build CLN
+~~~
+rustup update
+cargo update
+
+cargo update -p hyper-util@0.1.18 --precise 0.1.16
+cargo update -p hyper@1.8.1 --precise 1.6.0
+
+apt install -y python3-mako
+rustup default nightly
+
+uv sync --all-extras --all-groups --frozen
+./configure
+RUST_PROFILE=release uv run make
+RUST_PROFILE=release make install  # This will replace lightingd executable files of the system
+
+lightning-cli --version
+~~~
+## First Start CLN
+~~~
+vi /mnt/data/lightning/config
+
+database-upgrade=true
+
+systemctl daemon-reload
+systemctl start lightningd
+~~~
+## Restart CLN
+~~~
+systemctl stop lnbits
+systemctl stop rtl
+systemctl stop lightningd
+
+systemctl start lightningd
+systemctl start lnbits
+systemctl start rtl
+~~~
