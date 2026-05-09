@@ -1,12 +1,18 @@
 # Upgrade Core Lightning 26.04.1
 
-## Clone lightning
+## OS Upgrade & Backup existing CLN binary
 ~~~
 sudo -i
 sudo apt update
 sudo apt upgrade
 reboot
 
+mkdir /tmp/clightning-v25.12
+cp /usr/local/bin/lightning* /tmp/clightning-v25.12
+~~~
+
+## Clone lightning
+~~~
 cd /tmp
 wget https://github.com/ElementsProject/lightning/releases/download/v26.04.1/clightning-v26.04.1.zip
 unzip clightning-v26.04.1.zip
@@ -15,11 +21,7 @@ cd clightning-v26.04.1
 sudo rm -R /usr/local/libexec/c-lightning/plugins
 
 ~~~
-## Backup existing CLN binary
-~~~
-mkdir /tmp/clightning-v25.12
-cp /usr/local/bin/lightning* /tmp/clightning-v25.12
-~~~
+
 
 ## Install update and rust
 ~~~
