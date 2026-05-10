@@ -32,3 +32,8 @@ ExecStart=/home/lnbits/.local/bin/uv run lnbits --port 5000 --host 0.0.0.0 --deb
 systemctl daemon-reload
 sudo systemctl start lnbits
 ~~~
+## Upgrade LNbits Extension
+~~~
+Login LNbits with admin user
+Click Extension Menu and select newer version of each extension to update.
+~~~
