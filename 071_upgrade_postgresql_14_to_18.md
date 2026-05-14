@@ -19,6 +19,9 @@ sudo pg_dropcluster 18 main --stop
 # sudo pg_createcluster 18 main -- --no-data-checksums
 # sudo pg_ctlcluster 18 main start
 sudo pg_dropcluster 18 main --stop
+
+sudo touch /var/lib/postgresql/14/main/postgresql.auto.conf
+sudo chown postgres:postgres /var/lib/postgresql/14/main/postgresql.auto.conf
 ~~~
 
 ## Compatibility Check
