@@ -25,6 +25,10 @@ sudo systemctl stop postgresql@18-main
 ~~~
 sudo -iu postgres
 
+sudo pg_upgradecluster -m upgrade 14 main
+
+or
+
 /usr/lib/postgresql/18/bin/pg_upgrade \
   --old-datadir /var/lib/postgresql/14/main \
   --new-datadir /var/lib/postgresql/18/main \
@@ -37,6 +41,10 @@ sudo -iu postgres
 
 ## Performing upgrade
 ~~~
+sudo pg_upgradecluster -m upgrade 14 main --link
+
+or
+
 /usr/lib/postgresql/18/bin/pg_upgrade \
   --old-datadir /var/lib/postgresql/14/main \
   --new-datadir /var/lib/postgresql/18/main \
