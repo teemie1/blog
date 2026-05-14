@@ -26,12 +26,11 @@ sudo chown postgres:postgres /var/lib/postgresql/14/main/postgresql.auto.conf
 
 ## Compatibility Check
 ~~~
-sudo -iu postgres
-
 sudo pg_upgradecluster -m upgrade 14 main
 
 or
 
+sudo -iu postgres
 /usr/lib/postgresql/18/bin/pg_upgrade \
   --old-datadir /var/lib/postgresql/14/main \
   --new-datadir /var/lib/postgresql/18/main \
@@ -48,6 +47,7 @@ sudo pg_upgradecluster -m upgrade 14 main --link
 
 or
 
+sudo -iu postgres
 /usr/lib/postgresql/18/bin/pg_upgrade \
   --old-datadir /var/lib/postgresql/14/main \
   --new-datadir /var/lib/postgresql/18/main \
