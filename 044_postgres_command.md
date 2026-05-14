@@ -4,7 +4,12 @@
 ~~~
 sudo -iu postgres
 psql -U postgres
-DROP DATABASE lightningdb;
+
+# List database
+postgres=# \l
+
+# Delete Database, use carefully!!!
+DROP DATABASE lndb;
 ~~~
 
 ## Create User & Database
