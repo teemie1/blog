@@ -1,5 +1,10 @@
 # Upgrade PostgreSQL version 14 to 18
 
+## Backup PostgreSQL v14
+~~~
+pg_basebackup -h [host] -p 5432 -U [user] -D /path/to/backup/dir -Fp -Xs -P -v
+~~~
+
 ## Install PostgreSQL v18
 ~~~
 sudo apt-get install postgresql-18
