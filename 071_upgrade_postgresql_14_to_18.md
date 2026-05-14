@@ -30,6 +30,8 @@ sudo -iu postgres
   --new-datadir /var/lib/postgresql/18/main \
   --old-bindir /usr/lib/postgresql/14/bin \
   --new-bindir /usr/lib/postgresql/18/bin \
+  -o "-c config_file=/etc/postgresql/14/main/postgresql.conf" \
+  -O "-c config_file=/etc/postgresql/18/main/postgresql.conf" \
   --check
 ~~~
 
@@ -40,11 +42,14 @@ sudo -iu postgres
   --new-datadir /var/lib/postgresql/18/main \
   --old-bindir /usr/lib/postgresql/14/bin \
   --new-bindir /usr/lib/postgresql/18/bin \
+  -o "-c config_file=/etc/postgresql/14/main/postgresql.conf" \
+  -O "-c config_file=/etc/postgresql/18/main/postgresql.conf" \
   --link
 ~~~
 
 ## Post upgrade task
 ~~~
+sudo systemctl start postgresql@18-main
 copy postgresql.conf ฿ pg_hba.conf
 
 ~~~
