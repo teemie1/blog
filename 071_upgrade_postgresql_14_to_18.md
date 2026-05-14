@@ -3,6 +3,7 @@
 ## Backup PostgreSQL v14
 ~~~
 pg_basebackup -h [host] -p 5432 -U [user] -D /path/to/backup/dir -Fp -Xs -P -v
+pg_basebackup -h localhost -p 5433 -U lightningusr -D /tmp/lightningdb.tar  -Ft -Xs -P -v --password
 ~~~
 
 ## Install PostgreSQL v18
