@@ -56,7 +56,11 @@ sudo -iu postgres
 
 ## Post upgrade task
 ~~~
+# Start postgresql v18
+sudo pg_ctlcluster 18 main start
+or
 sudo systemctl start postgresql@18-main
-copy postgresql.conf ฿ pg_hba.conf
 
+# Verify
+psql -U lightningusr --host=localhost --port=5433 "dbname=lightningdb" -t -c "SELECT max(height) from blocks;"
 ~~~
