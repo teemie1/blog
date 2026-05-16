@@ -15,7 +15,7 @@ sudo systemctl stop postgresql@14-main
 ~~~
 sudo apt-get install postgresql-18
 sudo pg_lsclusters
-sudo pg_dropcluster 18 main --stop
+sudo pg_dropcluster 18 main
 # sudo pg_createcluster 18 main -- --no-data-checksums
 # sudo pg_ctlcluster 18 main start
 sudo pg_dropcluster 18 main --stop
