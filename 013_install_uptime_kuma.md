@@ -2,7 +2,7 @@
 
 ## Install Uptime Kuma via docker
 ~~~
-$ sudo docker run -d --restart=always -p 3001:3001 -v uptime-kuma:/app/data --name uptime-kuma louislam/uptime-kuma:1
+$ sudo docker run -d --restart=always -p 3001:3001 -v uptime-kuma:/app/data --name uptime-kuma louislam/uptime-kuma:2
 # Check docker container is running
 $ sudo docker ps -a
 ~~~
